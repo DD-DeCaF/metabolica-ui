@@ -2,7 +2,7 @@ import {XRefComponent} from './xref.component';
 
 class XRefRegistryProvider {
     constructor() {
-        this.navigation = [];
+        this.resources = {};
     }
 
     // XXX is component needed?
