@@ -1,21 +1,30 @@
 const path = require('path');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const ExtractTextPlugin = require('extract-text-webpack-plugin');
+const webpack = require('webpack');
 
 module.exports = function () {
     return {
-        entry: './src/index.js',
+        entry: {
+			main: './src/index.js'
+		},
         output: {
-            filename: 'bundle.js',
-            path: path.resolve(__dirname, 'dist')
+			filename: '[chunkhash].[name].js',
+			path: path.resolve(__dirname, 'dist')
         },
         plugins: [
-            new ExtractTextPlugin('styles.css'),
             new HtmlWebpackPlugin({
                 inject: 'head',
                 template: './src/index.html',
                 filename: 'index.html'
-            })
+            }),
+			new webpack.optimize.CommonsChunkPlugin({
+				name: 'vendor',
+				minChunks: function (module) {
+					return module.context && module.context.indexOf('node_modules') !== -1;
+				}
+			}),
+			new ExtractTextPlugin('[chunkhash].[name].css')
         ],
         module: {
             rules: [

@@ -12,6 +12,7 @@ import {SessionModule} from './shared/session/session.module';
 import {SharingModule} from './shared/sharing/sharing-legacy.module';
 import {LoginModule} from './login/login.module';
 import {DocsModule} from './docs/docs.module';
+
 import {DirectivesModule} from './shared/directives-legacy.module';
 import {XRefsModule} from './shared/xrefs/xrefs.module';
 

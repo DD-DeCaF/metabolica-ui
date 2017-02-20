@@ -9,8 +9,6 @@ class LoginController {
             password: ''
         };
 
-        console.log('foo')
-
         this.authenticate = async(form, credentials) => {
             try {
                 await Session.authenticate(credentials);
