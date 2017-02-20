@@ -7,7 +7,7 @@ class XRefRegistryProvider {
 
     // XXX is component needed?
     register(resource, config) {
-        this.resources.push({resource, config})
+        this.resources[resource] = config
     }
 
     $get() {
@@ -33,11 +33,9 @@ export const XRefsModule = angular.module('xrefs', ['ngMaterial'])
         return function (item, event) {
             let config;
 
-            for(let registryItem of xrefRegistry) {
-                if(item instanceof registryItem.resource) {
-                    config = registryItem.config(item)
-                }
-            }
+			if(xrefRegistry[item.prototype.name]) {
+				config = xrefRegistry[item.prototype.name](item)
+			}
 
             if(!config) {
                 return
