@@ -3,7 +3,7 @@ import Plotly from 'plotly.js/lib/core';
 import PlotlyBox from 'plotly.js/lib/box';
 import PlotlyHeatmap from 'plotly.js/lib/heatmap';
 import PlotlyBar from 'plotly.js/lib/bar';
-import './plotly/plotly.scss';
+import './plotly.scss';
 
 // Register plot types
 // Scatter plot is already included in the core
