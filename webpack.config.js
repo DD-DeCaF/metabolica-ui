@@ -71,7 +71,8 @@ module.exports = function () {
                 '/api': {
                     // Set the following line to the address of the API you want to test against:
                     target: 'https://localhost',
-                    secure: false
+					secure: false,
+					changeOrigin: true
                 }
             }
         }

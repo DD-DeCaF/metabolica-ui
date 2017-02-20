@@ -8,8 +8,8 @@ class AppController {
         this._$rootScope = $rootScope;
         this._$state = $state;
 
-        this.projectNavigation = appNavigation.filter(nav => nav.requiresProject);
-        this.navigation = appNavigation.filter(nav => !nav.requiresProject);
+        this.projectNavigation = appNavigation.filter(nav => nav.position == 'project');
+        this.navigation = appNavigation.filter(nav => nav.position == 'global');
 
         this.projects = [];
         Project.query().then((projects) => {

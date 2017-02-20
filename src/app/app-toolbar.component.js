@@ -1,7 +1,7 @@
 
 class AppToolbarController {
 
-    constructor($state, $rootScope, Session, Project) {
+    constructor($state, $rootScope, Session, Project, appNavigation) {
         this._$state = $state;
         this._$rootScope = $rootScope;
         this._Session = Session;
@@ -10,6 +10,8 @@ class AppToolbarController {
         Project.query().then((projects) => {
             this.projects = projects
         });
+
+		this.navigation = appNavigation.filter(nav => nav.position == 'toolbar');
     }
 
     get project() {
@@ -120,13 +122,11 @@ export const AppToolbarComponent = {
                     <md-icon>more_vert</md-icon>
                 </md-button>
                 <md-menu-content width="4">
-                    <md-menu-item>
-                        <md-button ui-sref="app.settings">
-                            <md-icon>account_circle</md-icon>
-                            Account Settings
-                        </md-button>
-                    </md-menu-item>
-                    <md-menu-divider></md-menu-divider>
+                    <md-list-item ng-repeat="component in $ctrl.navigation" ui-sref="{{ component.state }}">
+                        <md-icon md-svg-icon="{{ component.icon }}"></md-icon>
+                        <p ng-if="!$ctrl.inProjectComponent">{{ component.title }}</p>
+                    </md-list-item>
+                    <md-menu-divider ng-if="$ctrl.navigation.length"></md-menu-divider>
                     <md-menu-item>
                         <md-button ui-sref="app.docs">
                             <md-icon>book</md-icon>

@@ -24,10 +24,16 @@ class AppNavigationProvider {
     }
 
     // XXX is component needed?
-    register(state, {title, requiresProject=false, icon='puzzle'} = {}) {
-        // TODO auto-infer requiresProject
+    register(state, {title, position=null, icon='puzzle'} = {}) {
+		if(!position) {
+			if(state.startsWith('app.project')) {
+				position = 'project';
+			} else {
+				position = 'global';
+			}
+		}
 
-        this.navigation.push({state, title, requiresProject, icon});
+        this.navigation.push({state, title, position, icon});
     }
 
     $get() {
