@@ -12,6 +12,7 @@ import {SessionModule} from './shared/session/session.module';
 import {SharingModule} from './shared/sharing/sharing-legacy.module';
 import {LoginModule} from './login/login.module';
 import {DocsModule} from './docs/docs.module';
+import {SearchModule} from './search/search.module';
 
 import {DirectivesModule} from './shared/directives-legacy.module';
 import {XRefsModule} from './shared/xrefs/xrefs.module';
@@ -55,6 +56,7 @@ export const AppModule = angular.module('App', [
         LoginModule.name,
         DocsModule.name,
         XRefsModule.name,
+        SearchModule.name,
         DirectivesModule.name
     ])
     .provider('appNavigation', AppNavigationProvider)

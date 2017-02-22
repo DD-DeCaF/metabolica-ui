@@ -1,19 +1,29 @@
-
 class XRefController {
-    constructor(xrefMenuPanel) {
-        this._xrefMenuPanel = xrefMenuPanel;
-    }
+	constructor(xrefRegistry) {
+		this._xrefRegistry = xrefRegistry;
+	}
 
-    openMenu(event, item) {
-        this._xrefMenuPanel(item, event);
-        event.stopPropagation();
-    }
+	$onChanges() {
+		if (this.value) {
+			let config = this._xrefRegistry[this.value.constructor.name];
+
+			if (config) {
+				let {state, stateParams} = config(this.value);
+				this.state = state;
+				this.stateParams = stateParams;
+			} else {
+				this.state = null;
+				this.stateParams = null;
+			}
+		}
+	}
 }
 
 export const XRefComponent = {
-    template: '<span class="xref-menu-open-button" ng-click="$ctrl.openMenu($event, $ctrl.value)">{{ $ctrl.value.identifier }}</span>',
-    controller: XRefController,
-    bindings: {
-        value: '<'
-    }
+	template: '<a ui-state="$ctrl.state" ui-state-params="$ctrl.stateParams"><ng-transclude>{{ $ctrl.value.identifier }}</ng-transclude></a>',
+	controller: XRefController,
+	transclude: true,
+	bindings: {
+		value: '<'
+	}
 };

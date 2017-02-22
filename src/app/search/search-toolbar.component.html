@@ -1,0 +1,30 @@
+<ng-transclude ng-hide="$ctrl.showSearch" flex></ng-transclude>
+
+<md-autocomplete
+  ng-if="$ctrl.showSearch"
+  md-autofocus="true"
+  md-selected-item="$ctrl.selectedItem"
+  md-search-text-change="$ctrl.searchTextChange(ctrl.searchText)"
+  md-search-text="$ctrl.searchText"
+  md-selected-item-change="$ctrl.selectedItemChange(item)"
+  md-items="item in $ctrl.query($ctrl.searchText)"
+  md-item-text="item.text"
+  md-min-length="2"
+  placeholder="Search plates, media, pools, isolates and more."
+  flex>
+  <md-item-template>
+    <div layout="row">
+      <span md-highlight-text="$ctrl.searchText" md-highlight-flags="^i">{{ item.text }}</span>
+      <span flex></span>
+      <span class="md-caption">{{ item.search.name }}</span>
+    </div>
+  </md-item-template>
+  <md-not-found>
+    No matches found for "{{$ctrl.searchText}}".
+  </md-not-found>
+</md-autocomplete>
+
+<md-button aria-label="More" class="md-icon-button" ng-click="$ctrl.toggleSearch()">
+  <md-icon ng-hide="$ctrl.showSearch">search</md-icon>
+  <md-icon ng-show="$ctrl.showSearch">cancel</md-icon>
+</md-button>

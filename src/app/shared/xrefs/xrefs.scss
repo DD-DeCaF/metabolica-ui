@@ -1,0 +1,30 @@
+
+
+.xref-menu-open-button {
+	cursor: pointer;
+	outline: none;
+}
+
+.xref-menu-open-button:hover {
+	color: #2196F9;
+}
+
+.xref-menu {
+	background: white;
+	border-radius: 4px;
+	overflow: hidden;
+
+	border: 1px solid rgba(0,0,0,0.12);
+
+	width: 500px;
+	min-height: 200px;
+
+	&.xref-menu-wide {
+		width: 700px;
+		min-height: 400px;
+
+		.xref-menu-content {
+			height: 400px;
+		}
+	}
+}

@@ -1,17 +1,20 @@
+import {XRefMenuComponent} from './xref-menu.component';
 import {XRefComponent} from './xref.component';
+import './xrefs.scss';
+
 
 class XRefRegistryProvider {
     constructor() {
-        this.resources = {};
+        this.sources = {};
     }
 
     // XXX is component needed?
     register(resource, config) {
-        this.resources[resource] = config
+        this.sources[resource] = config
     }
 
     $get() {
-        return this.resources;
+        return this.sources;
     }
 }
 
@@ -33,8 +36,10 @@ export const XRefsModule = angular.module('xrefs', ['ngMaterial'])
         return function (item, event) {
             let config;
 
-			if(xrefRegistry[item.prototype.name]) {
-				config = xrefRegistry[item.prototype.name](item)
+			console.log(item, item.constructor.name, item.constructor)
+
+			if(xrefRegistry[item.constructor.name]) {
+				config = xrefRegistry[item.constructor.name](item)
 			}
 
             if(!config) {
@@ -68,4 +73,5 @@ export const XRefsModule = angular.module('xrefs', ['ngMaterial'])
         }
 
     })
-    .component('xref', XRefComponent);
+    .component('xrefMenu', XRefMenuComponent)
+	.component('xref', XRefComponent);
