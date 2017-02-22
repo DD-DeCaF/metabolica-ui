@@ -18,16 +18,15 @@ class SearchSourcesProvider {
         this.sources = {};
     }
 
-    // XXX is component needed?
-    register(name, resource) {
-        this.sources[name] = resource
+    register(name, source) {
+        this.sources[name] = source
     }
 
     $get($injector) {
         return Object
             .keys(this.sources)
             .map(resourceName => ({
-                search: this.sources[resourceName],
+                source: this.sources[resourceName],
                 resource: $injector.get(resourceName)
             }));
     }
@@ -36,7 +35,7 @@ class SearchSourcesProvider {
 
 export const SearchModule = angular.module('search', [])
     .provider('searchSources', SearchSourcesProvider)
-    .component('searchToolbar', SearchToolbarComponent)
+    .component('searchToolbar', SearchToolbarComponent);
     //.config((searchSourcesProvider, potionProvider) => {
     //    searchSourcesProvider.register('Project', {
     //        name: 'project',

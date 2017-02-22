@@ -24,25 +24,25 @@ class SearchToolbarController {
     query(searchText) {
         let searches = [];
 
-        for (let {resource, search} of this.searchSources) {
+        for (let {resource, source} of this.searchSources) {
             let defer = this._$q.defer();
-            search.query(resource, searchText)
+            source.query(resource, searchText)
                 .then(results => defer.resolve({
                     results: results,
-                    search
+                    source
                 }))
-                .catch(() => defer.resolve({search, results: []}));
+                .catch(() => defer.resolve({source, results: []}));
             searches.push(defer.promise);
         }
 
         return this._$q.all(searches).then((searches) => {
             return searches
-                .map(({search, results}) => results
+                .map(({source, results}) => results
                     .map(result => ({
-                        search,
-                        state: search.state,
-                        stateParams: search.stateParams(result),
-                        text: search.formatAsText(result)
+                        source,
+                        state: source.state,
+                        stateParams: source.stateParams(result),
+                        text: source.formatAsText(result)
                     })))
                 .reduce((a, b) => a.concat(b), [])
                 .sort((a, b) => a.text.localeCompare(b.text));
