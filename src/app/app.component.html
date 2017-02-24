@@ -53,7 +53,7 @@
 
     <md-list ng-show="$ctrl.project">
       <md-list-item
-        ng-repeat="component in $ctrl.projectNavigation"
+        ng-repeat="component in $ctrl.projectNavigation | orderBy:'order'"
         ui-sref="{{ component.state }}">
         <md-icon md-svg-icon="{{ component.icon }}"></md-icon>
         <p>{{ component.title }}</p>
