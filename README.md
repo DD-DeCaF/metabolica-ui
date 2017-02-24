@@ -40,3 +40,13 @@ npm start
 ```
 
 In its default configuration, the development server expects a compatible API to run on `https://localhost/` (port 443). Please consult the API server documentation about how to do this.
+ 
+ 
+## Documentation
+
+ 
+- [AngularJS](https://angularjs.org/)
+- [Angular Material](https://material.angularjs.org)
+- [webpack](https://webpack.js.org/)
+ 
+   This project uses webpack 2 for the development server, compilation and bundling.
