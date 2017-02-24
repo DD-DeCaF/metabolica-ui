@@ -91,7 +91,8 @@ export const MaintenanceModule = angular.module('shared.maintenance', [])
                 maintenanceDialogIsOpen = true;
 
                 $mdDialog.show({
-                    controller($scope) {
+                    controller($scope, appName) {
+                        $scope.appName = appName;
                         $scope.retry = () => {
                             httpBuffer.retryAll((config) => config);
 

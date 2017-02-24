@@ -14,4 +14,6 @@ export const DevAppModule = angular.module('DevApp', [
     AppModule.name,
     MaintenanceModule.name,
 	PlotlyModule.name
-]);
+]).config(function (appNameProvider) {
+    appNameProvider.name = 'Metabolica (Dev)'
+});

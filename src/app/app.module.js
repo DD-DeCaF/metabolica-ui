@@ -44,6 +44,15 @@ class AppNavigationProvider {
 }
 
 
+class AppNameProvider {
+    name = 'Metabolica';
+
+    $get() {
+        return this.name;
+    }
+}
+
+
 export const AppModule = angular.module('App', [
         'ngAnimate',
         'ngAria',
@@ -60,6 +69,7 @@ export const AppModule = angular.module('App', [
         DirectivesModule.name
     ])
     .provider('appNavigation', AppNavigationProvider)
+    .provider('appName', AppNameProvider)
     .component('app', AppComponent)
     .component('appHome', AppHomeComponent)
     .component('appToolbar', AppToolbarComponent)

@@ -3,7 +3,8 @@ import './login.component.scss';
 
 
 class LoginController {
-    constructor($scope, $timeout, $state, $stateParams, $location, Session) {
+    constructor($scope, $timeout, $state, $stateParams, $location, Session, appName) {
+        this.appName = appName;
         this.credentials = {
             username: '',
             password: ''

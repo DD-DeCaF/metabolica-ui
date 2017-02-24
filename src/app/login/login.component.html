@@ -5,12 +5,12 @@
             flex>
 
     <form class="login-form" name="loginForm">
-        <md-card layout="column" layout-padding>
+        <md-card layout="column" style="min-width: 650px" layout-padding>
             <md-card-content layout="column">
 
-                <h1 class="md-display-5">iLoop Web Platform</h1>
+                <h1 class="md-display-5">{{ $ctrl.appName }}</h1>
 
-                <p>Use your DTU username if you are a member of DTU. <em>If you are not a member of DTU</em>, use your email address.</p>
+                <p>Enter your username and password to log in.</p>
 
                 <md-input-container class="md-icon-float md-icon-left"> <!--TODO: md-icon-left is a temp fix, remove once AM fixes this-->
                     <!-- Use floating label instead of placeholder -->

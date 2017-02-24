@@ -1,7 +1,7 @@
 <md-content md-colors="{background: 'default-accent-200'}" ui-view layout="column" flex>
     <md-toolbar class="md-accent md-hue-1 md-whiteframe-z1">
         <div class="md-toolbar-tools">
-            <h2>Documentation for the API backend of the iLoop Platform</h2>
+            <h2>Documentation for the API backend of {{ $ctrl.appName }}</h2>
             <span flex></span>
             <md-button hide-gt-md
                        ng-click="$ctrl.toggleSidenav('right')"
@@ -16,8 +16,7 @@
                 <h3 class="md-title">Guidelines for API use:</h3>
 
                 <ul>
-                    <li>As a member of the iLoop you are very welcome to query the API (i.e. make GET requests).
-                    </li>
+                    <li>As a user you are very welcome to query the API (i.e. make GET requests).</li>
                     <li>The API is under active development is is subject to unannounced changes.</li>
                     <li>Before using the API for submitting data (i.e. making POST requests) you should first
                         inquire for instructions in the use of the API.
