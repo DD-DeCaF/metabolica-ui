@@ -16,7 +16,7 @@
     "ngstorage": "^0.3.11",
     "plotly.js": "^1.23.1",
     "potion-client": "^0.15.1",
-    "reflect-metadata": "^0.1.10"
+    "reflect-metadata": "0.1.10"
   },
   "scripts": {
     "build": "webpack",
