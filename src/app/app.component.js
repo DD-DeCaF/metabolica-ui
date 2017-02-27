@@ -4,11 +4,12 @@ import './app.component.scss';
 
 class AppController {
 
-    constructor($state, $rootScope, appNavigation, Session, Project) {
+    constructor($state, $rootScope, appNavigation, appName, Session, Project) {
         this._Session = Session;
         this._$rootScope = $rootScope;
         this._$state = $state;
 
+        this.appName = appName;
         this.projectNavigation = appNavigation.filter(nav => nav.position == 'project');
         this.navigation = appNavigation.filter(nav => nav.position == 'global');
 
