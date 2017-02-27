@@ -40,6 +40,8 @@ npm start
 ```
 
 In its default configuration, the development server expects a compatible API to run on `https://localhost/` (port 443). Please consult the API server documentation about how to do this.
+
+Development should follow [DTU Biosustain guidelines](https://github.com/biosustain/biosustain) with semantic commit messages.
  
  
 ## Documentation
