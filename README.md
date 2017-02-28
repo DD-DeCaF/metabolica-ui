@@ -42,7 +42,13 @@ npm start
 In its default configuration, the development server expects a compatible API to run on `https://localhost/` (port 443). Please consult the API server documentation about how to do this.
 
 Development should follow [DTU Biosustain guidelines](https://github.com/biosustain/biosustain) with semantic commit messages.
- 
+
+### Naming
+
+New Metabolica UI components should follow the `metabolica-{componentModuleName}` naming scheme for their NPM packages. 
+Their GitHub repositories should follow the `metabolica-ui-{componentModuleName}` naming scheme.
+
+Any server-side code may use GitHub repositories using the `metabolica-{componentModuleName}` naming scheme. 
  
 ## Documentation
 
