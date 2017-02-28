@@ -1,3 +1,4 @@
+import angular from 'angular';
 import {ProjectComponent} from './project.component';
 import {ResourcesModule} from '../shared/resources/resources.module';
 import 'angular-ui-router';
