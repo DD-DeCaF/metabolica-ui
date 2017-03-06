@@ -2,6 +2,10 @@
 @import url('https://fonts.googleapis.com/icon?family=Material+Icons');
 
 
+ui-view {
+  max-width: 100%;
+}
+
 .text-right {
 	text-align: right;
 }
