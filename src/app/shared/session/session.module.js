@@ -4,7 +4,7 @@ import 'ngstorage';
 import {ResourcesModule} from '../resources/resources.module';
 
 
-function SessionFactory($http, $localStorage, $rootScope, User) {
+function SessionFactory($http, $localStorage, $rootScope, User, potion) {
     const Session = {
         isAuthenticated() {
             return this.expires > new Date();
@@ -48,7 +48,7 @@ function SessionFactory($http, $localStorage, $rootScope, User) {
         },
 
         authenticate(credentials) {
-            return $http.post('/api/auth', credentials)
+            return $http.post(`${potion.host}${potion.prefix}/auth`, credentials)
                 .then((response) => {
                     $localStorage.sessionJWT = response.data.token;
                     $rootScope.$broadcast('session:login');
