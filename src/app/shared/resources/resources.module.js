@@ -8,7 +8,9 @@ import {Aggregate, Test} from './legacy/types';
 import {Variant} from './legacy/variant';
 
 export const ResourcesModule = angular
-    .module('shared.resources', ['potion']);
+    .module('shared.resources', ['potion'])
+    .constant('Item', Item)
+    .constant('Route', Route);
 
 /**
  * User Management
@@ -58,7 +60,7 @@ function GroupMembershipFactory(potion, Group, User) {
  */
 
 ResourcesModule.factory('Project', ProjectFactory);
-function ProjectFactory(potion, Experiment, ExperimentPhase, Strain, Pool, Plate, Sample, Device, Organism, GenomeDiff, DNAComponent, Medium, ChemicalEntity) {
+function ProjectFactory(potion, Item, Experiment, ExperimentPhase, Strain, Pool, Plate, Sample, Device, Organism, GenomeDiff, DNAComponent, Medium, ChemicalEntity) {
     // NOTE injects are there to work around AngularJS circular dependency resolution issues
     class Project extends Item {
         readPermissions = Route.GET('/permissions');
