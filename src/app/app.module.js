@@ -28,7 +28,7 @@ class AppNavigationProvider {
     // XXX is component needed?
     register(state, {title, position=null, icon='puzzle', order=Number.MAX_VALUE} = {}) {
 		if(!position) {
-			if(state.startsWith('app.project')) {
+			if(state.startsWith('app.project.')) {
 				position = 'project';
 			} else {
 				position = 'global';
