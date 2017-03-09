@@ -197,18 +197,20 @@ function SampleFactory(potion, Experiment, Medium, Plate, Strain) {
         static aggregateTests = Route.GET('/aggregate-tests');
         static _aggregateScalars = Route.GET('/aggregate-scalars');
 
-        static async aggregateScalars(...args) {
-            return new Aggregate(await this._aggregateScalars(...args))
+        static aggregateScalars(...args) {
+            return this._aggregateScalars(...args)
+                .then(aggregate => new Aggregate(aggregate))
         }
 
         _readSeries = Route.GET('/series');
 
-        async readSeries(...args) {
-            let series = await this._readSeries(...args);
-            return series.map((item) => Object.assign(item, {
-                test: new Test(item.test),
-                sample: this
-            }));
+        readSeries(...args) {
+            return this._readSeries(...args)
+                .then(series => series
+                    .map((item) => Object.assign(item, {
+                        test: new Test(item.test),
+                        sample: this
+                    })));
         }
 
         labelAsText() {
