@@ -121,10 +121,9 @@ export const AppModule = angular.module('App', [
         $urlRouterProvider.otherwise('/app/home');
         $locationProvider.html5Mode(true);
     })
-    .run(function ($rootScope, $state, $location, $log, $mdDialog) {
+    .run(function ($transitions, $state, $location, $log, $mdDialog) {
         // https://github.com/angular/material/issues/3418
-        $rootScope.$on('$stateChangeStart', () => {
-            $log.log('state change start', $state)
+        $transitions.onStart({}, transition => {
             $mdDialog.cancel();
         });
     });

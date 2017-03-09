@@ -21,8 +21,10 @@ class XRefRegistryProvider {
 
 export const XRefsModule = angular.module('xrefs', ['ngMaterial'])
     .provider('xrefRegistry', XRefRegistryProvider)
-    .factory('xrefMenuPanel', function ($rootScope, $mdPanel, xrefRegistry) {
-        $rootScope.$on('$stateChangeStart', closeMenus);
+    .factory('xrefMenuPanel', function ($transitions, $mdPanel, xrefRegistry) {
+        $transitions.onStart({}, transition => {
+            closeMenus()
+        });
 
         let menus = [];
         function closeMenus() {
@@ -67,7 +69,9 @@ export const XRefsModule = angular.module('xrefs', ['ngMaterial'])
                 escapeToClose: true,
                 focusOnOpen: false,
                 zIndex: 89
-            }, config)).then((menu) => {menus.push(menu)})
+            }, config)).then(menu => {
+                menus.push(menu);
+            })
         }
 
     })
