@@ -25,7 +25,6 @@ class TestSelectMultiple {
 	$onInit() {
 		this.ngModel.$render = () => {
 			this.selectedTests = this.ngModel.$viewValue;
-			console.log('render', this.selectedTests)
 		};
 
 		this._$scope.$watchCollection(() => this.selectedTests, (value) => {

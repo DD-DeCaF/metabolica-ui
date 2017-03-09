@@ -36,8 +36,6 @@ export const XRefsModule = angular.module('xrefs', ['ngMaterial'])
         return function (item, event) {
             let config;
 
-			console.log(item, item.constructor.name, item.constructor)
-
 			if(xrefRegistry[item.constructor.name]) {
 				config = xrefRegistry[item.constructor.name](item)
 			}

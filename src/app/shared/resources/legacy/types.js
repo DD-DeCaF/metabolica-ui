@@ -402,7 +402,6 @@ export class AggregateList {
 	 * @returns {Array<Test>}
 	 */
 	tests() {
-		console.log(this);
 		let tests = new Map();
 		for (let aggregate of this.aggregates) {
 			for (let test of aggregate.tests) {
