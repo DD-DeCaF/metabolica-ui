@@ -15,7 +15,9 @@ function $sharingProvider() {
         },
 
         $get: ['$state', '$rootScope', function ($state, $rootScope) {
-            let provided = {}, transfer = {};
+            let provided = {};
+            let transfer = {};
+            let hooks = []
 
             class Sharing {
 
@@ -42,27 +44,26 @@ function $sharingProvider() {
                     }
                 }
 
-                provide(scope, sharable) {
-                    for (let type of Object.keys(sharable)) {
-                        let watchExpression = sharable[type];
+                provide(shareable) {
+                    provided = Object.assign({}, provided, shareable);
+                    console.log('share change', this.targets, shareable)
+                    this._triggerOnShareChange()
+                }
 
-                        scope.$watch(watchExpression, (value) => {
-                            if (value != undefined) {
-                                provided[type] = value;
-                            } else {
-                                delete provided[type];
-                            }
+                clearProvisions() {
+                    provided = {};
+                    this._triggerOnShareChange()
+                }
 
-                            $rootScope.$broadcast('share-change', this.targets);
-                        });
+                onShareChange(hookFn) {
+                    hooks.push(hookFn)
+                }
 
-
+                _triggerOnShareChange() {
+                    let targets = this.targets;
+                    for(let hookFn of hooks) {
+                        hookFn(targets)
                     }
-
-                    scope.$on('$destroy', function () {
-                        provided = {};
-                        $rootScope.$broadcast('share-change', []);
-                    });
                 }
 
                 get targets() {
@@ -77,6 +78,7 @@ function $sharingProvider() {
 
                 // TODO transfer to $stateParams if receiving state supports it (needs to be specified on register).
                 async open(state) {
+                    console.log('open', state)
                     transfer = provided;
                     await $state.go(state);
                     transfer = {};
@@ -138,4 +140,10 @@ export const SharingModule = angular.module('SharingModule', [])
         }
 
     })
-    .provider('$sharing', $sharingProvider);
+    .provider('$sharing', $sharingProvider)
+    .run(function($transitions) {
+        $transitions.onStart({}, transition => {
+            const $sharing = transition.injector().get('$sharing');
+            $sharing.clearProvisions();
+        });
+    });

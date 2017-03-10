@@ -92,7 +92,6 @@ export const AppModule = angular.module('App', [
          * Specify the API root and ensure requests are get annotated with the session token.
          */
         potionProvider.config({prefix: '/api'});
-        //$httpProvider.interceptors.push('httpInterceptor');
         $httpProvider.interceptors.push('sessionInterceptor');
     })
     .config(function ($mdIconProvider) {
@@ -121,12 +120,20 @@ export const AppModule = angular.module('App', [
         $urlRouterProvider.otherwise('/app/home');
         $locationProvider.html5Mode(true);
     })
-    .run(function ($transitions, $state, $location, $log, $mdDialog) {
+    .run(function ($transitions, $state, $location, $log, $mdDialog, $window, appName) {
         // https://github.com/angular/material/issues/3418
         $transitions.onStart({}, transition => {
             $mdDialog.cancel();
         });
+
+        $transitions.onStart({}, transition => {
+            transition.promise.finally(() => {
+                let title = $state.current.data && $state.current.data.title;
+                $window.document.title = title ? `${appName} – ${title}`: appName;
+            })
+        });
     });
+
 
 
 

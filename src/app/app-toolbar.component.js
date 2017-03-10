@@ -2,11 +2,15 @@ import template from './app-toolbar.component.html';
 
 class AppToolbarController {
 
-	constructor($state, $rootScope, $mdSidenav, Session, Project, appNavigation) {
+	constructor($scope, $state, $rootScope, $mdSidenav, $sharing, Session, Project, appNavigation) {
 		this._$state = $state;
 		this._$rootScope = $rootScope;
 		this._$mdSidenav = $mdSidenav;
 		this._Session = Session;
+
+        $sharing.onShareChange(targets => {
+            this.sharing = {targets, open: $sharing.open};
+        });
 
 		this.projects = [];
 		Project.query().then((projects) => {
