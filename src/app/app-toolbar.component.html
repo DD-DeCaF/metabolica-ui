@@ -35,10 +35,12 @@
         <md-icon>more_vert</md-icon>
       </md-button>
       <md-menu-content width="4">
-        <md-list-item ng-repeat="component in $ctrl.navigation" ui-sref="{{ component.state }}">
-          <md-icon md-svg-icon="{{ component.icon }}"></md-icon>
-          <p>{{ component.title }}</p>
-        </md-list-item>
+        <md-menu-item ng-repeat="component in $ctrl.navigation">
+          <md-button ui-sref="{{ component.state }}">
+            <md-icon md-svg-icon="{{ component.icon }}"></md-icon>
+            {{ component.title }}
+          </md-button>
+        </md-menu-item>
         <md-menu-divider ng-if="$ctrl.navigation.length"></md-menu-divider>
         <md-menu-item>
           <md-button ui-sref="app.docs">
