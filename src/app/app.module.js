@@ -26,7 +26,7 @@ class AppNavigationProvider {
     }
 
     // XXX is component needed?
-    register(state, {title, position=null, icon='puzzle', order=Number.MAX_VALUE} = {}) {
+    register(state, {title, position=null, icon='puzzle', order=Number.MAX_VALUE, stateParams={}} = {}) {
 		if(!position) {
 			if(state.startsWith('app.project.')) {
 				position = 'project';
@@ -35,7 +35,7 @@ class AppNavigationProvider {
 			}
 		}
 
-        this.navigation.push({state, title, position, icon, order});
+        this.navigation.push({state: `${state}(${JSON.stringify(stateParams)})`, title, position, icon, order});
     }
 
     $get() {
