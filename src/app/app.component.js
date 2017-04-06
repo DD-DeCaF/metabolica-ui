@@ -4,10 +4,11 @@ import './app.component.scss';
 
 class AppController {
 
-    constructor($state, $rootScope, appNavigation, appName, Session, Project) {
+    constructor($state, $rootScope, appNavigation, appName, Session, Project, SideNavLock) {
         this._Session = Session;
         this._$rootScope = $rootScope;
         this._$state = $state;
+        this.SideNavLock = SideNavLock;
 
         this.appName = appName;
         this.projectNavigation = appNavigation.filter(nav => nav.position == 'project');
@@ -46,7 +47,6 @@ class AppController {
 
 
 export const AppComponent = {
-    bindings: {},
     controller: AppController,
     template
 };

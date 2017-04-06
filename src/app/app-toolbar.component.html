@@ -1,9 +1,10 @@
 <md-toolbar ng-hide="shouldHideMenus()"
             ng-style="{backgroundColor: $ctrl.project.color}"
             class="md-theme-light color-transition"
-            layout="row">
+            layout="row"
+            >
   <div class="md-toolbar-tools">
-    <md-button hide-gt-sm ng-click="$ctrl.toggleSidenav('left')"
+    <md-button ng-click="$ctrl.toggleSidenav('left')"
                class="md-icon-button">
       <md-icon aria-label="Menu">menu</md-icon>
     </md-button>

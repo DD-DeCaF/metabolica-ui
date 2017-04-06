@@ -73,6 +73,9 @@ export const AppModule = angular.module('App', [
     .component('app', AppComponent)
     .component('appHome', AppHomeComponent)
     .component('appToolbar', AppToolbarComponent)
+    .service('SideNavLock', function () {
+        this.lock = true;
+    })
     .config(function ($mdThemingProvider) {
         /**
          * Theming
