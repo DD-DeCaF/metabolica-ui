@@ -2,13 +2,11 @@ import template from './app-toolbar.component.html';
 
 class AppToolbarController {
 
-	constructor($scope, $state, $rootScope, $mdSidenav, $sharing, Session, Project, appNavigation, SideNavLock, $mdMedia) {
+	constructor($scope, $state, $rootScope, $mdSidenav, $sharing, Session, Project, appNavigation) {
 		this._$state = $state;
 		this._$rootScope = $rootScope;
 		this._$mdSidenav = $mdSidenav;
 		this._Session = Session;
-		this._SideNavLock = SideNavLock;
-		this._$mdMedia = $mdMedia;
 
         $sharing.onShareChange(targets => {
             this.sharing = {targets, open: $sharing.open};
@@ -52,12 +50,7 @@ class AppToolbarController {
 	}
 
 	toggleSidenav(menuId) {
-        this._$mdSidenav(menuId).toggle();
-        this._SideNavLock.lock = !this._SideNavLock.lock;
-
-        if(this._$mdSidenav(menuId).isOpen() && this._$mdMedia('gt-sm')){
-            this._$mdSidenav(menuId).close();
-        }
+		this._$mdSidenav(menuId).toggle();
 	}
 
 	logout() {
@@ -67,5 +60,5 @@ class AppToolbarController {
 
 export const AppToolbarComponent = {
 	controller: AppToolbarController,
-	template,
+	template
 };
