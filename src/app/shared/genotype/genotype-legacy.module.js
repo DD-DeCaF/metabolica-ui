@@ -142,11 +142,11 @@ function joinPieces(pieces = []) {
 }
 
 
-export function featureText(feature, {integrated, isMarker} = {integrated: true, isMarker: false}) {
+export function featureText(feature, {integrated, isMarker, includePlasmidContent} = {integrated: true, isMarker: false, includePlasmidContent: true}) {
     if (feature instanceof Plasmid) {
         let name = feature.name;
 
-        if (feature.contents.length) {
+        if (feature.contents.length && includePlasmidContent) {
             let content = feature.contents.map(featureText).join(' ');
 
             if (integrated) {
@@ -194,7 +194,7 @@ export function featureText(feature, {integrated, isMarker} = {integrated: true,
 }
 
 // FIXME unnecessary spaces when merging marker pieces
-export function genotypeToText(genotype) {
+export function genotypeToText(genotype, {includePlasmidContent=true} = {}) {
     if (genotype == null) {
         return '—';
     }
@@ -216,7 +216,7 @@ export function genotypeToText(genotype) {
         } else if (change instanceof Phene) {
             pieces.push(featureText(change));
         } else if (change instanceof Plasmid) {
-            pieces.push(featureText(change, {integrated: false}));
+            pieces.push(featureText(change, {integrated: false, includePlasmidContent}));
         }
 
         if (change.marker) {
