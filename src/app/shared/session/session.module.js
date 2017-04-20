@@ -58,6 +58,10 @@ function SessionFactory($http, $localStorage, $rootScope, User, potion) {
         logout(next = null) {
             delete $localStorage.sessionJWT;
             $rootScope.$broadcast('session:logout', {next: next});
+        },
+
+        login(next = null) {
+            $rootScope.$broadcast('session:logout', {next: next});
         }
     };
 
@@ -76,7 +80,8 @@ function SessionInterceptorFactory($q, $injector) {
         },
         responseError(response) {
             if (response.status === 401) {
-                $injector.get('Session').logout(location.pathname);
+                // TODO: fix backend to respond to unauthorised user
+                // $injector.get('Session').logout(location.pathname);
             }
             return $q.reject(response);
         }
@@ -101,13 +106,6 @@ export const SessionModule = angular
 
         if(!Session.isAuthenticated()) {
             $rootScope.isAuthenticated = false;
-            setTimeout(() => {
-                let next;
-                if (!$state.includes('login')) {
-                    next = $location.path();
-                }
-                $rootScope.$broadcast('session:logout', {next});
-            }, 100);
         } else {
             $rootScope.isAuthenticated = true;
             $log.info(`Session expires ${Session.expires}`);

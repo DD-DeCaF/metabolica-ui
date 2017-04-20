@@ -7,6 +7,7 @@ class AppToolbarController {
 		this._$rootScope = $rootScope;
 		this._$mdSidenav = $mdSidenav;
 		this._Session = Session;
+        this.isAuthenticated = $rootScope.isAuthenticated;
 
         $sharing.onShareChange(targets => {
             this.sharing = {targets, open: $sharing.open};
@@ -17,7 +18,7 @@ class AppToolbarController {
 			this.projects = projects
 		});
 
-		this.navigation = appNavigation.filter(nav => nav.position == 'toolbar');
+		this.navigation = appNavigation[this.isAuthenticated].filter(nav => nav.position == 'toolbar');
 	}
 
 	get project() {
@@ -55,6 +56,10 @@ class AppToolbarController {
 
 	logout() {
 		this._Session.logout();
+	}
+
+	login() {
+		this._Session.login();
 	}
 }
 

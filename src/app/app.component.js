@@ -10,8 +10,8 @@ class AppController {
         this._$state = $state;
 
         this.appName = appName;
-        this.projectNavigation = appNavigation.filter(nav => nav.position == 'project');
-        this.navigation = appNavigation.filter(nav => nav.position == 'global');
+        this.projectNavigation = appNavigation[$rootScope.isAuthenticated].filter(nav => nav.position == 'project');
+        this.navigation = appNavigation[$rootScope.isAuthenticated].filter(nav => nav.position == 'global');
 
         this.projects = [];
         Project.query().then((projects) => {

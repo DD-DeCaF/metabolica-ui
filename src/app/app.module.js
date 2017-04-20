@@ -22,11 +22,12 @@ import iconPuzzle from '../../img/icons/puzzle.svg';
 
 class AppNavigationProvider {
     constructor() {
-        this.navigation = [];
+        // Two lists of components: for authorised and unauthorised users
+        this.navigation = {true: [], false: []};
     }
 
     // XXX is component needed?
-    register(state, {title, position=null, icon='puzzle', order=Number.MAX_VALUE, stateParams={}} = {}) {
+    register(state, {title, position=null, authRequired=true, icon='puzzle', order=Number.MAX_VALUE, stateParams={}} = {}) {
 		if(!position) {
 			if(state.startsWith('app.project.')) {
 				position = 'project';
@@ -35,12 +36,16 @@ class AppNavigationProvider {
 			}
 		}
 
-        this.navigation.push({state: `${state}(${JSON.stringify(stateParams)})`, title, position, icon, order});
+        var module = {state: `${state}(${JSON.stringify(stateParams)})`, title, position, icon, order, authRequired};
+        this.navigation[true].push(module);
+        if (!module.authRequired) this.navigation[false].push(module);
     }
 
     $get() {
         return this.navigation;
     }
+
+
 }
 
 

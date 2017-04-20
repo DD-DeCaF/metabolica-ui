@@ -49,10 +49,16 @@
           </md-button>
         </md-menu-item>
         <md-menu-divider></md-menu-divider>
-        <md-menu-item>
+        <md-menu-item ng-if="$ctrl.isAuthenticated">
           <md-button ng-click="$ctrl.logout()">
             <md-icon>lock</md-icon>
             Log Out
+          </md-button>
+        </md-menu-item>
+        <md-menu-item ng-if="!$ctrl.isAuthenticated">
+          <md-button ng-click="$ctrl.login()">
+            <md-icon>lock</md-icon>
+            Log In
           </md-button>
         </md-menu-item>
       </md-menu-content>
