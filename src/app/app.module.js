@@ -22,11 +22,12 @@ import iconPuzzle from '../../img/icons/puzzle.svg';
 
 class AppNavigationProvider {
     constructor() {
+        // Two lists of components: for authorised and unauthorised users
         this.navigation = [];
     }
 
     // XXX is component needed?
-    register(state, {title, position=null, icon='puzzle', order=Number.MAX_VALUE, stateParams={}} = {}) {
+    register(state, {title, position=null, authRequired=true, icon='puzzle', order=Number.MAX_VALUE, stateParams={}} = {}) {
 		if(!position) {
 			if(state.startsWith('app.project.')) {
 				position = 'project';
@@ -35,12 +36,15 @@ class AppNavigationProvider {
 			}
 		}
 
-        this.navigation.push({state: `${state}(${JSON.stringify(stateParams)})`, title, position, icon, order});
+        let module = {state: `${state}(${JSON.stringify(stateParams)})`, title, position, icon, order, authRequired};
+        this.navigation.push(module);
     }
 
     $get() {
         return this.navigation;
     }
+
+
 }
 
 
@@ -49,6 +53,15 @@ class AppNameProvider {
 
     $get() {
         return this.name;
+    }
+}
+
+
+class AppAuthProvider {
+    isRequired = false;
+
+    $get() {
+        return this.isRequired;
     }
 }
 
@@ -70,6 +83,7 @@ export const AppModule = angular.module('App', [
     ])
     .provider('appNavigation', AppNavigationProvider)
     .provider('appName', AppNameProvider)
+    .provider('appAuth', AppAuthProvider)
     .component('app', AppComponent)
     .component('appHome', AppHomeComponent)
     .component('appToolbar', AppToolbarComponent)

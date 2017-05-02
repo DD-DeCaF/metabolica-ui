@@ -17,7 +17,10 @@ class AppToolbarController {
 			this.projects = projects
 		});
 
-		this.navigation = appNavigation.filter(nav => nav.position == 'toolbar');
+        this.navigation = appNavigation.filter(nav => nav.position == 'toolbar');
+        if (!$rootScope.isAuthenticated) {
+            this.navigation = this.navigation.filter(nav => !nav.authRequired);
+        }
 	}
 
 	get project() {
@@ -55,6 +58,10 @@ class AppToolbarController {
 
 	logout() {
 		this._Session.logout();
+	}
+
+	login() {
+		this._Session.login();
 	}
 }
 
