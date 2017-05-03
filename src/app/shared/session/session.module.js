@@ -69,7 +69,7 @@ function SessionFactory($http, $localStorage, $rootScope, User, potion) {
 }
 
 
-function SessionInterceptorFactory($q, $injector) {
+function SessionInterceptorFactory($q, $injector, appAuth) {
     return {
         request(config) {
             let $localStorage = $injector.get('$localStorage');
@@ -81,7 +81,9 @@ function SessionInterceptorFactory($q, $injector) {
         responseError(response) {
             if (response.status === 401) {
                 // TODO: fix backend to respond to unauthorised user
-                // $injector.get('Session').logout(location.pathname);
+                if (appAuth.isRequired) {
+                    $injector.get('Session').logout(location.pathname);
+                }
             }
             return $q.reject(response);
         }
@@ -95,7 +97,7 @@ export const SessionModule = angular
     ])
     .factory('Session', SessionFactory)
     .factory('sessionInterceptor', SessionInterceptorFactory)
-    .run(function ($rootScope, $state, $location, $log, $mdDialog, Session, Project) {
+    .run(function ($rootScope, $state, $location, $log, $mdDialog, Session, Project, appAuth) {
         $rootScope.$on('session:login', (event) => {
             $rootScope.isAuthenticated = true;
         });
@@ -106,6 +108,15 @@ export const SessionModule = angular
 
         if(!Session.isAuthenticated()) {
             $rootScope.isAuthenticated = false;
+            if (appAuth) {
+                setTimeout(() => {
+                    let next;
+                    if (!$state.includes('login')) {
+                        next = $location.path();
+                    }
+                    $rootScope.$broadcast('session:logout', {next});
+                }, 100);
+            }
         } else {
             $rootScope.isAuthenticated = true;
             $log.info(`Session expires ${Session.expires}`);

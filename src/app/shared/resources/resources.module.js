@@ -317,7 +317,7 @@ function PoolFactory(potion, $cacheFactory, User, Strain, Medium, ChemicalEntity
         readSamples = Route.GET('/samples');
         static lineage = Route.GET('/lineage');
         static searchByGenotype = Route.GET('/search-by-genotype');
-        static compareGenotypes = Route.GET('/compare-genotypes');
+        static compareGenotypes = Route.POST('/compare-genotypes');
     }
 
     return potion.register('/pool', Pool, {

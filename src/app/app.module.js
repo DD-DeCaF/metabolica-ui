@@ -23,7 +23,7 @@ import iconPuzzle from '../../img/icons/puzzle.svg';
 class AppNavigationProvider {
     constructor() {
         // Two lists of components: for authorised and unauthorised users
-        this.navigation = {true: [], false: []};
+        this.navigation = [];
     }
 
     // XXX is component needed?
@@ -36,9 +36,8 @@ class AppNavigationProvider {
 			}
 		}
 
-        var module = {state: `${state}(${JSON.stringify(stateParams)})`, title, position, icon, order, authRequired};
-        this.navigation[true].push(module);
-        if (!module.authRequired) this.navigation[false].push(module);
+        let module = {state: `${state}(${JSON.stringify(stateParams)})`, title, position, icon, order, authRequired};
+        this.navigation.push(module);
     }
 
     $get() {
@@ -54,6 +53,15 @@ class AppNameProvider {
 
     $get() {
         return this.name;
+    }
+}
+
+
+class AppAuthProvider {
+    isRequired = false;
+
+    $get() {
+        return this.isRequired;
     }
 }
 
@@ -75,6 +83,7 @@ export const AppModule = angular.module('App', [
     ])
     .provider('appNavigation', AppNavigationProvider)
     .provider('appName', AppNameProvider)
+    .provider('appAuth', AppAuthProvider)
     .component('app', AppComponent)
     .component('appHome', AppHomeComponent)
     .component('appToolbar', AppToolbarComponent)

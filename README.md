@@ -39,7 +39,7 @@ Run the development server:
 npm start
 ```
 
-In its default configuration, the development server expects a compatible API to run on `https://localhost/` (port 443). Please consult the API server documentation about how to do this.
+In its default configuration, the development server expects a compatible API to run on `http://localhost/` (port 80). Please consult the API server documentation about how to do this. To change the target URL of the API, set the `METABOLICA_DEV_API_HOST` environment variable.
 
 Development should follow [DTU Biosustain guidelines](https://github.com/biosustain/biosustain) with semantic commit messages.
 

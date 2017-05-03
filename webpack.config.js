@@ -79,7 +79,7 @@ module.exports = function () {
             proxy: {
                 '/api': {
                     // Set the following line to the address of the API you want to test against:
-                    target: 'http://localhost',
+                    target: process.env.METABOLICA_DEV_API_HOST || 'http://localhost',
 					secure: false,
 					changeOrigin: true
                 }

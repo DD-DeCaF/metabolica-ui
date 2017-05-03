@@ -39,7 +39,20 @@ function plotDirective(WindowResize) {
 						showLink: false,
 						showTips: false,
 						sendData: false,
-						modeBarButtonsToRemove: ['sendDataToCloud']
+						modeBarButtonsToRemove: ['sendDataToCloud'],
+                        modeBarButtonsToAdd: [{
+                            // https://github.com/plotly/plotly.js/issues/1576
+                            name: 'toLargeImage',
+                            title: 'Download plot as a png (larger image)',
+                            icon: Plotly.Icons['camera-retro'],
+                            click: function(gd) {
+                                Plotly.downloadImage(gd, {
+                                    format: 'png',
+                                    width: 1200,
+                                    filename: 'newplot'}
+                                )
+                            }
+                        }]
 					}, options || {})
 				);
 			});
