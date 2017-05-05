@@ -3,7 +3,7 @@
             class="md-theme-light color-transition"
             layout="row">
   <div class="md-toolbar-tools">
-    <md-button hide-gt-sm ng-click="$ctrl.toggleSidenav('left')"
+    <md-button ng-hide="$ctrl.appCtrl.isSidenavOpen('left')" ng-click="$ctrl.appCtrl.openSidenav('left')"
                class="md-icon-button">
       <md-icon aria-label="Menu">menu</md-icon>
     </md-button>
