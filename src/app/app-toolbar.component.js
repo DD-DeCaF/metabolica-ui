@@ -7,6 +7,7 @@ class AppToolbarController {
 		this._$rootScope = $rootScope;
 		this._$mdSidenav = $mdSidenav;
 		this._Session = Session;
+		this.isAuthenticated = $rootScope.isAuthenticated;
 
         $sharing.onShareChange(targets => {
             this.sharing = {targets, open: $sharing.open};
@@ -18,7 +19,7 @@ class AppToolbarController {
 		});
 
         this.navigation = appNavigation.filter(nav => nav.position == 'toolbar');
-        if (!$rootScope.isAuthenticated) {
+        if (!this.isAuthenticated) {
             this.navigation = this.navigation.filter(nav => !nav.authRequired);
         }
 	}
