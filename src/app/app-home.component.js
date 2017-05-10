@@ -1,7 +1,8 @@
 
 class AppHomeController {
-    constructor(appName) {
+    constructor(appName, $mdSidenav) {
         this.appName = appName;
+        this._$mdSidenav = $mdSidenav;
     }
 }
 
