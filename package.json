@@ -15,7 +15,7 @@
     "gnomic-grammar": "^0.3.4",
     "ngstorage": "^0.3.11",
     "plotly.js": "^1.23.1",
-    "potion-client": "1.5.1",
+    "potion-client": "1.5.2",
     "reflect-metadata": "^0.1.10"
   },
   "scripts": {
