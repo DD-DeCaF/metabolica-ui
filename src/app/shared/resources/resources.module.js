@@ -514,3 +514,61 @@ function TaskCommentFactory(potion, User, Task) {
         readonly: ['createdBy', 'createdAt', 'updatedAt']
     });
 }
+
+ResourcesModule.factory('MeasurementTable', MeasurementTableFactory);
+function MeasurementTableFactory(potion, Item, Route) {
+    class MeasurementTable extends Item {
+        static _generateTable = Route.POST('/generate-table');
+        static _generateTableAggregate = Route.POST('/generate-table-aggregate');
+        static _generateTableSeries = Route.POST('/generate-table-series');
+
+        static generateTable(...args) {
+            return this._generateTable(...args)
+                .then(table => {
+                    let tests = new Map(Object
+                        .entries(table.tests)
+                        .map(([key, test]) => [key, new Test(test)]));
+
+                    return table.measurements
+                        .map(measurement => Object.assign(measurement, {test: tests.get(measurement.test)}));
+                });
+        }
+
+        static generateTableAggregate(...args) {
+            return this._generateTableAggregate(...args)
+                .then(table => {
+                    let tests = new Map(Object
+                        .entries(table.tests)
+                        .map(([key, test]) => [key, new Test(test)]));
+
+                    return table.measurements
+                        .map(measurement => Object.assign(measurement, {test: tests.get(measurement.test)}));
+                });
+        }
+
+        static generateTableSeries(...args) {
+            return this._generateTableSeries(...args)
+                .then(table => {
+                    if (table.columns.includes('test')) {
+                        const tests = new Map(Object
+                            .entries(table.tests)
+                            .map(([key, test]) => [key, new Test(test)]));
+
+                        const t = table.columns.indexOf('test');
+
+                        for (let measurement of table.measurements) {
+                            measurement[t] = tests.get(measurement[t]);
+                        }
+                    }
+
+                    return table.measurements.map(measurement => table.columns
+                        .reduce((obj, key) => {
+                            obj[key] = measurement[table.columns.indexOf(key)];
+                            return obj;
+                        }, {}));
+                });
+        }
+    }
+
+    return potion.register('/measurement-table', MeasurementTable);
+}
