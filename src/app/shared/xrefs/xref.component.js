@@ -20,7 +20,10 @@ class XRefController {
 }
 
 export const XRefComponent = {
-	template: '<a ui-state="$ctrl.state" ui-state-params="$ctrl.stateParams"><ng-transclude>{{ $ctrl.value.identifier }}</ng-transclude></a>',
+	template: `
+    <a ui-state="$ctrl.state" ui-state-params="$ctrl.stateParams">
+      <ng-transclude>{{ $ctrl.value.identifier || $ctrl.value.barcode }}</ng-transclude>
+    </a>`,
 	controller: XRefController,
 	transclude: true,
 	bindings: {
