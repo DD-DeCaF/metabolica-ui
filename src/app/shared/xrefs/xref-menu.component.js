@@ -12,7 +12,7 @@ class XRefMenuController {
 export const XRefMenuComponent = {
 	template: `
 	<span class="xref-menu-open-button" ng-click="$ctrl.openMenu($event, $ctrl.value)">
-	  <ng-transclude>{{ $ctrl.value.identifier }}</ng-transclude>
+	  <ng-transclude>{{ $ctrl.value.identifier || $ctrl.value.barcode }}</ng-transclude>
     </span>`,
 	controller: XRefMenuController,
 	transclude: true,

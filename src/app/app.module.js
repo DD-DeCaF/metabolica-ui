@@ -58,7 +58,7 @@ class AppNameProvider {
 
 
 class AppAuthProvider {
-    isRequired = false;
+    isRequired = true;
 
     $get() {
         return this.isRequired;

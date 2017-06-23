@@ -2,15 +2,18 @@ import template from './app-toolbar.component.html';
 
 class AppToolbarController {
 
-	constructor($scope, $state, $rootScope, $mdSidenav, $sharing, Session, Project, appNavigation) {
+	constructor($scope, $state, $rootScope, $mdSidenav, $sharing, Session, Project, appNavigation, $mdMedia) {
 		this._$state = $state;
 		this._$rootScope = $rootScope;
 		this._$mdSidenav = $mdSidenav;
 		this._Session = Session;
+		this._$mdMedia = $mdMedia;
+    
+		this.isAuthenticated = $rootScope.isAuthenticated;
 
-        $sharing.onShareChange(targets => {
-            this.sharing = {targets, open: $sharing.open};
-        });
+    $sharing.onShareChange(targets => {
+				this.sharing = {targets, open: $sharing.open};
+		});
 
 		this.projects = [];
 		Project.query().then((projects) => {
@@ -18,7 +21,7 @@ class AppToolbarController {
 		});
 
         this.navigation = appNavigation.filter(nav => nav.position == 'toolbar');
-        if (!$rootScope.isAuthenticated) {
+        if (!this.isAuthenticated) {
             this.navigation = this.navigation.filter(nav => !nav.authRequired);
         }
 	}
@@ -52,10 +55,6 @@ class AppToolbarController {
 		}
 	}
 
-	toggleSidenav(menuId) {
-		this._$mdSidenav(menuId).toggle();
-	}
-
 	logout() {
 		this._Session.logout();
 	}
@@ -67,5 +66,8 @@ class AppToolbarController {
 
 export const AppToolbarComponent = {
 	controller: AppToolbarController,
-	template
+	template,
+    require: {
+	    appCtrl: '^app'
+    }
 };
