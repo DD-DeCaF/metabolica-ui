@@ -525,7 +525,7 @@ function MeasurementTableFactory(potion, Item, Route) {
         static generateTable(...args) {
             return this._generateTable(...args)
                 .then(table => {
-                    let tests = new Map(Object
+                    const tests = new Map(Object
                         .entries(table.tests)
                         .map(([key, test]) => [key, new Test(test)]));
 
@@ -537,12 +537,16 @@ function MeasurementTableFactory(potion, Item, Route) {
         static generateTableAggregate(...args) {
             return this._generateTableAggregate(...args)
                 .then(table => {
-                    let tests = new Map(Object
+                    const tests = new Map(Object
                         .entries(table.tests)
                         .map(([key, test]) => [key, new Test(test)]));
 
                     return table.measurements
-                        .map(measurement => Object.assign(measurement, {test: tests.get(measurement.test)}));
+                        .map(measurement => Object.assign(measurement,
+                            {
+                                test: tests.get(measurement.test),
+                                samplePoolGenotypeChange: table.genotypeChanges[measurement.samplePoolGenotypeChange]
+                            }));
                 });
         }
 
@@ -556,7 +560,7 @@ function MeasurementTableFactory(potion, Item, Route) {
 
                         const t = table.columns.indexOf('test');
 
-                        for (let measurement of table.measurements) {
+                        for (const measurement of table.measurements) {
                             measurement[t] = tests.get(measurement[t]);
                         }
                     }
