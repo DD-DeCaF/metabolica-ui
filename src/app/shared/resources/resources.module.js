@@ -4,7 +4,7 @@ import 'reflect-metadata'; // used by 'potion-client'
 import {Item, Route} from 'potion-client/angular';
 
 import {Genotype} from 'gnomic-grammar'; // TODO remove dependency, use service instead.
-import {Aggregate, Test} from './legacy/types';
+import {Aggregate} from './legacy/types';
 import {Variant} from './legacy/variant';
 
 export const ResourcesModule = angular
@@ -76,6 +76,18 @@ function ProjectMembershipFactory(potion, User, Project) {
     return potion.register('/project-membership', ProjectMembership);
 }
 
+/**
+ * Test
+ */
+
+ResourcesModule.factory('Test', TestFactory);
+function TestFactory(potion) {
+    class Test extends Item {
+        }
+    return potion.register('/test', Test, {
+        readonly: ['createdBy', 'createdAt', 'updatedAt']
+    });
+}
 
 /**
  * Chemical Entities
@@ -192,7 +204,7 @@ function DeviceFactory(potion) {
  */
 
 ResourcesModule.factory('Sample', SampleFactory);
-function SampleFactory(potion, Experiment, Medium, Plate, Strain) {
+function SampleFactory(potion, Experiment, Medium, Plate, Strain, Test) {
     class Sample extends Item {
         static aggregateTests = Route.GET('/aggregate-tests');
         static _aggregateScalars = Route.GET('/aggregate-scalars');
@@ -208,7 +220,7 @@ function SampleFactory(potion, Experiment, Medium, Plate, Strain) {
             return this._readSeries(...args)
                 .then(series => series
                     .map((item) => Object.assign(item, {
-                        test: new Test(item.test),
+                        test: item.test,
                         sample: this
                     })));
         }
@@ -391,7 +403,7 @@ function StrainFactory(potion, $cacheFactory, User, Organism) {
  */
 
 ResourcesModule.factory('Experiment', ExperimentFactory);
-function ExperimentFactory(potion, User, Device) {
+function ExperimentFactory(potion, User, Device, Test) {
     class Experiment extends Item {
         static readCompartmentTypes = Route.GET('/compartment-types');
         readSamples = Route.GET('/samples');
@@ -420,7 +432,7 @@ function ExperimentFactory(potion, User, Device) {
 }
 
 ResourcesModule.factory('ExperimentPhase', ExperimentPhaseFactory);
-function ExperimentPhaseFactory(potion) {
+function ExperimentPhaseFactory(potion, Test) {
     class ExperimentPhase extends Item {
         _aggregateScalars = Route.GET('/aggregate-scalars');
 
@@ -526,8 +538,7 @@ function MeasurementTableFactory(potion, Item, Route) {
             return this._generateTable(...args)
                 .then(table => {
                     const tests = new Map(Object
-                        .entries(table.tests)
-                        .map(([key, test]) => [key, new Test(test)]));
+                        .entries(table.tests));
 
                     return table.measurements
                         .map(measurement => Object.assign(measurement, {test: tests.get(measurement.test)}));
@@ -538,8 +549,7 @@ function MeasurementTableFactory(potion, Item, Route) {
             return this._generateTableAggregate(...args)
                 .then(table => {
                     const tests = new Map(Object
-                        .entries(table.tests)
-                        .map(([key, test]) => [key, new Test(test)]));
+                        .entries(table.tests));
 
                     return table.measurements
                         .map(measurement => Object.assign(measurement,
@@ -555,8 +565,7 @@ function MeasurementTableFactory(potion, Item, Route) {
                 .then(table => {
                     if (table.columns.includes('test')) {
                         const tests = new Map(Object
-                            .entries(table.tests)
-                            .map(([key, test]) => [key, new Test(test)]));
+                            .entries(table.tests));
 
                         const t = table.columns.indexOf('test');
 

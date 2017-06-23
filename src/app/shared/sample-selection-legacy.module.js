@@ -1,7 +1,5 @@
 import angular from 'angular';
 
-import {Test} from './resources/legacy/types';
-
 export const SAMPLE_PROPERTY_NAMES = [
 	'strain',
 	'medium',
@@ -33,14 +31,14 @@ class TestSelectMultiple {
 	}
 
 	testLabelAsHTML(test) {
-		return this._$sce.trustAsHtml(test.labelAsHTML(false));
+		return this._$sce.trustAsHtml(test.displayName);
 	}
 
 	getSelectedText() {
 		if(this.selectedTests.length == 0) {
 			return 'No tests'
 		} else if (this.selectedTests.length < 7) {
-			return this.selectedTests.map(test => test.labelAsText(false)).join(', ')
+			return this.selectedTests.map(test => test.displayName).join(', ')
 		} else {
 			return `${this.selectedTests.length} tests`
 		}
@@ -163,7 +161,7 @@ function testSelectDirective() {
 
 				scope.$watch(() => select._tests(), (tests) => {
 					if (Array.isArray(tests)) {
-						select.tests = tests.map((test) => new Test(test));
+						select.tests = tests;
 					}
 				});
 
@@ -171,12 +169,8 @@ function testSelectDirective() {
 					let value = ngModel.$viewValue;
 					if (value) {
 						select.option = Array.isArray(value)
-							? value.map((item) => item instanceof Test
-								? item
-								: new Test(item))
-							: value instanceof Test
-								? value
-								: new Test(value);
+							? value.map((item) => item)
+							: value;
 					}
 				};
 
@@ -205,7 +199,7 @@ class TestSelectDirectiveController {
 	}
 
 	testDisplayName(test) {
-		return this._$sce.trustAsHtml(`${this.optionPrefix ? `${this.optionPrefix} ` : '' }${test.labelAsHTML()}`);
+		return this._$sce.trustAsHtml(`${this.optionPrefix ? `${this.optionPrefix} ` : '' }${test.displayName}`);
 	}
 
 	testsByType({only = [], except = []}) {
@@ -216,9 +210,7 @@ class TestSelectDirectiveController {
 
 	isTestAvailable(test) {
 		if (Array.isArray(this.enabledTests) && this.enabledTests.length) {
-			return this.enabledTests
-				.map((test) => test instanceof Test ? test : new Test(test))
-				.find((t) => t.key == test.key);
+			return this.enabledTests.find((t) => t.id == test.id);
 		}
 
 		return true;
@@ -240,8 +232,8 @@ function testLabelDirective($sce) {
 		template: '<div ng-bind-html="label"></div>',
 		link(scope) {
 			scope.$watch('test', (test) => {
-				if (test instanceof Test) {
-					scope.label = $sce.trustAsHtml(test.labelAsHTML());
+				if (test) {
+					scope.label = $sce.trustAsHtml(test.displayName);
 				}
 			});
 		}
