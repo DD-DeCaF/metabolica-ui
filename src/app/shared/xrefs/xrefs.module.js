@@ -1,4 +1,3 @@
-import angular from 'angular';
 import {XRefMenuComponent} from './xref-menu.component';
 import {XRefComponent} from './xref.component';
 import './xrefs.scss';
@@ -11,7 +10,7 @@ class XRefRegistryProvider {
 
     // XXX is component needed?
     register(resource, config) {
-        this.sources[resource] = config;
+        this.sources[resource] = config
     }
 
     $get() {
@@ -23,13 +22,13 @@ class XRefRegistryProvider {
 export const XRefsModule = angular.module('xrefs', ['ngMaterial'])
     .provider('xrefRegistry', XRefRegistryProvider)
     .factory('xrefMenuPanel', function ($transitions, $mdPanel, xrefRegistry) {
-        $transitions.onStart({}, () => {
-            closeMenus();
+        $transitions.onStart({}, transition => {
+            closeMenus()
         });
 
         let menus = [];
         function closeMenus() {
-            for (let menu of menus) {
+            for(let menu of menus) {
                 menu.close();
             }
 
@@ -39,12 +38,12 @@ export const XRefsModule = angular.module('xrefs', ['ngMaterial'])
         return function (item, event) {
             let config;
 
-			if (xrefRegistry[item.constructor.name]) {
-				config = xrefRegistry[item.constructor.name](item);
+			if(xrefRegistry[item.constructor.name]) {
+				config = xrefRegistry[item.constructor.name](item)
 			}
 
-            if (!config) {
-                return;
+            if(!config) {
+                return
             }
 
             let animation = $mdPanel.newPanelAnimation()
@@ -60,11 +59,11 @@ export const XRefsModule = angular.module('xrefs', ['ngMaterial'])
                 .addPanelPosition($mdPanel.xPosition.ALIGN_END, $mdPanel.yPosition.CENTER);
 
             $mdPanel.open(Object.assign({
-                animation,
+                animation: animation,
                 attachTo: angular.element(document.body),
                 controllerAs: '$ctrl',
                 panelClass: 'xref-menu md-whiteframe-3dp',
-                position,
+                position: position,
                 openFrom: event,
                 clickOutsideToClose: true,
                 escapeToClose: true,
@@ -72,8 +71,8 @@ export const XRefsModule = angular.module('xrefs', ['ngMaterial'])
                 zIndex: 89
             }, config)).then(menu => {
                 menus.push(menu);
-            });
-        };
+            })
+        }
 
     })
     .component('xrefMenu', XRefMenuComponent)

@@ -1,6 +1,4 @@
-/*eslint no-unused-vars: 0*/
-import angular from 'angular';
-import './docs.component.scss';
+import './docs.component.scss'
 import template from './docs-resource.component.html';
 
 
@@ -9,25 +7,24 @@ class DocsResourceController {
         this._$mdDialog = $mdDialog;
         let name = this.name = $stateParams.resourceName;
 
-        $http.get(`${potion.prefix}/${name}/schema`).then(response => {
+        $http.get(`${potion.prefix}/${name}/schema`).then((response) => {
             let schema = this.schema = response.data;
 
             this.description = schema.description;
 
             this.links = schema.links;
-            this.properties = Object.keys(schema.properties)
-                .map(name =>
-                ({
+            this.properties = Object.keys(schema.properties).map((name) => {
+                return {
                     name,
                     schema: schema.properties[name]
-                })
-            );
-        });
+                };
+            });
+        })
     }
 
     formatTypes(types) {
         if (types instanceof Array) {
-            return types;
+            return types
         } else {
             return [types];
         }
@@ -69,7 +66,7 @@ class DocsResourceController {
 
                 $scope.closeDialog = () => {
                     $mdDialog.cancel();
-                };
+                }
             },
             clickOutsideToClose: true
         });
@@ -126,7 +123,7 @@ function formatSchemaType(type, schema) {
         case 'integer':
         case 'number':
             if (schema.minimum !== undefined || schema.maximum !== undefined) {
-                output += ` | ${formatSchemaInterval(schema)}`;
+                output += ` | ${formatSchemaInterval(schema)}`
             }
             break;
 
@@ -135,7 +132,6 @@ function formatSchemaType(type, schema) {
             break;
 
         case 'array':
-        {
             let arrayTypes;
             if (schema.items.type instanceof Array) {
                 arrayTypes = schema.items.type;
@@ -143,15 +139,14 @@ function formatSchemaType(type, schema) {
                 arrayTypes = [schema.items.type];
             }
 
-            let types = arrayTypes.map(type => formatSchemaType(type, schema.items));
+            let types = arrayTypes.map((type) => formatSchemaType(type, schema.items));
             output = `Array<${types.join('|')}>`;
 
             break;
-        }
 
         case 'null':
         default:
-            break;
+            break
     }
 
     return output;

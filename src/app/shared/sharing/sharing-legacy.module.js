@@ -11,13 +11,13 @@ function $sharingProvider() {
     return {
 
         register(state, {name, accept = []} = {}) {
-            registry.push({state, name, accept});
+            registry.push({state, name, accept})
         },
 
-        $get: ['$state', '$rootScope', function ($state) {
+        $get: ['$state', '$rootScope', function ($state, $rootScope) {
             let provided = {};
             let transfer = {};
-            let hooks = [];
+            let hooks = []
 
             class Sharing {
 
@@ -46,37 +46,39 @@ function $sharingProvider() {
 
                 provide(shareable) {
                     provided = Object.assign({}, provided, shareable);
-                    this._triggerOnShareChange();
+                    console.log('share change', this.targets, shareable)
+                    this._triggerOnShareChange()
                 }
 
                 clearProvisions() {
                     provided = {};
-                    this._triggerOnShareChange();
+                    this._triggerOnShareChange()
                 }
 
                 onShareChange(hookFn) {
-                    hooks.push(hookFn);
+                    hooks.push(hookFn)
                 }
 
                 _triggerOnShareChange() {
                     let targets = this.targets;
-                    for (let hookFn of hooks) {
-                        hookFn(targets);
+                    for(let hookFn of hooks) {
+                        hookFn(targets)
                     }
                 }
 
                 get targets() {
-                    return registry.filter(({_name , accept}) =>
-                        accept.some(({type, multiple}) => provided[type] != undefined && (multiple || !(provided[type] instanceof Array))));
+                    return registry.filter(({name, accept}) =>
+                        accept.some(({type, multiple}) => provided[type] != undefined && (multiple || !(provided[type] instanceof Array))))
                 }
 
                 findTargets(provides, isMultiple = false) {
-                    return registry.filter(({_name, accept, state}) =>
+                    return registry.filter(({name, accept, state}) =>
                     !$state.includes(state) && accept.some(({type, multiple}) => type == provides && (multiple || !isMultiple)));
                 }
 
                 // TODO transfer to $stateParams if receiving state supports it (needs to be specified on register).
                 async open(state) {
+                    console.log('open', state)
                     transfer = provided;
                     await $state.go(state);
                     transfer = {};
@@ -84,13 +86,13 @@ function $sharingProvider() {
 
                 async share(type, itemOrItems, targetState) {
                     provided = {[type]: itemOrItems};
-                    await this.open(targetState);
+                    await this.open(targetState)
                 }
             }
 
-            return new Sharing();
+            return new Sharing()
         }]
-    };
+    }
 }
 
 
@@ -103,14 +105,14 @@ class ShareButtonController {
 
     $onChanges(changes) {
         if (changes.items.currentValue) {
-            this.targets = this._sharing.findTargets(this.provides, changes.items.currentValue instanceof Array);
+            this.targets = this._sharing.findTargets(this.provides, changes.items.currentValue instanceof Array)
         } else {
             this.targets = [];
         }
     }
 
     shareWith(target) {
-        this._sharing.share(this.provides, this.items, target.state);
+        this._sharing.share(this.provides, this.items, target.state)
     }
 }
 
@@ -139,7 +141,7 @@ export const SharingModule = angular.module('SharingModule', [])
 
     })
     .provider('$sharing', $sharingProvider)
-    .run(function ($transitions) {
+    .run(function($transitions) {
         $transitions.onStart({}, transition => {
             const $sharing = transition.injector().get('$sharing');
             $sharing.clearProvisions();

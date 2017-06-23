@@ -1,4 +1,3 @@
-import angular from 'angular';
 // TODO(lars) find better location for these
 
 export const DirectivesModule = angular
@@ -20,7 +19,7 @@ function UserDirective() {
         template: '<span><md-tooltip>{{ user.displayName }} <span ng-if="user.title">({{ user.title }})</span></md-tooltip> {{ user.shortFullName() }}</span>',
         controller($q, $scope) {
             $scope.$watch('value', () => {
-                $q.when($scope.value).then(user => {
+                $q.when($scope.value).then((user) => {
                     $scope.user = user;
                 });
             });
@@ -34,7 +33,7 @@ function DateDirective() {
         scope: {
             value: '='
         },
-        template: '<span><md-tooltip>{{ value | date:"fullDate" }}</md-tooltip> {{ value | date:"mediumDate" }}</span>'
+        template: `<span><md-tooltip>{{ value | date:'fullDate' }}</md-tooltip> {{ value | date:'mediumDate'  }}</span>`
     };
 }
 

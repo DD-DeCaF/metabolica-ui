@@ -15,11 +15,11 @@ Plotly.register([
 
 export const PlotlyModule = angular
 	.module('plotly', [])
-	.service('WindowResize', WindowResize)
+	.service("WindowResize", WindowResize)
 	.directive('plot', plotDirective);
 
 
-function plotDirective() {
+function plotDirective(WindowResize) {
 	return {
 		restrict: 'E',
 		scope: {
@@ -27,7 +27,7 @@ function plotDirective() {
 			plotLayout: '=',
 			plotOptions: '='
 		},
-		link(scope, element) {
+		link(scope, element, attrs) {
 			scope.$watchGroup(['plotData', 'plotLayout', 'plotOptions'], ([data, layout, options]) => {
 				data = data || [];
 				Plotly.newPlot(
@@ -45,30 +45,30 @@ function plotDirective() {
                             name: 'toLargeImage',
                             title: 'Download plot as a png (larger image)',
                             icon: Plotly.Icons['camera-retro'],
-                            click(gd) {
+                            click: function(gd) {
                                 Plotly.downloadImage(gd, {
                                     format: 'png',
                                     width: 1200,
                                     filename: 'newplot'}
-                                );
+                                )
                             }
                         }]
 					}, options || {})
 				);
 			});
 
-			scope.$on('window-resize', () => {
+			scope.$on('window-resize', (event) => {
 				Plotly.Plots.resize(element[0]);
 			});
 		}
-	};
+	}
 }
 
 function WindowResize($window, $rootScope) {
 	let window = angular.element($window);
 	let width = window[0].innerWidth;
 
-	angular.element($window).on('resize', () => {
+	angular.element($window).on('resize', (event) => {
 		let newWidth = window[0].innerWidth;
 		if (width != newWidth) {
 			$rootScope.$broadcast('window-resize', width = newWidth);

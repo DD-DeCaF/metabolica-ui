@@ -10,7 +10,7 @@ class LoginController {
             password: ''
         };
 
-        this.authenticate = async (form, credentials) => {
+        this.authenticate = async(form, credentials) => {
             try {
                 await Session.authenticate(credentials);
 
@@ -28,7 +28,7 @@ class LoginController {
                 form.$setPristine();
                 $scope.$apply();
             }
-        };
+        }
     }
 
 }
