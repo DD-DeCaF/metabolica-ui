@@ -1,16 +1,17 @@
+import angular from 'angular';
 import {SearchToolbarComponent} from './search-toolbar.component';
 
 
 // TODO make TS interface
-class Search {
-    name = '';
-    pluralName = '';
-    state = '';
-
-    query(resource, searchText) {}
-    stateParams(item) {}
-    formatAsText(item) {}
-}
+// class Search {
+//     name = '';
+//     pluralName = '';
+//     state = '';
+//
+//     query(resource, searchText) {}
+//     stateParams(item) {}
+//     formatAsText(item) {}
+// }
 
 
 class SearchSourcesProvider {
@@ -19,7 +20,7 @@ class SearchSourcesProvider {
     }
 
     register(name, source) {
-        this.sources[name] = source
+        this.sources[name] = source;
     }
 
     $get($injector) {

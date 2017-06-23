@@ -12,19 +12,23 @@ module.exports = function () {
 			filename: '[chunkhash].[name].js',
 			path: path.resolve(__dirname, 'dist')
         },
+        resolve: {
+          extensions: ['.ts', '.tsx', '.js']
+        },
         plugins: [
+            new webpack.optimize.CommonsChunkPlugin({
+                name: ['vendor', 'manifest'],
+                minChunks: function (module) {
+                    return module.context
+                        && module.context.indexOf('node_modules') !== -1;
+                }
+            }),
+            new ExtractTextPlugin('[chunkhash].[name].css'),
             new HtmlWebpackPlugin({
                 inject: 'head',
                 template: './src/index.html',
                 filename: 'index.html'
-            }),
-			new webpack.optimize.CommonsChunkPlugin({
-				name: 'vendor',
-				minChunks: function (module) {
-					return module.context && module.context.indexOf('node_modules') !== -1;
-				}
-			}),
-			new ExtractTextPlugin('[chunkhash].[name].css')
+            })
         ],
         module: {
             rules: [
@@ -43,6 +47,28 @@ module.exports = function () {
                             loader: 'sass-loader'
                         }]
                     })
+                },
+                {
+                    test: /\.tsx?$/,
+                    loader: 'ts-loader',
+                    include: [
+                        path.resolve(__dirname, 'src')
+                    ],
+                    options: {
+                        transpileOnly: false,
+                        isolatedModules: true
+                    }
+                },
+                {
+                    test: /\.js$/,
+                    enforce: 'pre',
+                    include: [
+                        path.resolve(__dirname, 'src')
+                    ],
+                    loader: 'eslint-loader',
+                    options: {
+                        failOnError: true
+                    }
                 },
                 {
                     test: /\.js$/,

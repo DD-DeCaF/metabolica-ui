@@ -10,7 +10,7 @@ export const SINGLE_QUANTITY_MEASUREMENT_TYPES = [
 const UNIT_FORMATS = {
 	degC: '°C',
 	ug: 'μg'
-}
+};
 
 /**
  * A compact format of quantities. With compound measurements it is not specified whether mass or amount is used.
@@ -57,15 +57,15 @@ function formatQuantityAsText(quantity, compounds, compartment) {
 
 function formatUnit(unit) {
 	if (UNIT_FORMATS[unit]) {
-		return UNIT_FORMATS[unit]
+		return UNIT_FORMATS[unit];
 	}
 
-	return unit
+	return unit;
 }
 
 export class Measure {
 
-	constructor({quantity, compounds=null, compartment=null, unit=null}) {
+	constructor({quantity, compounds = null, compartment = null, unit = null}) {
 		this.quantity = quantity;
 		this.compounds = compounds || [];
 		this.compartment = compartment;
@@ -113,7 +113,7 @@ export class Test {
 
 		// if a measurement type ends with '-rate', remove it because it is superfluous. e.g. uptake-rate -> uptake
 		if (this.type.endsWith('-rate')) {
-			type = this.type.substr(0, this.type.length - 5)
+			type = this.type.substr(0, this.type.length - 5);
 		} else {
 			type = this.type;
 		}
@@ -136,8 +136,8 @@ export class Test {
 		}
 
 		let unit = '';
-		if (this.numerator && this.numerator.unit && this.denominator && this.denominator.unit) {  // x/y
-			unit = `${formatUnit(this.numerator.unit)}/${formatUnit(this.denominator.unit)}`
+		if (this.numerator && this.numerator.unit && this.denominator && this.denominator.unit) { // x/y
+			unit = `${formatUnit(this.numerator.unit)}/${formatUnit(this.denominator.unit)}`;
 		} else if (this.numerator && this.numerator.unit) { // x
 			unit = formatUnit(this.numerator.unit);
 		} else if (this.denominator && this.denominator.unit) { // 1/x
@@ -151,15 +151,15 @@ export class Test {
 
 		let parts = [];
 		if (withType) {
-			parts.push(`<strong>${type}</strong>`)
+			parts.push(`<strong>${type}</strong>`);
 		}
 
 		if (quantity) {
-			parts.push(quantity)
+			parts.push(quantity);
 		}
 
 		if (unit) {
-			parts.push(`(${unit.trim()})`)
+			parts.push(`(${unit.trim()})`);
 		}
 
 		return parts.join(' ');
@@ -171,7 +171,7 @@ export class Test {
 
 		// if a measurement type ends with '-rate', remove it because it is superfluous. e.g. uptake-rate -> uptake
 		if (this.type.endsWith('-rate')) {
-			type = this.type.substr(0, this.type.length - 5)
+			type = this.type.substr(0, this.type.length - 5);
 		} else {
 			type = this.type;
 		}
@@ -198,8 +198,8 @@ export class Test {
 		}
 
 		let unit = '';
-		if (this.numerator && this.numerator.unit && this.denominator && this.denominator.unit) {  // x/y
-			unit = `${formatUnit(this.numerator.unit)}/${formatUnit(this.denominator.unit)}`
+		if (this.numerator && this.numerator.unit && this.denominator && this.denominator.unit) { // x/y
+			unit = `${formatUnit(this.numerator.unit)}/${formatUnit(this.denominator.unit)}`;
 		} else if (this.numerator && this.numerator.unit) { // x
 			unit = formatUnit(this.numerator.unit);
 		} else if (this.denominator && this.denominator.unit) { // 1/x
@@ -212,15 +212,15 @@ export class Test {
 
 		let parts = [];
 		if (withType) {
-			parts.push(type)
+			parts.push(type);
 		}
 
 		if (quantity) {
-			parts.push(quantity)
+			parts.push(quantity);
 		}
 
 		if (unit) {
-			parts.push(`(${unit.trim()})`)
+			parts.push(`(${unit.trim()})`);
 		}
 
 		return parts.join(' ');
@@ -238,7 +238,7 @@ export class Test {
 
 
 export class AggregateScalar {
-	constructor(aggregate, {test, measurements, phase=null}) {
+	constructor(aggregate, {test, measurements, phase = null}) {
 		this.aggregate = aggregate;
 		this.measurements = measurements;
 		this.test = test instanceof Test ? test : new Test(test);
@@ -310,7 +310,7 @@ export class Aggregate {
 									// FIXME unit is a hack
 									denominator: new Measure({quantity: 'OD', unit: scalar.test.denominator.unit})
 								})
-							}))
+							}));
 						}
 					}
 				}
@@ -323,7 +323,7 @@ export class Aggregate {
 
 		let sampleKeys = this.sampleKeys = new WeakMap();
 		for (let sampleKey of Object.keys(sampleObj)) {
-			sampleKeys.set(sampleObj[sampleKey], sampleKey)
+			sampleKeys.set(sampleObj[sampleKey], sampleKey);
 		}
 	}
 
@@ -334,7 +334,7 @@ export class Aggregate {
 	}
 
 	get tests() {
-		return this.scalars.map((scalar) => scalar.test);
+		return this.scalars.map(scalar => scalar.test);
 	}
 
 	find(test) {
@@ -352,19 +352,19 @@ class AggregateAggregateScalar {
 	constructor(test, aggregates) {
 		this.test = test;
 		this.scalars = aggregates
-			.map((aggregate) => aggregate.find(this.test))
-			.filter((scalar) => scalar !== undefined);
+			.map(aggregate => aggregate.find(this.test))
+			.filter(scalar => scalar !== undefined);
 	}
 
 	get samples() {
 		return this.scalars
-			.map((scalar) => scalar.samples)
+			.map(scalar => scalar.samples)
 			.reduce((a, b) => a.concat(b), []);
 	}
 
 	replicates(sample) {
 		return this.scalars
-			.map((scalar) => scalar.replicates(sample))
+			.map(scalar => scalar.replicates(sample))
 			.reduce((a, b) => a.concat(b), []);
 	}
 }
@@ -390,7 +390,7 @@ export class AggregateList {
 	samples() {
 		if (this.aggregates.length) {
 			return this.aggregates
-				.map((aggregate) => aggregate.samples)
+				.map(aggregate => aggregate.samples)
 				.reduce((a, b) => a.concat(b), []);
 		}
 
@@ -406,7 +406,7 @@ export class AggregateList {
 		for (let aggregate of this.aggregates) {
 			for (let test of aggregate.tests) {
 				if (!tests.has(test.key)) {
-					tests.set(test.key, test)
+					tests.set(test.key, test);
 				}
 			}
 		}
