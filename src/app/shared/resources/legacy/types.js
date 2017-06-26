@@ -84,164 +84,11 @@ export class Measure {
 	}
 }
 
-
-// FIXME rename to Test
-/**
- *
- */
-export class Test {
-	constructor({type, numerator = null, denominator = null, rate = null} = {}) {
-		this.type = type;
-		this.numerator = !numerator || numerator instanceof Measure ? numerator : new Measure(numerator);
-		this.denominator = !denominator || denominator instanceof Measure ? denominator : new Measure(denominator);
-		this.rate = rate;
-		this.key = this._computeKey();
-	}
-
-	_computeKey() {
-		return [
-			this.type,
-			this.numerator ? this.numerator.key : null,
-			this.denominator ? this.denominator.key : null,
-			this.rate]
-			.filter(part => part !== null)
-			.join(':');
-	}
-
-	labelAsHTML(withType = true) {
-		let type;
-
-		// if a measurement type ends with '-rate', remove it because it is superfluous. e.g. uptake-rate -> uptake
-		if (this.type.endsWith('-rate')) {
-			type = this.type.substr(0, this.type.length - 5)
-		} else {
-			type = this.type;
-		}
-
-		let quantity;
-		if (this.numerator) {
-			quantity = formatQuantityHTML(this.numerator.quantity,
-				this.numerator.compounds,
-				this.numerator.compartment);
-		} else if (this.denominator) {
-			quantity = '1';
-		}
-
-		if (this.denominator) {
-			if (!(this.type == 'concentration' && this.denominator.quantity == 'volume')) {
-				quantity += ` / ${formatQuantityHTML(this.denominator.quantity,
-					this.denominator.compounds,
-					this.denominator.compartment)}`;
-			}
-		}
-
-		let unit = '';
-		if (this.numerator && this.numerator.unit && this.denominator && this.denominator.unit) {  // x/y
-			unit = `${formatUnit(this.numerator.unit)}/${formatUnit(this.denominator.unit)}`
-		} else if (this.numerator && this.numerator.unit) { // x
-			unit = formatUnit(this.numerator.unit);
-		} else if (this.denominator && this.denominator.unit) { // 1/x
-			unit = `1/${formatUnit(this.denominator.unit)}`;
-		}
-
-		if (this.rate) {
-			// NOTE(lars) could also write this as x/r or x/(y*r); choosing this syntax for now because it seems legible
-			unit += ` ${formatUnit(this.rate)}<sup>-1</sup>`;
-		}
-
-		let parts = [];
-		if (withType) {
-			parts.push(`<strong>${type}</strong>`)
-		}
-
-		if (quantity) {
-			parts.push(quantity)
-		}
-
-		if (unit) {
-			parts.push(`(${unit.trim()})`)
-		}
-
-		return parts.join(' ');
-	}
-
-	// TODO: implement this same as labelAsHTML without the HTML tags
-	labelAsText(withType = true) {
-		let type;
-
-		// if a measurement type ends with '-rate', remove it because it is superfluous. e.g. uptake-rate -> uptake
-		if (this.type.endsWith('-rate')) {
-			type = this.type.substr(0, this.type.length - 5)
-		} else {
-			type = this.type;
-		}
-
-		let quantity;
-		if (this.numerator) {
-			quantity = formatQuantityAsText(
-				this.numerator.quantity,
-				this.numerator.compounds,
-				this.numerator.compartment
-			);
-		} else if (this.denominator) {
-			quantity = '1';
-		}
-
-		if (this.denominator) {
-			if (!(this.denominator.quantity == 'volume')) {
-				quantity += ` / ${formatQuantityAsText(
-					this.denominator.quantity,
-					this.denominator.compounds,
-					this.denominator.compartment
-				)}`;
-			}
-		}
-
-		let unit = '';
-		if (this.numerator && this.numerator.unit && this.denominator && this.denominator.unit) {  // x/y
-			unit = `${formatUnit(this.numerator.unit)}/${formatUnit(this.denominator.unit)}`
-		} else if (this.numerator && this.numerator.unit) { // x
-			unit = formatUnit(this.numerator.unit);
-		} else if (this.denominator && this.denominator.unit) { // 1/x
-			unit = `1/${formatUnit(this.denominator.unit)}`;
-		}
-
-		if (this.rate) {
-			unit += ` ${formatUnit(this.rate)}^-1`;
-		}
-
-		let parts = [];
-		if (withType) {
-			parts.push(type)
-		}
-
-		if (quantity) {
-			parts.push(quantity)
-		}
-
-		if (unit) {
-			parts.push(`(${unit.trim()})`)
-		}
-
-		return parts.join(' ');
-	}
-
-	// TODO more efficient implementation
-	match(other) {
-		if (other instanceof Test) {
-			return other.key == this.key;
-		} else {
-			return new Test(other).key == this.key;
-		}
-	}
-}
-
-
 export class AggregateScalar {
 	constructor(aggregate, {test, measurements, phase=null}) {
 		this.aggregate = aggregate;
 		this.measurements = measurements;
-		this.test = test instanceof Test ? test : new Test(test);
+		this.test = test;
 		this.phase = phase;
 	}
 
@@ -282,14 +129,14 @@ export class Aggregate {
 
 		// TODO only if no yields
 
-		let hasYields = this.tests.some(test => test.type == 'yield');
+		let hasYields = this.tests.some(test => test.type === 'yield');
 
 		if (!hasYields) {
-			let ODs = this.find(new Test({type: 'biomass', numerator: {quantity: 'OD'}}));
+			let ODs = this.findByAttr('biomass', 'OD');
 			if (ODs) {
 				let concentrations = [];
 				for (let scalar of this.scalars) {
-					if (scalar.test.type == 'concentration') {
+					if (scalar.test.type === 'concentration') {
 
 						let measurements = {};
 
@@ -304,11 +151,13 @@ export class Aggregate {
 						if (Object.keys(measurements).length) {
 							concentrations.push(new AggregateScalar(this, {
 								measurements,
-								test: new Test({
+								test: ({
 									type: 'yield',
 									numerator: scalar.test.numerator,
 									// FIXME unit is a hack
-									denominator: new Measure({quantity: 'OD', unit: scalar.test.denominator.unit})
+									denominator: new Measure({quantity: 'OD', unit: scalar.test.denominator.unit}),
+                                    rate: '',
+                                    id: scalar.test.id
 								})
 							}))
 						}
@@ -340,11 +189,21 @@ export class Aggregate {
 	find(test) {
 		// TODO refactor to return both scalar and series
 		for (let scalar of this.scalars) {
-			if (test.match(scalar.test)) {
+			if (test.id === scalar.test.id) {
 				return scalar;
 			}
 		}
 	}
+
+	findByAttr(type, num_quantity) {
+	    for (let scalar of this.scalars) {
+	        if (scalar.test.type === type) {
+	            if ( scalar.test.numerator && scalar.test.numerator.quantity === num_quantity) {
+	                return scalar;
+                }
+            }
+        }
+    }
 }
 
 
@@ -405,8 +264,8 @@ export class AggregateList {
 		let tests = new Map();
 		for (let aggregate of this.aggregates) {
 			for (let test of aggregate.tests) {
-				if (!tests.has(test.key)) {
-					tests.set(test.key, test)
+				if (!tests.has(test.id)) {
+					tests.set(test.id, test)
 				}
 			}
 		}
