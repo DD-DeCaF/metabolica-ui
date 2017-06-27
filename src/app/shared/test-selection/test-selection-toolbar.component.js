@@ -17,7 +17,7 @@ class TestSelectionToolbarController {
     }
 
     $onChanges() {
-        if (this.measurements) {
+        if (this.measurements && this.measurements.length) {
             this.boxTypeOptions = Object.keys(RESOURCE_ID_KEY)
                                         .filter(resource => Object.entries(this.measurements[0])
                                                                   .filter(([, value]) => value)
