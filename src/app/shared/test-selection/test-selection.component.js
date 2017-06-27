@@ -22,7 +22,19 @@ class TestSelectionController {
                 .sort((a, b) => a.type.localeCompare(b.type));
 
             if (this.autoSelect) {
-                this.selectedTest = this.groupedTests[0].tests[0];
+                let found;
+                if (typeof this.autoSelect !== 'boolean') {
+                    for (const group of this.groupedTests) {
+                        found = group.tests.find(test => test.id === this.autoSelect.id);
+                        if (found) {
+                            this.selectedTest = found;
+                            break;
+                        }
+                    }
+                }
+                if (typeof this.autoSelect === 'boolean' || !found) {
+                    this.selectedTest = this.groupedTests[0].tests[0];
+                }
                 this.onSelection({selectedTest: this.selectedTest});
             }
         }
