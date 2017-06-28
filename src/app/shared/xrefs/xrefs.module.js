@@ -62,7 +62,7 @@ export const XRefsModule = angular.module('xrefs', ['ngMaterial'])
                 animation: animation,
                 attachTo: angular.element(document.body),
                 controllerAs: '$ctrl',
-                panelClass: 'xref-menu md-whiteframe-3dp',
+                panelClass: 'xref-menu md-whiteframe-3dp ${config.panelClass || ''}`,
                 position: position,
                 openFrom: event,
                 clickOutsideToClose: true,
