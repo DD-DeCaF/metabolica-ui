@@ -1,5 +1,3 @@
-
-
 .xref-menu-open-button {
 	cursor: pointer;
 	outline: none;
@@ -10,7 +8,7 @@
 }
 
 .xref-menu {
-	background: white;
+	background: #eeeeee;
 	border-radius: 4px;
 	overflow: hidden;
 
@@ -21,7 +19,7 @@
 
 	&.xref-menu-wide {
 		width: 700px;
-		min-height: 400px;
+		min-height: 360px;
 
 		.xref-menu-content {
 			height: 400px;
