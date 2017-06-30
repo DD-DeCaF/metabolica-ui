@@ -1,4 +1,4 @@
-import angular from 'angular';
+import angular from "angular";
 /**
  *
  * This is a service for transferring items between components
@@ -61,7 +61,7 @@ function $sharingProvider() {
 
                 _triggerOnShareChange() {
                     let targets = this.targets;
-                    for(let hookFn of hooks) {
+                    for (let hookFn of hooks) {
                         hookFn(targets)
                     }
                 }
@@ -120,14 +120,14 @@ export const SharingModule = angular.module('SharingModule', [])
     .component('shareButton', {
         template: `<md-menu ng-show="$ctrl.targets.length" md-position-mode="target-right target">
 						<md-button class="md-icon-button" ng-click="$mdOpenMenu($event)">
-							<md-icon>share</md-icon>
+							<md-icon md-svg-icon="share"></md-icon>
 						</md-button>
 						<md-menu-content width="4">
 							<md-menu-item ng-repeat="target in $ctrl.targets">
 								<md-button ng-click="$ctrl.shareWith(target)">
 									<div layout="row">
 										<p flex>{{ target.name }}</p>
-										<md-icon md-menu-align-target>share</md-icon>
+										<md-icon md-svg-icon="share" md-menu-align-target></md-icon>
 									</div>
 								</md-button>
 							</md-menu-item>
@@ -141,7 +141,7 @@ export const SharingModule = angular.module('SharingModule', [])
 
     })
     .provider('$sharing', $sharingProvider)
-    .run(function($transitions) {
+    .run(function ($transitions) {
         $transitions.onStart({}, transition => {
             const $sharing = transition.injector().get('$sharing');
             $sharing.clearProvisions();

@@ -20,6 +20,7 @@ import {XRefsModule} from './shared/xrefs/xrefs.module';
 import {TestSelectionModule} from './shared/test-selection/test-selection.module';
 
 import iconPuzzle from '../../img/icons/puzzle.svg';
+import iconShare from '../../img/icons/share.svg';
 
 
 class AppNavigationProvider {
@@ -112,7 +113,9 @@ export const AppModule = angular.module('App', [
         $httpProvider.interceptors.push('sessionInterceptor');
     })
     .config(function ($mdIconProvider) {
+        console.log(iconShare);
         $mdIconProvider.icon('puzzle', iconPuzzle, 24);
+        $mdIconProvider.icon('share', iconShare, 24);
     })
     .config(function ($stateProvider, $urlRouterProvider, $locationProvider) {
         /**
