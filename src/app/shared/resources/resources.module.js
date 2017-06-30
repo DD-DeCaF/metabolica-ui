@@ -83,7 +83,8 @@ function ProjectMembershipFactory(potion, User, Project) {
 ResourcesModule.factory('Test', TestFactory);
 function TestFactory(potion) {
     class Test extends Item {
-        }
+        update = Route.PATCH('');
+    }
     return potion.register('/test', Test, {
         readonly: ['createdBy', 'createdAt', 'updatedAt']
     });
