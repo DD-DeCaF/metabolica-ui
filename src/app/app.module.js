@@ -17,7 +17,7 @@ import {SearchModule} from './search/search.module';
 import {DirectivesModule} from './shared/directives-legacy.module';
 import {XRefsModule} from './shared/xrefs/xrefs.module';
 
-import {TestSelectionModule} from './shared/test-selection/test-selection.module';
+import {TestUtilsModule} from './shared/test-utils/test-utils.module';
 
 import iconPuzzle from '../../img/icons/puzzle.svg';
 
@@ -82,7 +82,7 @@ export const AppModule = angular.module('App', [
         XRefsModule.name,
         SearchModule.name,
         DirectivesModule.name,
-        TestSelectionModule.name
+        TestUtilsModule.name
     ])
     .provider('appNavigation', AppNavigationProvider)
     .provider('appName', AppNameProvider)
