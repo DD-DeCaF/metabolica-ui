@@ -13,31 +13,8 @@ export const SAMPLE_PROPERTY_NAMES = [
 export const SampleSelectionModule = angular
 	.module('common.sample-selection', [])
 	.constant('SAMPLE_PROPERTY_NAMES', SAMPLE_PROPERTY_NAMES)
-	.directive('testLabel', testLabelDirective)
 	.directive('samplePropertySelect', samplePropertySelectDirective)
 	.directive('sampleLabel', sampleLabelDirective);
-
-/**
- * <test-label for="">
- */
-
-function testLabelDirective($sce) {
-	return {
-		replace: true,
-		restrict: 'EA',
-		scope: {
-			test: '=for'
-		},
-		template: '<div ng-bind-html="label"></div>',
-		link(scope) {
-			scope.$watch('test', (test) => {
-				if (test) {
-					scope.label = $sce.trustAsHtml(test.displayName);
-				}
-			});
-		}
-	};
-}
 
 
 // <sample-property-select>
