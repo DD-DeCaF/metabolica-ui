@@ -1,10 +1,12 @@
 class TestSelectMultipleController {
     constructor($sce) {
         this._$sce = $sce;
+        this.selectedTests = [];
+        this.unselectedTests = [];
     }
 
-    $onChanges() {
-        if (this.tests) {
+    $onChanges(changes) {
+        if (changes.tests) {
             let groups = new Map();
             for (const test of this.tests) {
                 groups.has(test.type) ? groups.get(test.type).push(test) : groups.set(test.type, [test]);
@@ -16,8 +18,9 @@ class TestSelectMultipleController {
                     tests: tests.sort((a, b) => a.displayName.localeCompare(b.displayName))
                 }));
 
-            if (this.autoSelect) {
-                this.selectedTests = [...this.tests];
+            if (this.autoSelect && this.tests.length) {
+                this.selectedTests = this.tests
+                    .filter(test => !this.unselectedTests.some(unselectedTest => unselectedTest.id === test.id));
                 this.onSelection({selectedTests: this.selectedTests});
             }
         }
@@ -32,6 +35,12 @@ class TestSelectMultipleController {
             return this.selectedTests.length ? `${this.selectedTests.length} tests selected` : `No tests selected`;
         }
     }
+
+    onMenuClose() {
+        this.unselectedTests = this.tests
+            .filter(test => !this.selectedTests.some(selectedTest => selectedTest.id === test.id));
+        this.onSelection({selectedTests: this.selectedTests});
+    }
 }
 
 export const TestSelectMultipleComponent = {
@@ -40,7 +49,7 @@ export const TestSelectMultipleComponent = {
         ng-class="{'md-no-underline': !$ctrl.showUnderline}"
         multiple
         placeholder="{{ !$ctrl.tests.length ? 'No test available' : 'No test selected' }}"
-        md-on-close="$ctrl.onSelection({selectedTests: $ctrl.selectedTests})"
+        md-on-close="$ctrl.onMenuClose()"
         md-selected-text="$ctrl.getSelectedText()"
         ng-disabled="$ctrl.disabling && !$ctrl.tests.length"
         ng-model="$ctrl.selectedTests">
