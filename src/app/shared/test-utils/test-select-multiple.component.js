@@ -18,7 +18,7 @@ class TestSelectMultipleController {
                     tests: tests.sort((a, b) => a.displayName.localeCompare(b.displayName))
                 }));
 
-            if (this.autoSelect && this.tests.length) {
+            if (this.autoSelect) {
                 this.selectedTests = this.tests
                     .filter(test => !this.unselectedTests.some(unselectedTest => unselectedTest.id === test.id));
                 this.onSelection({selectedTests: this.selectedTests});
