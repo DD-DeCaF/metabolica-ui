@@ -49,7 +49,7 @@ function SessionFactory($http, $localStorage, $rootScope, User, potion) {
 
         authenticate(credentials) {
             return $http.post(`${potion.host}${potion.prefix}/auth`, credentials)
-                .then((response) => {
+                .then(response => {
                     $localStorage.sessionJWT = response.data.token;
                     $rootScope.$broadcast('session:login');
                 });
@@ -57,11 +57,11 @@ function SessionFactory($http, $localStorage, $rootScope, User, potion) {
 
         logout(next = null) {
             delete $localStorage.sessionJWT;
-            $rootScope.$broadcast('session:logout', {next: next});
+            $rootScope.$broadcast('session:logout', {next});
         },
 
         login(next = null) {
-            $rootScope.$broadcast('session:logout', {next: next});
+            $rootScope.$broadcast('session:logout', {next});
         }
     };
 
@@ -98,7 +98,7 @@ export const SessionModule = angular
     .factory('Session', SessionFactory)
     .factory('sessionInterceptor', SessionInterceptorFactory)
     .run(function ($rootScope, $state, $location, $log, $mdDialog, Session, Project, appAuth) {
-        $rootScope.$on('session:login', (event) => {
+        $rootScope.$on('session:login', () => {
             $rootScope.isAuthenticated = true;
         });
 
@@ -106,7 +106,7 @@ export const SessionModule = angular
             $state.go('login', options);
         });
 
-        if(!Session.isAuthenticated()) {
+        if (!Session.isAuthenticated()) {
             $rootScope.isAuthenticated = false;
             if (appAuth) {
                 setTimeout(() => {

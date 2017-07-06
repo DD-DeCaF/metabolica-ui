@@ -1,3 +1,4 @@
+/* eslint no-unused-vars: 0*/
 import angular from 'angular';
 
 import 'reflect-metadata'; // used by 'potion-client'
@@ -154,7 +155,7 @@ function GenomeDiffFactory(potion, User, Experiment, Sample) {
 
         async readItems(...args) {
             let items = await this._readItems(...args);
-            return items.map((item) => new Variant(item));
+            return items.map(item => new Variant(item));
         }
 
         get name() {
@@ -212,7 +213,7 @@ function SampleFactory(potion, Experiment, Medium, Plate, Strain, Test) {
 
         static aggregateScalars(...args) {
             return this._aggregateScalars(...args)
-                .then(aggregate => new Aggregate(aggregate))
+                .then(aggregate => new Aggregate(aggregate));
         }
 
         _readSeries = Route.GET('/series');
@@ -220,7 +221,7 @@ function SampleFactory(potion, Experiment, Medium, Plate, Strain, Test) {
         readSeries(...args) {
             return this._readSeries(...args)
                 .then(series => series
-                    .map((item) => Object.assign(item, {
+                    .map(item => Object.assign(item, {
                         test: item.test,
                         sample: this
                     })));
@@ -267,7 +268,9 @@ function PlateFactory(potion, User) {
         readSamples = Route.GET('/samples');
 
         get typeDefinition() {
-            return Plate.readTypes().then((definitions) => new Map(definitions.map(definition => [definition.type, definition]))).get(this.type)
+            return Plate.readTypes()
+                .then(definitions => new Map(definitions.map(definition => [definition.type, definition])))
+                .get(this.type);
         }
     }
 
@@ -295,7 +298,7 @@ function PoolFactory(potion, $cacheFactory, User, Strain, Medium, ChemicalEntity
     class Pool extends Item {
 
         get typeAsText() {
-            return POOL_TYPES[this.type] || this.type
+            return POOL_TYPES[this.type] || this.type;
         }
 
         get fullGenotypeObject() {
@@ -414,7 +417,7 @@ function ExperimentFactory(potion, User, Device, Test) {
 
         async readScalarTable(...args) {
             let data = await this._readScalarTable(...args);
-            return {aggregate: new Aggregate(data), total: data.total}
+            return {aggregate: new Aggregate(data), total: data.total};
         }
 
         listDataShapes = Route.GET('/list-data-shapes');
@@ -438,7 +441,7 @@ function ExperimentPhaseFactory(potion, Test) {
         _aggregateScalars = Route.GET('/aggregate-scalars');
 
         async aggregateScalars(...args) {
-            return new Aggregate(await this._aggregateScalars(...args))
+            return new Aggregate(await this._aggregateScalars(...args));
         }
     }
     return potion.register('/experiment-phase', ExperimentPhase);

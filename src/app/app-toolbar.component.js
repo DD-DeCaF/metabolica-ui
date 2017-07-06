@@ -8,7 +8,7 @@ class AppToolbarController {
 		this._$mdSidenav = $mdSidenav;
 		this._Session = Session;
 		this._$mdMedia = $mdMedia;
-    
+
 		this.isAuthenticated = $rootScope.isAuthenticated;
 
     $sharing.onShareChange(targets => {
@@ -16,8 +16,8 @@ class AppToolbarController {
 		});
 
 		this.projects = [];
-		Project.query().then((projects) => {
-			this.projects = projects
+		Project.query().then(projects => {
+			this.projects = projects;
 		});
 
         this.navigation = appNavigation.filter(nav => nav.position == 'toolbar');
@@ -68,6 +68,6 @@ export const AppToolbarComponent = {
 	controller: AppToolbarController,
 	template,
     require: {
-	    appCtrl: '^app'
+        appCtrl: '^app'
     }
 };

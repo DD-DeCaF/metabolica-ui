@@ -24,5 +24,5 @@ export const ProjectModule = angular.module('defaultProject', [
                 onExit($rootScope) {
                     $rootScope.project = null;
                 }
-            })
+            });
     });

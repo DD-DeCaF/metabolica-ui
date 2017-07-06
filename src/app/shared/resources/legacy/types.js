@@ -7,65 +7,9 @@ export const SINGLE_QUANTITY_MEASUREMENT_TYPES = [
 	'electron-balance'
 ];
 
-const UNIT_FORMATS = {
-	degC: '°C',
-	ug: 'μg'
-}
-
-/**
- * A compact format of quantities. With compound measurements it is not specified whether mass or amount is used.
- *
- * @param quantity
- * @param compounds
- * @param compartment
- * @returns String
- */
-function formatQuantityHTML(quantity, compounds, compartment) {
-	if (compounds.length > 0) {
-		let s = compounds.map(compound => `<strong>${compound.name}</strong>`).join(', ');
-		if (compartment) {
-			s += ` <em>${compartment}</em>`;
-		}
-		return s;
-	}
-
-	return `<strong>${quantity}</strong>`;
-}
-
-
-/**
- * A compact format of quantities as plain text.
- * With compound measurements it is not specified whether mass or amount is used.
- *
- * @param quantity
- * @param compounds
- * @param compartment
- * @returns String
- */
-function formatQuantityAsText(quantity, compounds, compartment) {
-	if (compounds.length > 0) {
-		let s = compounds.map(compound => `${compound.name}`).join(', ');
-		if (compartment) {
-			s += ` ${compartment}`;
-		}
-		return `[${s}]`;
-	}
-
-	return `${quantity}`;
-}
-
-
-function formatUnit(unit) {
-	if (UNIT_FORMATS[unit]) {
-		return UNIT_FORMATS[unit]
-	}
-
-	return unit
-}
-
 export class Measure {
 
-	constructor({quantity, compounds=null, compartment=null, unit=null}) {
+	constructor({quantity, compounds = null, compartment = null, unit = null}) {
 		this.quantity = quantity;
 		this.compounds = compounds || [];
 		this.compartment = compartment;
@@ -84,8 +28,9 @@ export class Measure {
 	}
 }
 
+
 export class AggregateScalar {
-	constructor(aggregate, {test, measurements, phase=null}) {
+	constructor(aggregate, {test, measurements, phase = null}) {
 		this.aggregate = aggregate;
 		this.measurements = measurements;
 		this.test = test;
@@ -159,7 +104,7 @@ export class Aggregate {
                                     rate: '',
                                     id: scalar.test.id
 								})
-							}))
+							}));
 						}
 					}
 				}
@@ -172,7 +117,7 @@ export class Aggregate {
 
 		let sampleKeys = this.sampleKeys = new WeakMap();
 		for (let sampleKey of Object.keys(sampleObj)) {
-			sampleKeys.set(sampleObj[sampleKey], sampleKey)
+			sampleKeys.set(sampleObj[sampleKey], sampleKey);
 		}
 	}
 
@@ -183,7 +128,7 @@ export class Aggregate {
 	}
 
 	get tests() {
-		return this.scalars.map((scalar) => scalar.test);
+		return this.scalars.map(scalar => scalar.test);
 	}
 
 	find(test) {
@@ -196,10 +141,10 @@ export class Aggregate {
 	}
 
 	findByAttr(type, num_quantity) {
-	    for (let scalar of this.scalars) {
-	        if (scalar.test.type === type) {
-	            if ( scalar.test.numerator && scalar.test.numerator.quantity === num_quantity) {
-	                return scalar;
+        for (let scalar of this.scalars) {
+            if (scalar.test.type === type) {
+                if (scalar.test.numerator && scalar.test.numerator.quantity === num_quantity) {
+                    return scalar;
                 }
             }
         }
@@ -211,19 +156,19 @@ class AggregateAggregateScalar {
 	constructor(test, aggregates) {
 		this.test = test;
 		this.scalars = aggregates
-			.map((aggregate) => aggregate.find(this.test))
-			.filter((scalar) => scalar !== undefined);
+			.map(aggregate => aggregate.find(this.test))
+			.filter(scalar => scalar !== undefined);
 	}
 
 	get samples() {
 		return this.scalars
-			.map((scalar) => scalar.samples)
+			.map(scalar => scalar.samples)
 			.reduce((a, b) => a.concat(b), []);
 	}
 
 	replicates(sample) {
 		return this.scalars
-			.map((scalar) => scalar.replicates(sample))
+			.map(scalar => scalar.replicates(sample))
 			.reduce((a, b) => a.concat(b), []);
 	}
 }
@@ -249,7 +194,7 @@ export class AggregateList {
 	samples() {
 		if (this.aggregates.length) {
 			return this.aggregates
-				.map((aggregate) => aggregate.samples)
+				.map(aggregate => aggregate.samples)
 				.reduce((a, b) => a.concat(b), []);
 		}
 
@@ -265,7 +210,7 @@ export class AggregateList {
 		for (let aggregate of this.aggregates) {
 			for (let test of aggregate.tests) {
 				if (!tests.has(test.id)) {
-					tests.set(test.id, test)
+					tests.set(test.id, test);
 				}
 			}
 		}
