@@ -559,7 +559,8 @@ function MeasurementTableFactory(potion, Item, Route) {
                         .map(measurement => Object.assign(measurement,
                             {
                                 test: tests.get(measurement.test),
-                                samplePoolGenotypeChange: table.genotypeChanges[measurement.samplePoolGenotypeChange]
+                                samplePoolGenotypeChange: table.genotypeChanges[measurement.samplePoolGenotypeChange],
+                                samplePoolGenotype: table.genotypes[measurement.samplePoolGenotype]
                             }));
                 });
         }
