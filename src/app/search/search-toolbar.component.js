@@ -57,6 +57,7 @@ class SearchToolbarController {
 
             // NOTE workaround for https://github.com/angular/material/issues/5407
             this._$mdUtil.enableScrolling();
+            this.showSearch = false;
         }
     }
 }
