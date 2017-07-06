@@ -1,47 +1,39 @@
-# XRef module
-`xref` module implements two angular components: `<xref>` and `<xref-menu>`. They provide enhancements on top of `ui-sref` directive from `ui-router`.
+# XRefs module
+The _XRefs_ module provides AngularJS utilities to better deal with references to [potion-node based resources](https://github.com/biosustain/potion-node/blob/master/docs/ANGULARJS.md) (from now on, _resources_).
 
-`xref` module also implements two services:
+Currently it is composed of two services (`xrefRegistry`, `xrefMenuPanel`) and two components (`<xref>`, `<xref-menu>`).
 
-- `xrefRegistryProvider`, a Provider service
-- `xrefMenuPanel`, a Factory service
+These provide enhancements on top of `ui-sref` directive from _ui-router_.
 
-As a developer, you can add `xref` support for a [potion-node based resource](https://github.com/biosustain/potion-node/blob/master/docs/ANGULARJS.md), e.g. *Pool*, *Strain*, *Experiment* etc. See complete list of registered resources under [resources](https://github.com/biosustain/metabolica-ui/blob/master/src/app/shared/resources/resources.module.js) module.
+As a developer, you can implement `<xref>`/`<xref-menu>` support for _resource type_ like **Pool**, **Strain**, **Experiment** and others. See the complete list of registered resources in [_resources_](https://github.com/biosustain/metabolica-ui/blob/master/src/app/shared/resources/resources.module.js) module.
 
-## xrefRegistryProvider
-This *Provider* service allows you to register a `xref` menu config against for a new resource type. `xref` menu config should be a callable function which returns a config to create a new `$mdPanel` for the clicked item. Clicked item points to `value` attribute of `<xref>` or `<xref-menu>` directives.
-## xref component
-`<xref>` should be used whenever you want `ui-sref` based links. These links behave similar to `href` links, except that links are created on the fly using stateParams.
- 
-For example:
-```html
-<xref value="pool"></xref>
-```
+## xrefRegistry
+This _Provider_ service allows you to register a `<xref-menu>` configuration for a resource type.
+
+The configuration should be a callable [function which returns an object](https://github.com/biosustain/metabolica-ui-core/blob/master/src/app/pools/xrefs/pool-xref.config.js) with the desired settings.
+These settings affect the logic and appearance of the panel shown when clicking on a resource link.
 
 ## xrefMenuPanel
-This *Factory* services is used to create a new `$mdPanel` after click event. You need to pass the instance of the clicked Item and click event.
+This _Factory_ service is used to create a new [`$mdPanel`](https://material.angularjs.org/latest/api/service/$mdPanel) on a _click_ event. You need to pass the instance of the clicked _Item_ and the _click_ event (available through [$event](https://docs.angularjs.org/guide/expression#-event-)).
 
-`xrefMenuPanel` is used internally by `<xref-menu>` component. But, it can be used directly as well, e.g. [<project-lineage>](https://github.com/biosustain/metabolica-ui-core/blob/master/src/app/project/project-lineage.component.js). 
+`xrefMenuPanel` is used internally by `<xref-menu>` component, but it can also be used [directly](https://github.com/biosustain/metabolica-ui-core/blob/master/src/app/project/project-lineage.component.js).
+
+## xref component
+`<xref>` should be used instead of `ui-sref` when linking resource instances. These links behave similarly to classic ones, except that references are interpolated on the fly using _$stateParams_ (through a `value` attribute).
 
 ## xref-menu component
-`<xref-menu>` should be used whenever you want to open a new panel for quick overview of related object. This panel should contain a link to detail page for the current object.
+`<xref-menu>` should be used when you want to show a panel with a quick overview of the clicked resource. This panel should contain a link to the resource's _details_ page. Like `<xref>`, it also uses the `value` attribute.
 
-For example:
-```html
-<xref-menu value="pool"></xref-menu>
-```
+# How to implement `<xref>` support for a new resource type
+Suppose, you want to implement `<xref>`/`<xref-menu>` support for a resource called *Foo*.
 
-## Quick example: Adding xref for a new resource
-Suppose, you want to add xref for a resource called *Foo*.
-
-#### Step 1 - Adding xref config
+#### Step 1. Add a xref config
 Create a file called *foo-xref.config.js*:
 ```js
 import template from './foo-xref.menu.html';
 
 class FooMenuController {
 }
-
 
 export default function (foo) {
     return {
@@ -56,14 +48,14 @@ export default function (foo) {
         }
     };
 }
-
 ```
-#### Step 2. Add template for xref panel
+
+#### Step 2. Add a template for xref-menu
 ```html
 <div md-colors="{background: 'default-accent-200'}" layout="column">
   <md-toolbar md-colors="{background: 'default-accent-200'}" class="md-dense md-accent">
     <div class="md-toolbar-tools">
-      <h3>{{ $ctrl.foo.name }}</h3>
+      <h3>{{ $ctrl.foo.identifier }}</h3>
       <span flex></span>
       <md-button ui-sref="app.project.foo({fooId: $ctrl.foo.id})" class="md-icon-button">
         <md-icon>arrow_forward</md-icon>
@@ -78,16 +70,16 @@ export default function (foo) {
 </div>
 ```
 
-#### Step 3. Register xref config
+#### Step 3. Register the xref config
 ```js
-import * as angular from 'angular';
+import angular from 'angular';
 import {FooComponent} from './foo.component';
-import fooXrefMenuConfig from 'xrefs/foo-xref.config';
+import fooXRefMenuConfig from './xrefs/foo-xref.config';
 
 export const FooModule = angular.module('foo-module', [])
     .component('foo', FooComponent)
     .config(function (xrefRegistryProvider) {
-        xrefRegistryProvider.register('Foo', fooXrefMenuConfig);
+        xrefRegistryProvider.register('Foo', fooXRefMenuConfig);
     })
     .config(function ($stateProvider) {
         $stateProvider.state('app.project.foo', {
@@ -104,12 +96,8 @@ export const FooModule = angular.module('foo-module', [])
     });
 ```
 
-#### Step 4. Use newly created xref in other templates
-**xref**
+#### Step 4. Use the newly xref supported resource type in other templates
 ```html
-<xref-menu value="foo"></xref-menu>
-```
-**xref-menu**
-```html
-<xref value="foo"></xref>
+<xref value="$ctrl.foo"></xref>
+<xref-menu value="$ctrl.foo"></xref-menu>
 ```
