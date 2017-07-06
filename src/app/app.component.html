@@ -49,6 +49,7 @@
     <md-content>
       <md-list ng-hide="$ctrl.project">
         <md-subheader class="md-no-sticky">Projects</md-subheader>
+        <md-progress-linear md-mode="indeterminate" ng-if="!$ctrl.projectsFetched"></md-progress-linear>
         <md-list-item ng-repeat="project in $ctrl.projects"
                       ui-sref="app.project({projectId: project.id})">
           <md-icon ng-style="{color: project.color}">folder</md-icon>

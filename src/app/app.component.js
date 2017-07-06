@@ -20,9 +20,11 @@ class AppController {
         this.projectNavigation = allNavigation.filter(nav => nav.position == 'project');
         this.navigation = allNavigation.filter(nav => nav.position == 'global');
 
+        this.projectsFetched = false;
         this.projects = [];
         Project.query().then(projects => {
             this.projects = projects;
+            this.projectsFetched = true;
         });
 
         this.lockLeftSidenavOpen = true;
