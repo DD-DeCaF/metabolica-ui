@@ -57,4 +57,4 @@ Any server-side code may use GitHub repositories using the `metabolica-{componen
 - [Angular Material](https://material.angularjs.org)
 - [webpack](https://webpack.js.org/)
  
-   This project uses webpack 2 for the development server, compilation and bundling.
+   This project uses webpack 3 for the development server, compilation and bundling.
