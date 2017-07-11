@@ -4,7 +4,6 @@ import angular from 'angular';
 import 'reflect-metadata'; // used by 'potion-client'
 import {Item, Route} from 'potion-client/angular';
 
-import {Genotype} from 'gnomic-grammar'; // TODO remove dependency, use service instead.
 import {Aggregate} from './legacy/types';
 import {Variant} from './legacy/variant';
 
@@ -301,7 +300,7 @@ function PoolFactory(potion, $cacheFactory, User, Strain, Medium, ChemicalEntity
             return POOL_TYPES[this.type] || this.type;
         }
 
-        get fullGenotypeObject() {
+        get fullGenotype() {
             // Try to get the genotype from cache
             let cached = cache.get(this.identifier);
             if (cached) {
@@ -310,24 +309,10 @@ function PoolFactory(potion, $cacheFactory, User, Strain, Medium, ChemicalEntity
 
             let parent = null;
             if (this.parentPool) {
-                parent = this.parentPool.fullGenotypeObject;
+                parent = this.parentPool.fullGenotype;
             }
 
-            return cache.put(this.identifier, Genotype.parse(this.genotype || '', {parent}));
-        }
-
-        get genotypeObject() {
-            // Try to get the genotype from cache
-            let cached = cache.get(this.genotype);
-            if (cached) {
-                return cached;
-            }
-
-            if (!this.genotype) {
-                return null;
-            }
-
-            return cache.put(this.genotype, Genotype.parse(this.genotype));
+            return cache.put(this.identifier, [parent || '', this.genotype || ''].join(' '));
         }
 
         readSamples = Route.GET('/samples');
@@ -351,7 +336,8 @@ function StrainFactory(potion, $cacheFactory, User, Organism) {
     const cache = $cacheFactory('strain-genotype');
 
     class Strain extends Item {
-        get fullGenotypeObject() {
+
+        get fullGenotype() {
             // Try to get the genotype from cache
             let cached = cache.get(this.identifier);
             if (cached) {
@@ -360,29 +346,11 @@ function StrainFactory(potion, $cacheFactory, User, Organism) {
 
             let parent = null;
             if (this.parentStrain) {
-                parent = this.parentStrain.fullGenotypeObject;
+                parent = this.parentStrain.fullGenotype;
             } else {
-                parent = this.pool.fullGenotypeObject;
+                parent = this.pool.fullGenotype;
             }
-
-            return cache.put(this.identifier, Genotype.parse(this.genotype || '', {parent}));
-        }
-
-        get genotypeObject() {
-            let genotype = this.genotype || this.pool.genotype;
-
-            // Try to get the genotype from cache
-            let cached = cache.get(genotype);
-            if (cached) {
-                return cached;
-            }
-
-            if (!genotype) {
-                return null;
-            }
-
-            // Cache the genotype
-            return cache.put(genotype, Genotype.parse(genotype));
+            return cache.put(this.identifier, [parent || '', this.genotype || this.pool.genotype || ''].join(' '));
         }
 
         readSamples = Route.GET('/samples');

@@ -12,7 +12,6 @@
     "angular-ui-router": "1.0.0-rc.1",
     "babel-polyfill": "^6.22.0",
     "chroma-js": "^1.2.2",
-    "gnomic-grammar": "^0.3.4",
     "ngstorage": "^0.3.11",
     "plotly.js": "^1.28.1",
     "potion-client": "1.5.2",
