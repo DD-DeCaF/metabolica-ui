@@ -1,3 +1,4 @@
+import angular from 'angular';
 import {TestSelectComponent} from './test-select.component';
 import {TestSelectMultipleComponent} from './test-select-multiple.component';
 import {TestLabelComponent} from './test-label.component.js';
