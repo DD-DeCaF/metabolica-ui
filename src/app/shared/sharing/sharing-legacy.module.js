@@ -1,4 +1,4 @@
-import angular from "angular";
+import angular from 'angular';
 /**
  *
  * This is a service for transferring items between components
