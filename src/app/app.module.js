@@ -20,6 +20,7 @@ import {XRefsModule} from './shared/xrefs/xrefs.module';
 import {TestUtilsModule} from './shared/test-utils/test-utils.module';
 
 import iconPuzzle from '../../img/icons/puzzle.svg';
+import iconShare from '../../img/icons/share.svg';
 
 
 class AppNavigationProvider {
@@ -114,6 +115,7 @@ export const AppModule = angular.module('App', [
     })
     .config(function ($mdIconProvider) {
         $mdIconProvider.icon('puzzle', iconPuzzle, 24);
+        $mdIconProvider.icon('share', iconShare, 24);
     })
     .config(function ($stateProvider, $urlRouterProvider, $locationProvider) {
         /**

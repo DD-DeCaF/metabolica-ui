@@ -118,14 +118,14 @@ export const SharingModule = angular.module('SharingModule', [])
     .component('shareButton', {
         template: `<md-menu ng-show="$ctrl.targets.length" md-position-mode="target-right target">
 						<md-button class="md-icon-button" ng-click="$mdOpenMenu($event)">
-							<md-icon>share</md-icon>
+							<md-icon md-svg-icon="share"></md-icon>
 						</md-button>
 						<md-menu-content width="4">
 							<md-menu-item ng-repeat="target in $ctrl.targets">
 								<md-button ng-click="$ctrl.shareWith(target)">
 									<div layout="row">
 										<p flex>{{ target.name }}</p>
-										<md-icon md-menu-align-target>share</md-icon>
+										<md-icon md-svg-icon="share" md-menu-align-target></md-icon>
 									</div>
 								</md-button>
 							</md-menu-item>
