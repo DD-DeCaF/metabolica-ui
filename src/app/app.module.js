@@ -113,7 +113,6 @@ export const AppModule = angular.module('App', [
         $httpProvider.interceptors.push('sessionInterceptor');
     })
     .config(function ($mdIconProvider) {
-        console.log(iconShare);
         $mdIconProvider.icon('puzzle', iconPuzzle, 24);
         $mdIconProvider.icon('share', iconShare, 24);
     })
