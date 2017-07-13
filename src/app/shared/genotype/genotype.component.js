@@ -8,7 +8,7 @@ class GenotypeController {
         this._Genotype = Genotype;
     }
 
-    $onChanges(changes) {
+    $onChanges() {
         let genotype = null;
         if (this.parts) {
             genotype = this.parts.join(' ');
@@ -17,7 +17,7 @@ class GenotypeController {
         }
 
         if (this.genotype === genotype) {
-            return
+            return;
         }
         this.genotype = genotype;
 
@@ -29,7 +29,7 @@ class GenotypeController {
             this.genotypeHTML = this._$sce.trustAsHtml(escapeHTML(genotype));
             this._Genotype.formatGnomicAsHTML({value: genotype}, {cache: true})
                 .then(response => {
-                    if(!response.valid) {
+                    if (!response.valid) {
                         this.isValid = false;
                     } else {
                         this.genotypeHTML = this._$sce.trustAsHtml(response.html);
