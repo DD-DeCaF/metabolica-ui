@@ -3,8 +3,8 @@ class XRefController {
 		this._xrefRegistry = xrefRegistry;
 	}
 
-	$onChanges(changes) {
-		if (changes.value) {
+	$onChanges() {
+		if (this.value) {
             const config = this._xrefRegistry[this.type || this.value.constructor.name];
             if (config) {
                 const {state, stateParams} = config(this.value);

@@ -13,7 +13,7 @@ class XRefRegistryProvider {
     register(type, config) {
         if (typeof type === 'string') {
             this.sources[type] = config;
-        } else if (type.constructor.name) {
+        } else if (type) {
             this.sources[type.constructor.name] = config;
         }
     }
