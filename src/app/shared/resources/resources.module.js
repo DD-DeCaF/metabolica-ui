@@ -65,6 +65,8 @@ function ProjectFactory(potion, Item, Experiment, ExperimentPhase, Strain, Pool,
     class Project extends Item {
         readPermissions = Route.GET('/permissions');
         readSummary = Route.GET('/summary');
+        defaultTests = Route.GET('/default-tests');
+        updateDefaultTests = Route.POST('/update-default-tests');
     }
     return potion.register('/project', Project);
 }
