@@ -64,6 +64,7 @@ ResourcesModule.factory('Project', ProjectFactory);
 function ProjectFactory(potion, Item, Experiment, ExperimentPhase, Strain, Pool, Plate, Sample, Device, Organism, GenomeDiff, DNAComponent, Medium, ChemicalEntity) {
     // NOTE injects are there to work around AngularJS circular dependency resolution issues
     class Project extends Item {
+        defaultTests = Route.GET('/default-tests');
         readPermissions = Route.GET('/permissions');
         readSummary = Route.GET('/summary');
     }

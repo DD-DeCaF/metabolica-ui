@@ -1,41 +1,33 @@
 class TestSelectController {
     constructor($sce) {
         this._$sce = $sce;
+        this.defaultTestsUsed = false;
     }
 
-    $onChanges() {
-        this.selectedTest = null;
-        this.groupedTests = [];
-
-        if (this.tests && this.tests.length) {
+    $onChanges(changes) {
+        if (changes.tests) {
             const groups = new Map();
             for (const test of this.tests) {
-                groups.has(test.type) ? groups.get(test.type).push(test) :
-                    groups.set(test.type, [test]);
+                groups.has(test.type) ? groups.get(test.type).push(test) : groups.set(test.type, [test]);
             }
 
-            this.groupedTests = Array.from(groups.entries())
-                .map(([type, tests]) => ({
-                    type,
-                    tests: tests.sort((a, b) => a.displayName.localeCompare(b.displayName))
-                }))
-                .sort((a, b) => a.type.localeCompare(b.type));
+            this.groupedTests = Array.from(groups.entries()).map(([type, tests]) => ({type, tests}));
 
             if (this.autoSelect) {
-                let found;
-                if (typeof this.autoSelect !== 'boolean') {
-                    for (const group of this.groupedTests) {
-                        found = group.tests.find(test => test.id === this.autoSelect.id);
-                        if (found) {
-                            this.selectedTest = found;
-                            break;
+                if (!this.selectedTest || !this.tests.some(test => test.id === this.selectedTest.id)) {
+                    this.selectedTest = this.tests && this.tests.length ? this.tests[0] : null;
+                    this.onSelection({selectedTest: this.selectedTest});
+                }
+
+                if (!this.defaultTestsUsed && this.tests.length && this.project) {
+                    this.project.defaultTests().then(defaultTests => {
+                        if (defaultTests.length) {
+                            this.selectedTest = defaultTests[0];
+                            this.onSelection({selectedTest: this.selectedTest});
                         }
-                    }
+                    });
+                    this.defaultTestsUsed = true;
                 }
-                if (typeof this.autoSelect === 'boolean' || !found) {
-                    this.selectedTest = this.groupedTests[0].tests[0];
-                }
-                this.onSelection({selectedTest: this.selectedTest});
             }
         }
     }
@@ -56,8 +48,8 @@ export const TestSelectComponent = {
         <md-option ng-if="$ctrl.noValueOption !== ''"
                    ng-value="null">{{ $ctrl.noValueOption }}</md-option>
         <md-optgroup label="{{ group.type }}"
-                     ng-repeat="group in $ctrl.groupedTests">
-          <md-option ng-repeat="test in group.tests"
+                     ng-repeat="group in $ctrl.groupedTests | orderBy: 'type'">
+          <md-option ng-repeat="test in group.tests | orderBy: 'displayName'"
                      ng-value="test">
             <span ng-bind-html="$ctrl.testLabelAsHTML(test)"></span>
           </md-option>
@@ -71,6 +63,7 @@ export const TestSelectComponent = {
         noValueOption: '@',
         onSelection: '&',
         optionsPrefix: '@',
+        project: '<',
         showUnderline: '<',
         tests: '<'
     }
