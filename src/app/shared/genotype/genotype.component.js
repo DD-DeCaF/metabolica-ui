@@ -22,7 +22,7 @@ class GenotypeController {
         this.genotype = genotype;
 
         this.isValid = true;
-        if (genotype === null) {
+        if (!genotype) {
             this.genotypeHTML = this._$sce.trustAsHtml('&mdash;');
         } else if (typeof genotype === 'string' || genotype instanceof String) {
             genotype = genotype.replace(/ {2,}/g, ' ').trim(); // remove potential extra spaces
@@ -36,7 +36,7 @@ class GenotypeController {
                     }
                 });
         } else {
-            this.genotypeHTML = genotype.format.html;
+            this.genotypeHTML = '';
         }
     }
 }
