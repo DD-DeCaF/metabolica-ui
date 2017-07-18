@@ -1,10 +1,37 @@
+import angular from "angular";
+
 class AddToCartController {
-    constructor($cart) {
+    constructor($mdToast, $cart) {
+        this._$mdToast = $mdToast;
         this.$cart = $cart;
     }
 
     add(value) {
-        this.$cart.add(value.constructor.name.toLowerCase(), value);
+        const added = this.$cart.add(value.constructor.name.toLowerCase(), value);
+
+        if (added) {
+            this.showAddedToast();
+        } else {
+            this.showAlreadyExistsToast();
+        }
+    }
+
+    showAddedToast() {
+        this._$mdToast.show(
+            this._$mdToast.simple()
+                .textContent('Added to the cart!')
+                .position('bottom right')
+                .hideDelay(3000)
+        );
+    }
+
+    showAlreadyExistsToast() {
+        this._$mdToast.show(
+            this._$mdToast.simple()
+                .textContent('Already exists in the cart!')
+                .position('bottom right')
+                .hideDelay(3000)
+        );
     }
 }
 

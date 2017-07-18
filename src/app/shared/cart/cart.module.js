@@ -77,7 +77,7 @@ class CartProvider {
                         const item = items[i];
 
                         if (item.$uri === newItem.$uri) {
-                            return;
+                            return false;
                         }
                     }
                 }
@@ -85,6 +85,8 @@ class CartProvider {
                 this.itemGroups.get(type)['items'].push(newItem);
 
                 this._triggerOnCartChange();
+
+                return true;
             }
 
             onCartChange(hookFn) {
