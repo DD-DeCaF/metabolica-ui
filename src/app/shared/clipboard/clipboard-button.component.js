@@ -1,18 +1,18 @@
 import angular from "angular";
 
-import "./cart-panel.scss";
+import "./clipboard-panel.scss";
 
-import panelTemplate from "./cart-panel.html";
+import panelTemplate from "./clipboard-panel.html";
 
-class CartPanelController {
-    constructor($cart, $sharing, mdPanelRef) {
+class ClipboardPanelController {
+    constructor($clipboard, $sharing, mdPanelRef) {
         this._mdPanelRef = mdPanelRef;
-        this.$cart = $cart;
+        this.$clipboard = $clipboard;
 
-        this.itemGroups = Array.from(this.$cart.itemGroups.values());
+        this.itemGroups = Array.from(this.$clipboard.itemGroups.values());
 
         this.sharing = {
-            targets: $cart.sharingTargets,
+            targets: $clipboard.sharingTargets,
             open: state => {
                 this._mdPanelRef && this._mdPanelRef.close();
                 $sharing.open(state);
@@ -22,25 +22,23 @@ class CartPanelController {
 
     clear() {
         this.itemGroups = [];
-        this.$cart.clear();
+        this.$clipboard.clear();
         this._mdPanelRef && this._mdPanelRef.close();
     }
 }
 
-class CartButtonController {
-    constructor($cart, $mdPanel, $sharing) {
-        this.$cart = $cart;
+class ClipboardButtonController {
+    constructor($clipboard, $mdPanel, $sharing) {
+        this.$clipboard = $clipboard;
         this._$mdPanel = $mdPanel;
         this._$sharing = $sharing;
     }
 
-    showShoppingCart(event) {
+    showClipboard(event) {
         const $mdPanel = this._$mdPanel;
 
         let animation = $mdPanel.newPanelAnimation()
             .withAnimation($mdPanel.animation.FADE);
-
-        console.log(event.target);
 
         let position = $mdPanel.newPanelPosition()
             .relativeTo(event.target)
@@ -48,7 +46,7 @@ class CartButtonController {
 
         const oldProvided = Object.assign({}, this._$sharing.provided);
         const newProvided = {};
-        this.$cart.itemGroups.forEach(({items}, type) => {
+        this.$clipboard.itemGroups.forEach(({items}, type) => {
             if (items.length === 1) {
                 newProvided[type] = items[0];
             } else {
@@ -70,18 +68,18 @@ class CartButtonController {
             },
             focusOnOpen: false,
             zIndex: 91,
-            controller: CartPanelController,
+            controller: ClipboardPanelController,
             template: panelTemplate
         });
     }
 }
 
-export const CartButtonComponent = {
-    controller: CartButtonController,
+export const ClipboardButtonComponent = {
+    controller: ClipboardButtonController,
     transclude: true,
     template: `
-    <md-button layout="row" ng-hide="$ctrl.$cart.isEmpty()" aria-label="Shopping Cart" class="md-icon-button cart-button" ng-click="$ctrl.showShoppingCart($event)">
-      <md-icon md-svg-icon="cart"></md-icon>
-      <span>({{$ctrl.$cart.size}})</span>
+    <md-button layout="row" ng-hide="$ctrl.$clipboard.isEmpty()" aria-label="Shopping Clipboard" class="md-icon-button clipboard-button" ng-click="$ctrl.showClipboard($event)">
+      <md-icon md-svg-icon="clipboard"></md-icon>
+      <span>({{$ctrl.$clipboard.size}})</span>
     </md-button>`
 };

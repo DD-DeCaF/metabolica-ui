@@ -1,13 +1,13 @@
 import angular from "angular";
-import {CartButtonComponent} from "./cart-button.component";
-import {AddToCartComponent} from "./add-to-cart.component.js";
+import {ClipboardButtonComponent} from "./clipboard-button.component";
+import {AddToClipboardComponent} from "./add-to-clipboard.component.js";
 
-import iconCart from "../../../../img/icons/cart.svg";
-import iconCartPlus from "../../../../img/icons/cart-plus.svg";
+import iconClipboard from "../../../../img/icons/clipboard.svg";
+import iconClipboardPlus from "../../../../img/icons/clipboard-plus.svg";
 import iconClearAll from "../../../../img/icons/clear-all.svg";
 
 
-class CartRegistryProvider {
+class ClipboardRegistryProvider {
     constructor() {
         this.sources = {};
     }
@@ -22,7 +22,7 @@ class CartRegistryProvider {
 }
 
 
-class CartProvider {
+class ClipboardProvider {
     static itemGroups = new Map();
     static selectedItems = [];
 
@@ -36,13 +36,13 @@ class CartProvider {
         let hooks = [];
         let $sharingProvider = this._$sharingProvider;
 
-        class Cart {
+        class Clipboard {
             get itemGroups() {
-                return CartProvider.itemGroups;
+                return ClipboardProvider.itemGroups;
             }
 
             get selectedItems() {
-                return CartProvider.selectedItems;
+                return ClipboardProvider.selectedItems;
             }
 
             get size(){
@@ -58,10 +58,10 @@ class CartProvider {
             }
 
             clear() {
-                CartProvider.itemGroups = new Map();
-                CartProvider.selectedItems = [];
+                ClipboardProvider.itemGroups = new Map();
+                ClipboardProvider.selectedItems = [];
 
-                this._triggerOnCartChange();
+                this._triggerOnClipboardChange();
             }
 
             add(type, newItem) {
@@ -84,16 +84,16 @@ class CartProvider {
 
                 this.itemGroups.get(type)['items'].push(newItem);
 
-                this._triggerOnCartChange();
+                this._triggerOnClipboardChange();
 
                 return true;
             }
 
-            onCartChange(hookFn) {
+            onClipboardChange(hookFn) {
                 hooks.push(hookFn);
             }
 
-            _triggerOnCartChange() {
+            _triggerOnClipboardChange() {
                 let targets = this.sharingTargets;
                 for (let hookFn of hooks) {
                     hookFn(targets);
@@ -107,28 +107,28 @@ class CartProvider {
             }
         }
 
-        return new Cart();
+        return new Clipboard();
     }
 }
 
 
-export const CartModule = angular.module('cart', [])
-    .provider('cartRegistry', CartRegistryProvider)
-    .provider('$cart', CartProvider)
-    .component('cartButton', CartButtonComponent)
-    .component('addToCart', AddToCartComponent)
+export const ClipboardModule = angular.module('clipboard', [])
+    .provider('clipboardRegistry', ClipboardRegistryProvider)
+    .provider('$clipboard', ClipboardProvider)
+    .component('clipboardButton', ClipboardButtonComponent)
+    .component('addToClipboard', AddToClipboardComponent)
     .config(function ($mdIconProvider) {
-        $mdIconProvider.icon('cart', iconCart, 24);
-        $mdIconProvider.icon('cart-plus', iconCartPlus, 24);
+        $mdIconProvider.icon('clipboard', iconClipboard, 24);
+        $mdIconProvider.icon('clipboard-plus', iconClipboardPlus, 24);
         $mdIconProvider.icon('clear-all', iconClearAll, 24);
     })
-    .config(function (cartRegistryProvider) {
-        cartRegistryProvider.register('experiment', {
+    .config(function (clipboardRegistryProvider) {
+        clipboardRegistryProvider.register('experiment', {
             name: 'experiment',
             pluralName: 'experiments'
         });
 
-        cartRegistryProvider.register('pool', {
+        clipboardRegistryProvider.register('pool', {
             name: 'pool',
             pluralName: 'pools'
         });

@@ -1,13 +1,13 @@
 import angular from "angular";
 
-class AddToCartController {
-    constructor($mdToast, $cart) {
+class AddToClipboardController {
+    constructor($mdToast, $clipboard) {
         this._$mdToast = $mdToast;
-        this.$cart = $cart;
+        this.$clipboard = $clipboard;
     }
 
     add(value) {
-        const added = this.$cart.add(value.constructor.name.toLowerCase(), value);
+        const added = this.$clipboard.add(value.constructor.name.toLowerCase(), value);
 
         if (added) {
             this.showAddedToast();
@@ -19,7 +19,7 @@ class AddToCartController {
     showAddedToast() {
         this._$mdToast.show(
             this._$mdToast.simple()
-                .textContent('Added to the cart!')
+                .textContent('Added to the clipboard!')
                 .position('bottom right')
                 .hideDelay(3000)
         );
@@ -28,20 +28,20 @@ class AddToCartController {
     showAlreadyExistsToast() {
         this._$mdToast.show(
             this._$mdToast.simple()
-                .textContent('Already exists in the cart!')
+                .textContent('Already exists on the clipboard!')
                 .position('bottom right')
                 .hideDelay(3000)
         );
     }
 }
 
-export const AddToCartComponent = {
-    controller: AddToCartController,
+export const AddToClipboardComponent = {
+    controller: AddToClipboardController,
     bindings: {
         value: '<'
     },
     template: `
     <md-button class="md-icon-button" ng-click="$ctrl.add($ctrl.value)">
-      <md-icon md-svg-icon="cart-plus"></md-icon>
+      <md-icon md-svg-icon="clipboard-plus"></md-icon>
     </md-button>`
 };

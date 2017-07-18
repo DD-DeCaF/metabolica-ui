@@ -1,8 +1,8 @@
-button.cart-button {
+button.clipboard-button {
   width: auto !important;
 }
 
-.cart-panel {
+.clipboard-panel {
   background: #eeeeee;
   border-radius: 4px;
   overflow: hidden;
@@ -12,11 +12,11 @@ button.cart-button {
   width: 500px;
   min-height: 180px;
 
-  &.cart-panel-wide {
+  &.clipboard-panel-wide {
     width: 700px;
     min-height: 360px;
 
-    .cart-panel-content {
+    .clipboard-panel-content {
       height: 400px;
     }
   }
