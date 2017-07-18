@@ -1,18 +1,22 @@
-.shopping-cart {
+button.cart-button {
+  width: auto !important;
+}
+
+.cart-panel {
   background: #eeeeee;
   border-radius: 4px;
   overflow: hidden;
 
-  border: 1px solid rgba(0,0,0,0.12);
+  border: 1px solid rgba(0, 0, 0, 0.12);
 
   width: 500px;
   min-height: 180px;
 
-  &.shopping-cart-wide {
+  &.cart-panel-wide {
     width: 700px;
     min-height: 360px;
 
-    .shopping-cart-content {
+    .cart-panel-content {
       height: 400px;
     }
   }

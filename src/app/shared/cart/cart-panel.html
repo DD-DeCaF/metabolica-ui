@@ -1,0 +1,46 @@
+<div class="cart-panel md-whiteframe-3dp" md-colors="{background: 'default-accent-200'}">
+  <div layout="row">
+    <span flex></span>
+    <md-button layout="row" ng-disabled="true" aria-label="Shopping Cart" class="md-icon-button cart-button">
+      <md-icon md-svg-icon="cart"></md-icon>
+      <span>({{$ctrl.$cart.size}})</span>
+    </md-button>
+  </div>
+
+  <div ng-repeat="itemGroup in $ctrl.itemGroups">
+
+    <md-subheader class="md-no-sticky">{{ itemGroup.type }}</md-subheader>
+    <md-list>
+      <md-list-item ng-repeat="item in itemGroup.items">
+        <md-checkbox ng-model="item.$selected"></md-checkbox>
+        <p>{{ item.identifier }}</p>
+      </md-list-item>
+    </md-list>
+    <md-divider></md-divider>
+  </div>
+
+
+  <md-toolbar md-colors="{background: 'default-accent-200'}" class="md-dense md-accent" layout="row">
+    <md-button class="md-icon-button" ng-click="$ctrl.clear()">
+      <md-icon md-svg-icon="clear-all"></md-icon>
+    </md-button>
+    <span flex></span>
+
+    <md-menu ng-show="$ctrl.sharing.targets.length" md-position-mode="target-right target">
+      <md-button class="md-icon-button" ng-click="$mdOpenMenu($event)">
+        <md-icon md-svg-icon="share"></md-icon>
+      </md-button>
+
+      <md-menu-content width="4">
+        <md-menu-item ng-repeat="target in $ctrl.sharing.targets">
+          <md-button ng-click="$ctrl.sharing.open(target.state)">
+            <div layout="row">
+              <p flex>{{ target.name }}</p>
+              <md-icon md-svg-icon="share" md-menu-align-target></md-icon>
+            </div>
+          </md-button>
+        </md-menu-item>
+      </md-menu-content>
+    </md-menu>
+  </md-toolbar>
+</div>

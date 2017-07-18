@@ -18,7 +18,7 @@ import {SearchModule} from './search/search.module';
 import {DirectivesModule} from './shared/directives-legacy.module';
 import {XRefsModule} from './shared/xrefs/xrefs.module';
 import {TestUtilsModule} from './shared/test-utils/test-utils.module';
-import {ShoppingCartModule} from './shared/shopping-cart/shopping-cart.module';
+import {CartModule} from './shared/cart/cart.module';
 
 import iconPuzzle from '../../img/icons/puzzle.svg';
 import iconShare from '../../img/icons/share.svg';
@@ -87,7 +87,7 @@ export const AppModule = angular.module('App', [
         SearchModule.name,
         DirectivesModule.name,
         TestUtilsModule.name,
-        ShoppingCartModule.name
+        CartModule.name
     ])
     .provider('appNavigation', AppNavigationProvider)
     .provider('appName', AppNameProvider)

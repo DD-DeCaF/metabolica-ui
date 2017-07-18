@@ -10,6 +10,7 @@ function $sharingProvider() {
 
     return {
 
+        registry,
         register(state, {name, accept = []} = {}) {
             registry.push({state, name, accept});
         },
@@ -21,12 +22,16 @@ function $sharingProvider() {
 
             class Sharing {
 
+                get provided(){
+                    return provided;
+                }
+
                 items(type, otherwise = []) {
                     let values = transfer[type];
                     if (values instanceof Array) {
                         transfer = {};
                         return values;
-                    } else if (values != undefined) {
+                    } else if (values !== undefined) {
                         transfer = {};
                         return [values];
                     } else {
@@ -36,7 +41,7 @@ function $sharingProvider() {
 
                 item(type, otherwise = null) {
                     let value = transfer[type];
-                    if (!(value == undefined || value instanceof Array)) {
+                    if (!(value === undefined || value instanceof Array)) {
                         transfer = {};
                         return value;
                     } else {
@@ -67,12 +72,12 @@ function $sharingProvider() {
 
                 get targets() {
                     return registry.filter(({_name , accept}) =>
-                        accept.some(({type, multiple}) => provided[type] != undefined && (multiple || !(provided[type] instanceof Array))));
+                        accept.some(({type, multiple}) => provided[type] !== undefined && (multiple || !(provided[type] instanceof Array))));
                 }
 
                 findTargets(provides, isMultiple = false) {
                     return registry.filter(({_name, accept, state}) =>
-                    !$state.includes(state) && accept.some(({type, multiple}) => type == provides && (multiple || !isMultiple)));
+                    !$state.includes(state) && accept.some(({type, multiple}) => type === provides && (multiple || !isMultiple)));
                 }
 
                 // TODO transfer to $stateParams if receiving state supports it (needs to be specified on register).
