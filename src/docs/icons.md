@@ -10,19 +10,35 @@ Icon provider
 
 Register an icon by name in a module with [$mdIconProvider](https://material.angularjs.org/latest/api/service/$mdIconProvider)
 
-    import poolIcon from 'metabolica/img/icons/pools.svg';
+    import poolIcon from 'metabolica/img/icons/pool.svg';
 
     export const PoolsModule = angular.module('pools')
         .config(function ($mdIconProvider) {
             $mdIconProvider.icon('pool', poolIcon);
         }
+        
+        
+Using icons in templates
+-----------------------
 
-Use it in a template with the [md-icon](https://material.angularjs.org/latest/api/directive/mdIcon) directive
+Use a registered icon in a template with the [md-icon](https://material.angularjs.org/latest/api/directive/mdIcon) directive
 
     <md-icon md-svg-icon="pool"></md-icon>
 
+Or use the path directly
 
--------
+    <md-icon md-svg-icon="../../img/icons/pool.svg"
+    
+You can also use an icon as a button
+
+    <md-button
+        aria-label="pool"
+        class="md-icon-button">
+        <md-icon md-svg-icon="pool"></md-icon>
+    </md-button>
+
+Setting the icon for a module
+----------------------------
 
 Set the icon for a module by specifying `icon` in `appNavigationProvider.register`. It will appear on the left menu.
 
