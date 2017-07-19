@@ -1,66 +1,69 @@
 import angular from "angular";
 
 class AddToClipboardController {
-    constructor($mdToast, $sharing, $clipboard) {
+    constructor($mdToast, $clipboard) {
         this._$mdToast = $mdToast;
         this.$clipboard = $clipboard;
-        this.visible = false;
-        this.type = undefined;
-        this.value = undefined;
 
-        $sharing.onShareChange(targets => {
-            const providedEntries = Object.entries($sharing.provided);
-
-            if (providedEntries.length === 1 && $clipboard.isAllowed(providedEntries[0][0])){
-                [this.type, this.value] = providedEntries[0];
-                this.visible = this.type && this.value;
-            } else {
-                this.visible = false;
-
-                this.type = undefined;
-                this.value = undefined;
-            }
+        this.$clipboard.onClipboardChange(() => {
+            this.visible = !this.checkIfAdded(this.type, this.value);
         });
     }
 
-    add() {
+    $onInit(){
+        this.visible = !this.checkIfAdded(this.type, this.value);
+    }
+
+    checkIfAdded(type, item){
+        const items = this.$clipboard.itemGroups[type];
+
+        if (items === undefined){
+            return false;
+        }
+
+        for (let i = 0; i < items.length; i++) {
+            const _item = items[i];
+
+            if (_item.$uri === item.$uri) {
+                // This item already exists on the clipboard
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    add(type, value) {
         if (!(this.type && this.value)){
             return;
         }
 
-        if (this.value instanceof Array){
-            this.showToast('Don\'t know how to handle multiple items.');
+        if (!this.$clipboard.isAllowed(type)){
+            this.showToast('Clipboard does not support this object type.');
+            return;
+        } else if (this.checkIfAdded(type, value)){
+            this.showToast('Already exists on the clipboard.');
             return;
         }
 
-        const added = this.$clipboard.add(this.type, this.value);
+        this.$clipboard.add(type, value);
 
-        if (added === true) {
-            this.showToast('Added to the clipboard.');
-        } else if (added === false) {
-            this.showToast('Already exists on the clipboard.');
-        } else {
-            this.showToast('Clipboard does not support this object type.');
-        }
+        this.showToast('Added to the clipboard.');
     }
 
     showToast(msg){
-        this._$mdToast.show(
-            this._$mdToast.simple()
-                .textContent(msg)
-                .position('bottom right')
-                .hideDelay(3000)
-        );
+        this._$mdToast.show(this._$mdToast.simple().textContent(msg).hideDelay(2000));
     }
 }
 
 export const AddToClipboardComponent = {
     controller: AddToClipboardController,
     bindings: {
-        // value: '<'
+        type: '<',
+        value: '<',
     },
     template: `
-    <md-button ng-show="$ctrl.visible" class="md-icon-button" ng-click="$ctrl.add()">
+    <md-button ng-show="$ctrl.visible" class="md-icon-button" ng-click="$ctrl.add($ctrl.type, $ctrl.value)">
       <md-icon md-svg-icon="clipboard-plus"></md-icon>
     </md-button>`
 };

@@ -7,15 +7,13 @@ import panelTemplate from "./clipboard-panel.html";
 class ClipboardPanelController {
     constructor($clipboard, $sharing, mdPanelRef) {
         this._mdPanelRef = mdPanelRef;
-        this._$sharing = $sharing;
         this.$clipboard = $clipboard;
+        this._$sharing = $sharing;
 
-        this.itemGroups = Array.from(this.$clipboard.itemGroups.values());
-        this.updateSharing();
-    }
+        this.$clipboard.onClipboardChange(() => {
+            this.updateSharing();
+        });
 
-    onClipboardChange(){
-        this.$clipboard.triggerOnClipboardChange();
         this.updateSharing();
     }
 
@@ -29,11 +27,9 @@ class ClipboardPanelController {
         }
     }
 
-
     clear() {
-        this.itemGroups = [];
-        this.$clipboard.clear();
         this._mdPanelRef && this._mdPanelRef.close();
+        this.$clipboard.clear();
     }
 }
 

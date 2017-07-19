@@ -8,13 +8,13 @@
 
   <md-divider></md-divider>
 
-  <div ng-repeat="itemGroup in $ctrl.itemGroups">
+  <div ng-repeat="(type, items) in $ctrl.$clipboard.itemGroups">
 
-    <md-subheader md-colors="{background: 'default-accent-200'}">{{ itemGroup.pluralName }}</md-subheader>
+    <md-subheader md-colors="{background: 'default-accent-200'}">{{ type }}</md-subheader>
     <md-list>
-      <md-list-item ng-repeat="item in itemGroup.items">
-        <md-checkbox ng-model="item.selected" ng-change="$ctrl.onClipboardChange()"></md-checkbox>
-        <p>{{ item.item.identifier }}</p>
+      <md-list-item ng-repeat="item in items">
+        <md-checkbox ng-model="item.$selected" ng-change="$ctrl.$clipboard.triggerOnClipboardChange()"></md-checkbox>
+        <p>{{ item.identifier }}</p>
       </md-list-item>
     </md-list>
     <md-divider></md-divider>

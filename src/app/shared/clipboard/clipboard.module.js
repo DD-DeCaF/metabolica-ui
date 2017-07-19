@@ -8,8 +8,8 @@ import iconClearAll from "../../../../img/icons/clear-all.svg";
 
 
 class ClipboardProvider {
-    static itemGroups = new Map();
-    static selectedItemGroups = new Map();
+    static itemGroups = {};
+    static selectedItemGroups = {};
     static registry = {};
 
     constructor($sharingProvider) {
@@ -34,29 +34,29 @@ class ClipboardProvider {
             }
 
             updateSelection() {
-                ClipboardProvider.selectedItemGroups = new Map();
+                ClipboardProvider.selectedItemGroups = {};
 
-                this.itemGroups.forEach((value, type) => {
-                    const items = value['items'].filter(item => item.selected === true);
-                    if (!items.length) {
+                for(const [type, items] of Object.entries(this.itemGroups)) {
+                    const selectedItems = items.filter(item => item.$selected === true);
+                    if (!selectedItems.length) {
                         return
                     }
 
-                    ClipboardProvider.selectedItemGroups.set(type, Object.assign({}, value, {items}));
-                });
+                    ClipboardProvider.selectedItemGroups[type] = selectedItems;
+                }
             }
 
             get size() {
-                if (this.itemGroups.size === 0) {
+                if (Object.entries(this.itemGroups).length === 0) {
                     return 0;
                 } else {
-                    return Array.from(this.itemGroups.values()).reduce((sum, {items}) => sum + items.length, 0);
+                    return Object.values(this.itemGroups).reduce((sum, items) => sum + items.length, 0);
                 }
             }
 
             get sharingTargets() {
                 return $sharingProvider.registry.filter(({_name, accept}) =>
-                    accept.some(({type, multiple}) => this.selectedItemGroups.get(type) !== undefined && (multiple || !(this.selectedItemGroups.get(type)['items'].length > 1))
+                    accept.some(({type, multiple}) => this.selectedItemGroups[type] !== undefined && (multiple || !(this.selectedItemGroups[type].length > 1))
                     ));
             }
 
@@ -69,64 +69,45 @@ class ClipboardProvider {
             }
 
             clear() {
-                ClipboardProvider.itemGroups = new Map();
+                ClipboardProvider.itemGroups = {};
+                ClipboardProvider.selectedItemGroups = {};
 
-                this._triggerOnClipboardChange();
+                this.triggerOnClipboardChange();
             }
 
-            add(type, newItem) {
-                // type is not registered with $cartProvider
+            add(type, item) {
                 if (ClipboardProvider.registry[type] === undefined) {
                     return;
+                } else if (this.itemGroups[type] === undefined){
+                    ClipboardProvider.itemGroups[type] = [];
                 }
 
-                if (!this.itemGroups.has(type)) {
-                    const config = ClipboardProvider.registry[type];
+                this.itemGroups[type].push(Object.assign({}, item, {$selected: true}));
 
-                    this.itemGroups.set(type, {
-                        name: config.name,
-                        pluralName: config.pluralName,
-                        type,
-                        items: [],
-                    });
-                } else {
-                    const items = this.itemGroups.get(type)['items'];
-
-                    for (let i = 0; i < items.length; i++) {
-                        const item = items[i];
-
-                        if (item.item.$uri === newItem.$uri) {
-                            // This item already exists on the clipboard
-                            return false;
-                        }
-                    }
-                }
-
-                // Add this item to the clipboard
-                this.itemGroups.get(type)['items'].push({
-                    selected: true,
-                    item: newItem,
-                });
-
-                // Trigger any code related to clipboard change
                 this.triggerOnClipboardChange();
+            }
 
-                return true;
+            onClipboardChange(hookFn) {
+                hooks.push(hookFn);
             }
 
             triggerOnClipboardChange() {
                 this.updateSelection();
+
+                for(const hookFn of hooks){
+                    hookFn();
+                }
             }
 
             provideForSharing() {
                 const provided = {};
-                this.selectedItemGroups.forEach(({items}, type) => {
+                for(const [type, items] of Object.entries(this.selectedItemGroups)) {
                     if (items.length === 1) {
-                        provided[type] = items[0].item;
+                        provided[type] = items[0];
                     } else {
-                        provided[type] = items.map(item => item.item);
+                        provided[type] = items;
                     }
-                });
+                }
                 return provided;
             }
         }
