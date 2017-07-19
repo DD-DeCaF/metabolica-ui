@@ -9,26 +9,19 @@ class AddToClipboardController {
     add(value) {
         const added = this.$clipboard.add(value.constructor.name.toLowerCase(), value);
 
-        if (added) {
-            this.showAddedToast();
+        if (added === true) {
+            this.showToast('Added to the clipboard.');
+        } else if (added === false) {
+            this.showToast('Already exists on the clipboard.');
         } else {
-            this.showAlreadyExistsToast();
+            this.showToast('Clipboard does not support this object type.');
         }
     }
 
-    showAddedToast() {
+    showToast(msg){
         this._$mdToast.show(
             this._$mdToast.simple()
-                .textContent('Added to the clipboard!')
-                .position('bottom right')
-                .hideDelay(3000)
-        );
-    }
-
-    showAlreadyExistsToast() {
-        this._$mdToast.show(
-            this._$mdToast.simple()
-                .textContent('Already exists on the clipboard!')
+                .textContent(msg)
                 .position('bottom right')
                 .hideDelay(3000)
         );

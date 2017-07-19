@@ -7,66 +7,81 @@ import iconClipboardPlus from "../../../../img/icons/clipboard-plus.svg";
 import iconClearAll from "../../../../img/icons/clear-all.svg";
 
 
-class ClipboardRegistryProvider {
-    constructor() {
-        this.sources = {};
-    }
-
-    $get($injector) {
-        return this.sources;
-    }
-
-    register(name, config) {
-        this.sources[name] = config;
-    }
-}
-
-
 class ClipboardProvider {
     static itemGroups = new Map();
-    static selectedItems = [];
+    static selectedItemGroups = new Map();
+    static registry = {};
 
     constructor($sharingProvider) {
         this._$sharingProvider = $sharingProvider;
     }
 
+    register(name, config) {
+        ClipboardProvider.registry[name] = config;
+    }
+
     $get($injector) {
-        let provided = {};
-        let transfer = {};
-        let hooks = [];
-        let $sharingProvider = this._$sharingProvider;
+        const hooks = [];
+        const $sharingProvider = this._$sharingProvider;
 
         class Clipboard {
             get itemGroups() {
                 return ClipboardProvider.itemGroups;
             }
 
-            get selectedItems() {
-                return ClipboardProvider.selectedItems;
+            get selectedItemGroups() {
+                return ClipboardProvider.selectedItemGroups;
             }
 
-            get size(){
-                if (this.itemGroups.size === 0){
+            updateSelection() {
+                ClipboardProvider.selectedItemGroups = new Map();
+
+                this.itemGroups.forEach((value, type) => {
+                    const items = value['items'].filter(item => item.selected === true);
+                    if (!items.length) {
+                        return
+                    }
+
+                    ClipboardProvider.selectedItemGroups.set(type, Object.assign({}, value, {items}));
+                });
+            }
+
+            get size() {
+                if (this.itemGroups.size === 0) {
                     return 0;
                 } else {
                     return Array.from(this.itemGroups.values()).reduce((sum, {items}) => sum + items.length, 0);
                 }
             }
 
-            isEmpty(){
+            get sharingTargets() {
+                return $sharingProvider.registry.filter(({_name, accept}) =>
+                    accept.some(({type, multiple}) => this.selectedItemGroups.get(type) !== undefined && (multiple || !(this.selectedItemGroups.get(type)['items'].length > 1))
+                    ));
+            }
+
+            isEmpty() {
                 return this.size === 0;
             }
 
             clear() {
                 ClipboardProvider.itemGroups = new Map();
-                ClipboardProvider.selectedItems = [];
 
                 this._triggerOnClipboardChange();
             }
 
             add(type, newItem) {
+                // type is not registered with $cartProvider
+                if (ClipboardProvider.registry[type] === undefined) {
+                    return;
+                }
+
                 if (!this.itemGroups.has(type)) {
+                    const config = ClipboardProvider.registry[type];
+
                     this.itemGroups.set(type, {
+                        name: config.name,
+                        pluralName: config.pluralName,
                         type,
                         items: [],
                     });
@@ -76,34 +91,39 @@ class ClipboardProvider {
                     for (let i = 0; i < items.length; i++) {
                         const item = items[i];
 
-                        if (item.$uri === newItem.$uri) {
+                        if (item.item.$uri === newItem.$uri) {
+                            // This item already exists on the clipboard
                             return false;
                         }
                     }
                 }
 
-                this.itemGroups.get(type)['items'].push(newItem);
+                // Add this item to the clipboard
+                this.itemGroups.get(type)['items'].push({
+                    selected: true,
+                    item: newItem,
+                });
 
-                this._triggerOnClipboardChange();
+                // Trigger any code related to clipboard change
+                this.triggerOnClipboardChange();
 
                 return true;
             }
 
-            onClipboardChange(hookFn) {
-                hooks.push(hookFn);
+            triggerOnClipboardChange() {
+                this.updateSelection();
             }
 
-            _triggerOnClipboardChange() {
-                let targets = this.sharingTargets;
-                for (let hookFn of hooks) {
-                    hookFn(targets);
-                }
-            }
-
-            get sharingTargets() {
-                return $sharingProvider.registry.filter(({_name , accept}) =>
-                    accept.some(({type, multiple}) => this.itemGroups.get(type) !== undefined && (multiple || !(this.itemGroups.get(type)['items'].length > 1))
-                    ));
+            provideForSharing() {
+                const provided = {};
+                this.selectedItemGroups.forEach(({items}, type) => {
+                    if (items.length === 1) {
+                        provided[type] = items[0].item;
+                    } else {
+                        provided[type] = items.map(item => item.item);
+                    }
+                });
+                return provided;
             }
         }
 
@@ -113,7 +133,6 @@ class ClipboardProvider {
 
 
 export const ClipboardModule = angular.module('clipboard', [])
-    .provider('clipboardRegistry', ClipboardRegistryProvider)
     .provider('$clipboard', ClipboardProvider)
     .component('clipboardButton', ClipboardButtonComponent)
     .component('addToClipboard', AddToClipboardComponent)
@@ -122,14 +141,14 @@ export const ClipboardModule = angular.module('clipboard', [])
         $mdIconProvider.icon('clipboard-plus', iconClipboardPlus, 24);
         $mdIconProvider.icon('clear-all', iconClearAll, 24);
     })
-    .config(function (clipboardRegistryProvider) {
-        clipboardRegistryProvider.register('experiment', {
-            name: 'experiment',
-            pluralName: 'experiments'
+    .config(function ($clipboardProvider) {
+        $clipboardProvider.register('experiment', {
+            name: 'Experiment',
+            pluralName: 'Experiments'
         });
 
-        clipboardRegistryProvider.register('pool', {
-            name: 'pool',
-            pluralName: 'pools'
+        $clipboardProvider.register('pool', {
+            name: 'Pool',
+            pluralName: 'Pools'
         });
     });
