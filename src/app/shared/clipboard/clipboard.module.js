@@ -64,6 +64,10 @@ class ClipboardProvider {
                 return this.size === 0;
             }
 
+            isAllowed(type){
+                return ClipboardProvider.registry[type] !== undefined;
+            }
+
             clear() {
                 ClipboardProvider.itemGroups = new Map();
 

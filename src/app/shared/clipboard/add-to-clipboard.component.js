@@ -1,13 +1,39 @@
 import angular from "angular";
 
 class AddToClipboardController {
-    constructor($mdToast, $clipboard) {
+    constructor($mdToast, $sharing, $clipboard) {
         this._$mdToast = $mdToast;
         this.$clipboard = $clipboard;
+        this.visible = false;
+        this.type = undefined;
+        this.value = undefined;
+
+        $sharing.onShareChange(targets => {
+            const providedEntries = Object.entries($sharing.provided);
+
+            if (providedEntries.length === 1 && $clipboard.isAllowed(providedEntries[0][0])){
+                [this.type, this.value] = providedEntries[0];
+                this.visible = this.type && this.value;
+            } else {
+                this.visible = false;
+
+                this.type = undefined;
+                this.value = undefined;
+            }
+        });
     }
 
-    add(value) {
-        const added = this.$clipboard.add(value.constructor.name.toLowerCase(), value);
+    add() {
+        if (!(this.type && this.value)){
+            return;
+        }
+
+        if (this.value instanceof Array){
+            this.showToast('Don\'t know how to handle multiple items.');
+            return;
+        }
+
+        const added = this.$clipboard.add(this.type, this.value);
 
         if (added === true) {
             this.showToast('Added to the clipboard.');
@@ -31,10 +57,10 @@ class AddToClipboardController {
 export const AddToClipboardComponent = {
     controller: AddToClipboardController,
     bindings: {
-        value: '<'
+        // value: '<'
     },
     template: `
-    <md-button class="md-icon-button" ng-click="$ctrl.add($ctrl.value)">
+    <md-button ng-show="$ctrl.visible" class="md-icon-button" ng-click="$ctrl.add()">
       <md-icon md-svg-icon="clipboard-plus"></md-icon>
     </md-button>`
 };
