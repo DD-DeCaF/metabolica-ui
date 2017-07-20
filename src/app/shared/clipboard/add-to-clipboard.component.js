@@ -1,5 +1,3 @@
-import angular from "angular";
-
 class AddToClipboardController {
     constructor($mdToast, $clipboard) {
         this._$mdToast = $mdToast;
@@ -47,7 +45,6 @@ class AddToClipboardController {
         }
 
         this.$clipboard.add(type, value);
-
         this.showToast('Added to the clipboard.');
     }
 

@@ -43,7 +43,7 @@ class ClipboardProvider {
                 for(const [type, items] of Object.entries(this.itemGroups)) {
                     const selectedItems = items.filter(item => item.$selected === true);
                     if (!selectedItems.length) {
-                        return
+                        return;
                     }
 
                     ClipboardProvider.selectedItemGroups[type] = selectedItems;
@@ -129,15 +129,4 @@ export const ClipboardModule = angular.module('clipboard', [])
         $mdIconProvider.icon('clipboard', iconClipboard, 24);
         $mdIconProvider.icon('clipboard-plus', iconClipboardPlus, 24);
         $mdIconProvider.icon('clear-all', iconClearAll, 24);
-    })
-    .config(function ($clipboardProvider) {
-        $clipboardProvider.register('experiment', {
-            name: 'Experiment',
-            pluralName: 'Experiments'
-        });
-
-        $clipboardProvider.register('pool', {
-            name: 'Pool',
-            pluralName: 'Pools'
-        });
     });

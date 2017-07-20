@@ -24,7 +24,8 @@ class ClipboardPanelController {
                 this._mdPanelRef && this._mdPanelRef.close();
                 this._$sharing.open(state);
             }
-        }
+        };
+        this._$sharing.provide(this.$clipboard.provideForSharing());
     }
 
     clear() {
@@ -91,7 +92,7 @@ export const ClipboardButtonComponent = {
     controller: ClipboardButtonController,
     transclude: true,
     template: `
-    <md-button id="clipboard-button" layout="row" ng-hide="$ctrl.$clipboard.isEmpty()" aria-label="Shopping Clipboard" class="md-icon-button clipboard-button" ng-click="$ctrl.showClipboard($event)">
+    <md-button id="clipboard-button" layout="row" ng-hide="$ctrl.$clipboard.isEmpty()" aria-label="Clipboard" class="md-icon-button clipboard-button" ng-click="$ctrl.showClipboard($event)">
       <md-icon md-svg-icon="clipboard"></md-icon>
     </md-button>`
 };
