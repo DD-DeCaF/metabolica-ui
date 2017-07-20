@@ -1,7 +1,3 @@
-button.clipboard-button {
-  width: auto !important;
-}
-
 .clipboard-panel {
   background: #eeeeee;
   border-radius: 4px;
@@ -11,13 +7,4 @@ button.clipboard-button {
 
   width: 500px;
   min-height: 180px;
-
-  &.clipboard-panel-wide {
-    width: 700px;
-    min-height: 360px;
-
-    .clipboard-panel-content {
-      height: 400px;
-    }
-  }
 }

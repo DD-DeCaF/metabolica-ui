@@ -49,7 +49,7 @@ class ClipboardPanelController {
     }
 }
 
-class ClipboardButtonController {
+class ClipboardMenuController {
     constructor($clipboard, $mdPanel, $sharing) {
         this.$clipboard = $clipboard;
         this._$mdPanel = $mdPanel;
@@ -63,7 +63,7 @@ class ClipboardButtonController {
             .withAnimation($mdPanel.animation.FADE);
 
         let position = $mdPanel.newPanelPosition()
-            .relativeTo(document.querySelector('#clipboard-button'))
+            .relativeTo(document.querySelector('#clipboard-menu'))
             .addPanelPosition($mdPanel.xPosition.ALIGN_END, $mdPanel.yPosition.ABOVE);
 
         const oldProvided = Object.assign({}, this._$sharing.provided);
@@ -88,11 +88,11 @@ class ClipboardButtonController {
     }
 }
 
-export const ClipboardButtonComponent = {
-    controller: ClipboardButtonController,
+export const ClipboardMenuComponent = {
+    controller: ClipboardMenuController,
     transclude: true,
     template: `
-    <md-button id="clipboard-button" layout="row" ng-hide="$ctrl.$clipboard.isEmpty()" aria-label="Clipboard" class="md-icon-button clipboard-button" ng-click="$ctrl.showClipboard($event)">
+    <md-button id="clipboard-menu" layout="row" ng-hide="$ctrl.$clipboard.isEmpty()" aria-label="Clipboard" class="md-icon-button" ng-click="$ctrl.showClipboard($event)">
       <md-icon md-svg-icon="clipboard"></md-icon>
     </md-button>`
 };

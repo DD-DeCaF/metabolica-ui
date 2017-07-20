@@ -1,5 +1,5 @@
 import angular from "angular";
-import {ClipboardButtonComponent} from "./clipboard-button.component";
+import {ClipboardMenuComponent} from "./clipboard-menu.component";
 import {AddToClipboardComponent} from "./add-to-clipboard.component.js";
 
 import iconClipboard from "../../../../img/icons/clipboard.svg";
@@ -123,7 +123,7 @@ class ClipboardProvider {
 
 export const ClipboardModule = angular.module('clipboard', [])
     .provider('$clipboard', ClipboardProvider)
-    .component('clipboardButton', ClipboardButtonComponent)
+    .component('clipboardMenu', ClipboardMenuComponent)
     .component('addToClipboard', AddToClipboardComponent)
     .config(function ($mdIconProvider) {
         $mdIconProvider.icon('clipboard', iconClipboard, 24);
