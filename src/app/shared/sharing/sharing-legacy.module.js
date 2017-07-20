@@ -29,10 +29,10 @@ function $sharingProvider() {
                 items(type, otherwise = []) {
                     let values = transfer[type];
                     if (values instanceof Array) {
-                        transfer = {};
+                        transfer = Object.assign({}, transfer, {type: undefined});
                         return values;
                     } else if (values !== undefined) {
-                        transfer = {};
+                        transfer = Object.assign({}, transfer, {type: undefined});
                         return [values];
                     } else {
                         return otherwise;
@@ -42,7 +42,7 @@ function $sharingProvider() {
                 item(type, otherwise = null) {
                     let value = transfer[type];
                     if (!(value === undefined || value instanceof Array)) {
-                        transfer = {};
+                        transfer = Object.assign({}, transfer, {type: undefined});
                         return value;
                     } else {
                         return otherwise;

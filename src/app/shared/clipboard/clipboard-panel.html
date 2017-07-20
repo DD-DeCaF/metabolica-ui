@@ -10,7 +10,7 @@
 
   <div ng-repeat="(type, items) in $ctrl.$clipboard.itemGroups">
 
-    <md-subheader md-colors="{background: 'default-accent-200'}">{{ type }}</md-subheader>
+    <md-subheader md-colors="{background: 'default-accent-200'}">{{ $ctrl.getName(type) }}</md-subheader>
     <md-list>
       <md-list-item ng-repeat="item in items">
         <md-checkbox ng-model="item.$selected" ng-change="$ctrl.$clipboard.triggerOnClipboardChange()"></md-checkbox>

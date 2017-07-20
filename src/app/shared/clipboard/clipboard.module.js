@@ -25,6 +25,10 @@ class ClipboardProvider {
         const $sharingProvider = this._$sharingProvider;
 
         class Clipboard {
+            get registry() {
+                return ClipboardProvider.registry;
+            }
+
             get itemGroups() {
                 return ClipboardProvider.itemGroups;
             }

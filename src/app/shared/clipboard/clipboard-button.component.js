@@ -31,6 +31,21 @@ class ClipboardPanelController {
         this._mdPanelRef && this._mdPanelRef.close();
         this.$clipboard.clear();
     }
+
+    getName(type){
+        const items = this.$clipboard.itemGroups[type];
+        const config = this.$clipboard.registry[type];
+
+        if (config === undefined) {
+            return;
+        }
+
+        if (items.length === 1) {
+            return config.name;
+        } else {
+            return config.pluralName;
+        }
+    }
 }
 
 class ClipboardButtonController {
