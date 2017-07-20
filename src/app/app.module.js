@@ -4,7 +4,6 @@ import MdDataTable from 'angular-material-data-table';
 import 'angular-material-data-table/dist/md-data-table.css';
 import 'angular-ui-router';
 import 'angular-messages';
-import 'ngstorage';
 import angular from 'angular';
 import {AppComponent} from './app.component';
 import {AppHomeComponent} from './app-home.component';
@@ -77,7 +76,6 @@ export const AppModule = angular.module('App', [
         'ngMaterial',
         'ngMessages',
         'ui.router',
-        'ngStorage',
         MdDataTable,
         SessionModule.name,
         SharingModule.name,
