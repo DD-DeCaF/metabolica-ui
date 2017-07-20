@@ -13,7 +13,7 @@
     <md-subheader md-colors="{background: 'default-accent-200'}">{{ $ctrl.getName(type) }}</md-subheader>
     <md-list>
       <md-list-item ng-repeat="item in items">
-        <md-checkbox ng-model="item.$selected" ng-change="$ctrl._$clipboard.triggerOnClipboardChange()"></md-checkbox>
+        <md-checkbox ng-model="item.$selected" ng-click="$ctrl._$clipboard.updateSelectedItems()"></md-checkbox>
         <p>{{ item.identifier }}</p>
       </md-list-item>
     </md-list>
@@ -29,13 +29,13 @@
     <span flex></span>
 
     <md-menu md-position-mode="target-right target">
-      <md-button ng-disabled="!$ctrl.sharing.targets.length" class="md-icon-button" ng-click="$mdOpenMenu($event)">
+      <md-button ng-disabled="!$ctrl._$clipboard.sharingTargets.length" class="md-icon-button" ng-click="$mdOpenMenu($event)">
         <md-icon md-svg-icon="share"></md-icon>
       </md-button>
 
       <md-menu-content width="4">
-        <md-menu-item ng-repeat="target in $ctrl.sharing.targets">
-          <md-button ng-click="$ctrl.sharing.open(target.state)">
+        <md-menu-item ng-repeat="target in $ctrl._$clipboard.sharingTargets">
+          <md-button ng-click="$ctrl.open(target.state)">
             <div layout="row">
               <p flex>{{ target.name }}</p>
               <md-icon md-svg-icon="share" md-menu-align-target></md-icon>

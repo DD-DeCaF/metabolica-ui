@@ -37,17 +37,19 @@ class ClipboardProvider {
                 return ClipboardProvider.selectedItemGroups;
             }
 
-            updateSelection() {
+            updateSelectedItems() {
                 ClipboardProvider.selectedItemGroups = {};
 
-                for(const [type, items] of Object.entries(this.itemGroups)) {
+                for (const [type, items] of Object.entries(this.itemGroups)) {
                     const selectedItems = items.filter(item => item.$selected === true);
                     if (!selectedItems.length) {
-                        return;
+                        continue;
                     }
 
                     ClipboardProvider.selectedItemGroups[type] = selectedItems;
                 }
+
+                this._triggerOnChange();
             }
 
             get size() {
@@ -68,7 +70,7 @@ class ClipboardProvider {
                 return this.size === 0;
             }
 
-            isAllowed(type){
+            canAdd(type) {
                 return ClipboardProvider.registry[type] !== undefined;
             }
 
@@ -76,36 +78,42 @@ class ClipboardProvider {
                 ClipboardProvider.itemGroups = {};
                 ClipboardProvider.selectedItemGroups = {};
 
-                this.triggerOnClipboardChange();
+                this._triggerOnChange();
             }
 
             add(type, item) {
                 if (ClipboardProvider.registry[type] === undefined) {
                     return;
-                } else if (this.itemGroups[type] === undefined){
+                } else if (this.itemGroups[type] === undefined) {
                     ClipboardProvider.itemGroups[type] = [];
                 }
 
                 this.itemGroups[type].push(Object.assign({}, item, {$selected: true}));
 
-                this.triggerOnClipboardChange();
+                this.updateSelectedItems();
             }
 
-            onClipboardChange(hookFn) {
+            onChange(hookFn) {
                 hooks.push(hookFn);
             }
 
-            triggerOnClipboardChange() {
-                this.updateSelection();
+            offChange(hookFn) {
+                const index = hooks.indexOf(hookFn);
 
-                for(const hookFn of hooks){
+                if (index > -1) {
+                    hooks.splice(index, 1);
+                }
+            }
+
+            _triggerOnChange() {
+                for (const hookFn of hooks) {
                     hookFn();
                 }
             }
 
             provideForSharing() {
                 const provided = {};
-                for(const [type, items] of Object.entries(this.selectedItemGroups)) {
+                for (const [type, items] of Object.entries(this.selectedItemGroups)) {
                     if (items.length === 1) {
                         provided[type] = items[0];
                     } else {

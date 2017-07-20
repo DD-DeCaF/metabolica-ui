@@ -3,19 +3,23 @@ class AddToClipboardController {
         this._$mdToast = $mdToast;
         this._$clipboard = $clipboard;
 
-        this._$clipboard.onClipboardChange(() => {
-            this.visible = !this.checkIfAdded(this.type, this.value);
-        });
+        this.clipboardChangeHandler = () => this.visible = !this.checkIfAdded(this.type, this.value);
     }
 
-    $onInit(){
+    $onInit() {
         this.visible = !this.checkIfAdded(this.type, this.value);
+
+        this._$clipboard.onChange(this.clipboardChangeHandler);
     }
 
-    checkIfAdded(type, item){
+    $onDestroy() {
+        this._$clipboard.offChange(this.clipboardChangeHandler);
+    }
+
+    checkIfAdded(type, item) {
         const items = this._$clipboard.itemGroups[type];
 
-        if (items === undefined){
+        if (items === undefined) {
             return false;
         }
 
@@ -32,14 +36,14 @@ class AddToClipboardController {
     }
 
     add(type, value) {
-        if (!(this.type && this.value)){
+        if (!(this.type && this.value)) {
             return;
         }
 
-        if (!this._$clipboard.isAllowed(type)){
+        if (!this._$clipboard.canAdd(type)) {
             this.showToast('Clipboard does not support this object type.');
             return;
-        } else if (this.checkIfAdded(type, value)){
+        } else if (this.checkIfAdded(type, value)) {
             this.showToast('Already exists on the clipboard.');
             return;
         }
@@ -48,7 +52,7 @@ class AddToClipboardController {
         this.showToast('Added to the clipboard.');
     }
 
-    showToast(msg){
+    showToast(msg) {
         this._$mdToast.show(this._$mdToast.simple().textContent(msg).hideDelay(2000));
     }
 }

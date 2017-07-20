@@ -9,23 +9,12 @@ class ClipboardPanelController {
         this._mdPanelRef = mdPanelRef;
         this._$clipboard = $clipboard;
         this._$sharing = $sharing;
-
-        this._$clipboard.onClipboardChange(() => {
-            this.updateSharing();
-        });
-
-        this.updateSharing();
     }
 
-    updateSharing(){
-        this.sharing = {
-            targets: this._$clipboard.sharingTargets,
-            open: state => {
-                this._mdPanelRef && this._mdPanelRef.close();
-                this._$sharing.open(state);
-            }
-        };
+    open(state) {
+        this._mdPanelRef && this._mdPanelRef.close();
         this._$sharing.provide(this._$clipboard.provideForSharing());
+        this._$sharing.open(state);
     }
 
     clear() {
@@ -33,7 +22,7 @@ class ClipboardPanelController {
         this._$clipboard.clear();
     }
 
-    getName(type){
+    getName(type) {
         const items = this._$clipboard.itemGroups[type];
         const config = this._$clipboard.registry[type];
 
@@ -57,19 +46,13 @@ class ClipboardMenuController {
     }
 
     showClipboard(event) {
-        const $mdPanel = this._$mdPanel;
+        const animation = this._$mdPanel.newPanelAnimation().withAnimation(this._$mdPanel.animation.FADE);
 
-        let animation = $mdPanel.newPanelAnimation()
-            .withAnimation($mdPanel.animation.FADE);
-
-        let position = $mdPanel.newPanelPosition()
+        const position = this._$mdPanel.newPanelPosition()
             .relativeTo(document.querySelector('#clipboard-menu'))
-            .addPanelPosition($mdPanel.xPosition.ALIGN_END, $mdPanel.yPosition.ABOVE);
+            .addPanelPosition(this._$mdPanel.xPosition.ALIGN_END, this._$mdPanel.yPosition.ABOVE);
 
-        const oldProvided = Object.assign({}, this._$sharing.provided);
-        this._$sharing.provide(this._$clipboard.provideForSharing());
-
-        $mdPanel.open({
+        this._$mdPanel.open({
             animation,
             attachTo: angular.element(document.body),
             controllerAs: '$ctrl',
@@ -77,9 +60,6 @@ class ClipboardMenuController {
             openFrom: event,
             clickOutsideToClose: true,
             escapeToClose: true,
-            onCloseSuccess: (panelRef, closeReason) => {
-                this._$sharing.provide(oldProvided);
-            },
             focusOnOpen: false,
             zIndex: 91,
             controller: ClipboardPanelController,
@@ -90,7 +70,6 @@ class ClipboardMenuController {
 
 export const ClipboardMenuComponent = {
     controller: ClipboardMenuController,
-    transclude: true,
     template: `
     <md-button id="clipboard-menu" layout="row" ng-hide="$ctrl._$clipboard.isEmpty()" aria-label="Clipboard" class="md-icon-button" ng-click="$ctrl.showClipboard($event)">
       <md-icon md-svg-icon="clipboard"></md-icon>

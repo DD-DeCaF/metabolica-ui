@@ -1,4 +1,4 @@
-import angular from 'angular';
+import angular from "angular";
 /**
  *
  * This is a service for transferring items between components
@@ -21,11 +21,6 @@ function $sharingProvider() {
             let hooks = [];
 
             class Sharing {
-
-                get provided(){
-                    return provided;
-                }
-
                 items(type, otherwise = []) {
                     let values = transfer[type];
                     if (values instanceof Array) {
@@ -71,7 +66,7 @@ function $sharingProvider() {
                 }
 
                 get targets() {
-                    return registry.filter(({_name , accept}) =>
+                    return registry.filter(({_name, accept}) =>
                         accept.some(({type, multiple}) => provided[type] !== undefined && (multiple || !(provided[type] instanceof Array))));
                 }
 
