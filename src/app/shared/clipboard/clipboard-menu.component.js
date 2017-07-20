@@ -7,10 +7,10 @@ import panelTemplate from "./clipboard-panel.html";
 class ClipboardPanelController {
     constructor($clipboard, $sharing, mdPanelRef) {
         this._mdPanelRef = mdPanelRef;
-        this.$clipboard = $clipboard;
+        this._$clipboard = $clipboard;
         this._$sharing = $sharing;
 
-        this.$clipboard.onClipboardChange(() => {
+        this._$clipboard.onClipboardChange(() => {
             this.updateSharing();
         });
 
@@ -19,23 +19,23 @@ class ClipboardPanelController {
 
     updateSharing(){
         this.sharing = {
-            targets: this.$clipboard.sharingTargets,
+            targets: this._$clipboard.sharingTargets,
             open: state => {
                 this._mdPanelRef && this._mdPanelRef.close();
                 this._$sharing.open(state);
             }
         };
-        this._$sharing.provide(this.$clipboard.provideForSharing());
+        this._$sharing.provide(this._$clipboard.provideForSharing());
     }
 
     clear() {
         this._mdPanelRef && this._mdPanelRef.close();
-        this.$clipboard.clear();
+        this._$clipboard.clear();
     }
 
     getName(type){
-        const items = this.$clipboard.itemGroups[type];
-        const config = this.$clipboard.registry[type];
+        const items = this._$clipboard.itemGroups[type];
+        const config = this._$clipboard.registry[type];
 
         if (config === undefined) {
             return;
@@ -51,7 +51,7 @@ class ClipboardPanelController {
 
 class ClipboardMenuController {
     constructor($clipboard, $mdPanel, $sharing) {
-        this.$clipboard = $clipboard;
+        this._$clipboard = $clipboard;
         this._$mdPanel = $mdPanel;
         this._$sharing = $sharing;
     }
@@ -67,7 +67,7 @@ class ClipboardMenuController {
             .addPanelPosition($mdPanel.xPosition.ALIGN_END, $mdPanel.yPosition.ABOVE);
 
         const oldProvided = Object.assign({}, this._$sharing.provided);
-        this._$sharing.provide(this.$clipboard.provideForSharing());
+        this._$sharing.provide(this._$clipboard.provideForSharing());
 
         $mdPanel.open({
             animation,
@@ -92,7 +92,7 @@ export const ClipboardMenuComponent = {
     controller: ClipboardMenuController,
     transclude: true,
     template: `
-    <md-button id="clipboard-menu" layout="row" ng-hide="$ctrl.$clipboard.isEmpty()" aria-label="Clipboard" class="md-icon-button" ng-click="$ctrl.showClipboard($event)">
+    <md-button id="clipboard-menu" layout="row" ng-hide="$ctrl._$clipboard.isEmpty()" aria-label="Clipboard" class="md-icon-button" ng-click="$ctrl.showClipboard($event)">
       <md-icon md-svg-icon="clipboard"></md-icon>
     </md-button>`
 };

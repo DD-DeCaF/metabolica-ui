@@ -1,9 +1,9 @@
 class AddToClipboardController {
     constructor($mdToast, $clipboard) {
         this._$mdToast = $mdToast;
-        this.$clipboard = $clipboard;
+        this._$clipboard = $clipboard;
 
-        this.$clipboard.onClipboardChange(() => {
+        this._$clipboard.onClipboardChange(() => {
             this.visible = !this.checkIfAdded(this.type, this.value);
         });
     }
@@ -13,7 +13,7 @@ class AddToClipboardController {
     }
 
     checkIfAdded(type, item){
-        const items = this.$clipboard.itemGroups[type];
+        const items = this._$clipboard.itemGroups[type];
 
         if (items === undefined){
             return false;
@@ -36,7 +36,7 @@ class AddToClipboardController {
             return;
         }
 
-        if (!this.$clipboard.isAllowed(type)){
+        if (!this._$clipboard.isAllowed(type)){
             this.showToast('Clipboard does not support this object type.');
             return;
         } else if (this.checkIfAdded(type, value)){
@@ -44,7 +44,7 @@ class AddToClipboardController {
             return;
         }
 
-        this.$clipboard.add(type, value);
+        this._$clipboard.add(type, value);
         this.showToast('Added to the clipboard.');
     }
 
