@@ -1,20 +1,17 @@
-import angular from "angular";
-import {ClipboardMenuComponent} from "./clipboard-menu.component";
-import {AddToClipboardComponent} from "./add-to-clipboard.component.js";
+import angular from 'angular';
+import {ClipboardMenuComponent} from './clipboard-menu.component';
+import {AddToClipboardComponent} from './add-to-clipboard.component.js';
 
-import iconClipboard from "../../../../img/icons/clipboard.svg";
-import iconClipboardPlus from "../../../../img/icons/clipboard-plus.svg";
-import iconClearAll from "../../../../img/icons/clear-all.svg";
+import iconClipboard from '../../../../img/icons/clipboard.svg';
+import iconClipboardPlus from '../../../../img/icons/clipboard-plus.svg';
+import iconClipboardCheck from '../../../../img/icons/clipboard-check.svg';
+import iconDelete from '../../../../img/icons/delete.svg';
+import iconClearAll from '../../../../img/icons/clear-all.svg';
 
 
 class ClipboardProvider {
     static itemGroups = {};
-    static selectedItemGroups = {};
     static registry = {};
-
-    constructor($sharingProvider) {
-        this._$sharingProvider = $sharingProvider;
-    }
 
     register(name, config) {
         ClipboardProvider.registry[name] = config;
@@ -22,7 +19,6 @@ class ClipboardProvider {
 
     $get($injector) {
         const hooks = [];
-        const $sharingProvider = this._$sharingProvider;
 
         class Clipboard {
             get registry() {
@@ -33,12 +29,8 @@ class ClipboardProvider {
                 return ClipboardProvider.itemGroups;
             }
 
-            get selectedItemGroups() {
-                return ClipboardProvider.selectedItemGroups;
-            }
-
-            updateSelectedItems() {
-                ClipboardProvider.selectedItemGroups = {};
+            getSelectedItemGroups() {
+                const selected = {};
 
                 for (const [type, items] of Object.entries(this.itemGroups)) {
                     const selectedItems = items.filter(item => item.$selected === true);
@@ -46,10 +38,9 @@ class ClipboardProvider {
                         continue;
                     }
 
-                    ClipboardProvider.selectedItemGroups[type] = selectedItems;
+                    selected[type] = selectedItems;
                 }
-
-                this._triggerOnChange();
+                return selected;
             }
 
             get size() {
@@ -58,12 +49,6 @@ class ClipboardProvider {
                 } else {
                     return Object.values(this.itemGroups).reduce((sum, items) => sum + items.length, 0);
                 }
-            }
-
-            get sharingTargets() {
-                return $sharingProvider.registry.filter(({_name, accept}) =>
-                    accept.some(({type, multiple}) => this.selectedItemGroups[type] !== undefined && (multiple || !(this.selectedItemGroups[type].length > 1))
-                    ));
             }
 
             isEmpty() {
@@ -76,7 +61,6 @@ class ClipboardProvider {
 
             clear() {
                 ClipboardProvider.itemGroups = {};
-                ClipboardProvider.selectedItemGroups = {};
 
                 this._triggerOnChange();
             }
@@ -90,7 +74,15 @@ class ClipboardProvider {
 
                 this.itemGroups[type].push(Object.assign({}, item, {$selected: true}));
 
-                this.updateSelectedItems();
+                this._triggerOnChange();
+            }
+
+            remove(type, item) {
+                const items = this.getItems(type);
+                const index = items.findIndex(_item => _item.$uri === item.$uri);
+                items.splice(index, 1);
+
+                this._triggerOnChange();
             }
 
             onChange(hookFn) {
@@ -111,16 +103,22 @@ class ClipboardProvider {
                 }
             }
 
-            provideForSharing() {
-                const provided = {};
-                for (const [type, items] of Object.entries(this.selectedItemGroups)) {
-                    if (items.length === 1) {
-                        provided[type] = items[0];
-                    } else {
-                        provided[type] = items;
-                    }
+            getItems(type) {
+                return this.itemGroups[type] || [];
+            }
+
+            getSelectedItems(type) {
+                return this.getItems(type).filter(item => item.$selected === true);
+            }
+
+            getAsText(type, item) {
+                const config = this.registry[type];
+
+                if (config === undefined) {
+                    return;
                 }
-                return provided;
+
+                return `${config.name} ${item.identifier}`;
             }
         }
 
@@ -136,5 +134,7 @@ export const ClipboardModule = angular.module('clipboard', [])
     .config(function ($mdIconProvider) {
         $mdIconProvider.icon('clipboard', iconClipboard, 24);
         $mdIconProvider.icon('clipboard-plus', iconClipboardPlus, 24);
+        $mdIconProvider.icon('clipboard-check', iconClipboardCheck, 24);
+        $mdIconProvider.icon('delete', iconDelete, 24);
         $mdIconProvider.icon('clear-all', iconClearAll, 24);
     });

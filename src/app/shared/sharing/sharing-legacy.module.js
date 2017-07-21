@@ -1,4 +1,5 @@
 import angular from "angular";
+
 /**
  *
  * This is a service for transferring items between components
@@ -9,8 +10,6 @@ function $sharingProvider() {
     let registry = [];
 
     return {
-
-        registry,
         register(state, {name, accept = []} = {}) {
             registry.push({state, name, accept});
         },
@@ -21,6 +20,10 @@ function $sharingProvider() {
             let hooks = [];
 
             class Sharing {
+                get registry() {
+                    return registry;
+                }
+
                 items(type, otherwise = []) {
                     let values = transfer[type];
                     if (values instanceof Array) {
@@ -72,7 +75,7 @@ function $sharingProvider() {
 
                 findTargets(provides, isMultiple = false) {
                     return registry.filter(({_name, accept, state}) =>
-                    !$state.includes(state) && accept.some(({type, multiple}) => type === provides && (multiple || !isMultiple)));
+                        !$state.includes(state) && accept.some(({type, multiple}) => type === provides && (multiple || !isMultiple)));
                 }
 
                 // TODO transfer to $stateParams if receiving state supports it (needs to be specified on register).

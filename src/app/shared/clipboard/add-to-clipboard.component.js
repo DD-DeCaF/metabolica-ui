@@ -3,13 +3,15 @@ class AddToClipboardController {
         this._$mdToast = $mdToast;
         this._$clipboard = $clipboard;
 
-        this.clipboardChangeHandler = () => this.visible = !this.checkIfAdded(this.type, this.value);
+        this.clipboardChangeHandler = () => this.added = this.checkIfAdded(this.type, this.value);
     }
 
     $onInit() {
-        this.visible = !this.checkIfAdded(this.type, this.value);
-
         this._$clipboard.onChange(this.clipboardChangeHandler);
+    }
+
+    $onChanges(changes) {
+        this.added = this.checkIfAdded(this.type, this.value);
     }
 
     $onDestroy() {
@@ -17,43 +19,24 @@ class AddToClipboardController {
     }
 
     checkIfAdded(type, item) {
-        const items = this._$clipboard.itemGroups[type];
-
-        if (items === undefined) {
-            return false;
-        }
-
-        for (let i = 0; i < items.length; i++) {
-            const _item = items[i];
-
-            if (_item.$uri === item.$uri) {
-                // This item already exists on the clipboard
-                return true;
-            }
-        }
-
-        return false;
+        return this._$clipboard.getItems(type).some(_item => _item.$uri === item.$uri);
     }
 
-    add(type, value) {
+    addToClipboard(type, value) {
         if (!(this.type && this.value)) {
             return;
         }
 
         if (!this._$clipboard.canAdd(type)) {
-            this.showToast('Clipboard does not support this object type.');
-            return;
-        } else if (this.checkIfAdded(type, value)) {
-            this.showToast('Already exists on the clipboard.');
             return;
         }
 
         this._$clipboard.add(type, value);
-        this.showToast('Added to the clipboard.');
-    }
 
-    showToast(msg) {
-        this._$mdToast.show(this._$mdToast.simple().textContent(msg).hideDelay(2000));
+        const toastMessage = `"${this._$clipboard.getAsText(type, value)}" has been added to the clipboard.`;
+        this._$mdToast.show(this._$mdToast.simple()
+            .textContent(toastMessage)
+            .hideDelay(2000));
     }
 }
 
@@ -64,7 +47,10 @@ export const AddToClipboardComponent = {
         value: '<',
     },
     template: `
-    <md-button ng-show="$ctrl.visible" class="md-icon-button" ng-click="$ctrl.add($ctrl.type, $ctrl.value)">
+    <md-button ng-hide="$ctrl.added" class="md-icon-button" ng-click="$ctrl.addToClipboard($ctrl.type, $ctrl.value)">
       <md-icon md-svg-icon="clipboard-plus"></md-icon>
+    </md-button>
+    <md-button ng-show="$ctrl.added" class="md-icon-button" ng-disabled="true">
+      <md-icon md-svg-icon="clipboard-check"></md-icon>
     </md-button>`
 };

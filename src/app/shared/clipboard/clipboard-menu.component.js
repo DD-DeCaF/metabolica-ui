@@ -1,38 +1,76 @@
-import angular from "angular";
+import angular from 'angular';
 
-import "./clipboard-panel.scss";
+import './clipboard-menu-panel.scss';
 
-import panelTemplate from "./clipboard-panel.html";
+import panelTemplate from './clipboard-menu-panel.html';
 
-class ClipboardPanelController {
-    constructor($clipboard, $sharing, mdPanelRef) {
-        this._mdPanelRef = mdPanelRef;
+class ClipboardMenuPanelController {
+    constructor($mdToast, $clipboard, $sharing, mdPanelRef) {
+        this._$mdToast = $mdToast;
         this._$clipboard = $clipboard;
         this._$sharing = $sharing;
+        this._mdPanelRef = mdPanelRef;
+
+        this.targets = this.getTargets();
+    }
+
+    onSelectionChange() {
+        this.targets = this.getTargets();
+    }
+
+    getTargets() {
+        const selected = this._$clipboard.getSelectedItemGroups();
+
+        return this._$sharing.registry.filter(({_name, accept}) =>
+            accept.some(({type, multiple}) => selected[type] !== undefined && (multiple || !(selected[type].length > 1))
+            ));
     }
 
     open(state) {
-        this._mdPanelRef && this._mdPanelRef.close();
-        this._$sharing.provide(this._$clipboard.provideForSharing());
+        if (this._mdPanelRef) {
+            this._mdPanelRef.close();
+        }
+
+        const selected = this._$clipboard.getSelectedItemGroups();
+        const provided = {};
+
+        for (const [type, items] of Object.entries(selected)) {
+            if (items.length === 1) {
+                provided[type] = items[0];
+            } else {
+                provided[type] = items;
+            }
+        }
+
+        this._$sharing.provide(provided);
         this._$sharing.open(state);
     }
 
-    clear() {
-        this._mdPanelRef && this._mdPanelRef.close();
-        this._$clipboard.clear();
+    remove(type, item) {
+        this._$clipboard.remove(type, item);
+
+        const toastMessage = `"${this._$clipboard.getAsText(type, item)}" has been removed from the clipboard.`;
+        this._$mdToast.show(this._$mdToast.simple()
+            .textContent(toastMessage)
+            .hideDelay(2000));
+
+        if (this._$clipboard.isEmpty()) {
+            if (this._mdPanelRef) {
+                this._mdPanelRef.close();
+            }
+        }
     }
 
-    getName(type) {
-        const items = this._$clipboard.itemGroups[type];
-        const config = this._$clipboard.registry[type];
-
-        if (config === undefined) {
-            return;
+    clear() {
+        this._$clipboard.clear();
+        if (this._mdPanelRef) {
+            this._mdPanelRef.close();
         }
+    }
 
-        if (items.length === 1) {
-            return config.name;
-        } else {
+    getTypePluralName(type) {
+        const config = this._$clipboard.registry[type];
+        if (config) {
             return config.pluralName;
         }
     }
@@ -45,7 +83,13 @@ class ClipboardMenuController {
         this._$sharing = $sharing;
     }
 
-    showClipboard(event) {
+    $onDestroy() {
+        if (this._mdPanelRef) {
+            this._mdPanelRef.close();
+        }
+    }
+
+    showClipboardPanel(event) {
         const animation = this._$mdPanel.newPanelAnimation().withAnimation(this._$mdPanel.animation.FADE);
 
         const position = this._$mdPanel.newPanelPosition()
@@ -62,8 +106,10 @@ class ClipboardMenuController {
             escapeToClose: true,
             focusOnOpen: false,
             zIndex: 91,
-            controller: ClipboardPanelController,
+            controller: ClipboardMenuPanelController,
             template: panelTemplate
+        }).then(panelRef => {
+            this._mdPanelRef = panelRef;
         });
     }
 }
@@ -71,7 +117,7 @@ class ClipboardMenuController {
 export const ClipboardMenuComponent = {
     controller: ClipboardMenuController,
     template: `
-    <md-button id="clipboard-menu" layout="row" ng-hide="$ctrl._$clipboard.isEmpty()" aria-label="Clipboard" class="md-icon-button" ng-click="$ctrl.showClipboard($event)">
+    <md-button id="clipboard-menu" layout="row" ng-hide="$ctrl._$clipboard.isEmpty()" aria-label="Clipboard" class="md-icon-button" ng-click="$ctrl.showClipboardPanel($event)">
       <md-icon md-svg-icon="clipboard"></md-icon>
     </md-button>`
 };
