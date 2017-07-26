@@ -19,7 +19,7 @@ class ClipboardMenuPanelController {
     }
 
     getTargets() {
-        const selected = this._$clipboard.getSelectedItemGroups();
+        const selected = this.getSelectedItemGroups();
 
         return this._$sharing.registry.filter(({_name, accept}) =>
             accept.some(({type, multiple}) => selected[type] !== undefined && (multiple || !(selected[type].length > 1))
@@ -31,14 +31,14 @@ class ClipboardMenuPanelController {
             this._mdPanelRef.close();
         }
 
-        const selected = this._$clipboard.getSelectedItemGroups();
+        const selected = this.getSelectedItemGroups();
         const provided = {};
 
         for (const [type, items] of Object.entries(selected)) {
             if (items.length === 1) {
-                provided[type] = items[0];
+                provided[type] = items[0].item;
             } else {
-                provided[type] = items;
+                provided[type] = items.map(_item => _item.item);
             }
         }
 
@@ -73,6 +73,20 @@ class ClipboardMenuPanelController {
         if (config) {
             return config.pluralName;
         }
+    }
+
+    getSelectedItemGroups() {
+        const selected = {};
+
+        for (const [type, items] of Object.entries(this._$clipboard.itemGroups)) {
+            const selectedItems = items.filter(item => item.selected === true);
+            if (!selectedItems.length) {
+                continue;
+            }
+
+            selected[type] = selectedItems;
+        }
+        return selected;
     }
 }
 
@@ -118,6 +132,6 @@ export const ClipboardMenuComponent = {
     controller: ClipboardMenuController,
     template: `
     <md-button id="clipboard-menu" layout="row" ng-hide="$ctrl._$clipboard.isEmpty()" aria-label="Clipboard" class="md-icon-button" ng-click="$ctrl.showClipboardPanel($event)">
-      <md-icon md-svg-icon="clipboard"></md-icon>
+      <md-icon md-svg-icon="clipboard-outline"></md-icon>
     </md-button>`
 };

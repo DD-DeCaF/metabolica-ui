@@ -3,7 +3,7 @@ import angular from 'angular';
 import {ClipboardMenuComponent} from './clipboard-menu.component';
 import {AddToClipboardComponent} from './add-to-clipboard.component.js';
 
-import iconClipboard from '../../../../img/icons/clipboard.svg';
+import iconClipboardOutline from '../../../../img/icons/clipboard-outline.svg';
 import iconClipboardPlus from '../../../../img/icons/clipboard-plus.svg';
 import iconClipboardCheck from '../../../../img/icons/clipboard-check.svg';
 import iconDelete from '../../../../img/icons/delete.svg';
@@ -15,20 +15,6 @@ class Clipboard {
         this.registry = registry;
         this.itemGroups = {};
         this.hooks = [];
-    }
-
-    getSelectedItemGroups() {
-        const selected = {};
-
-        for (const [type, items] of Object.entries(this.itemGroups)) {
-            const selectedItems = items.filter(item => item.$selected === true);
-            if (!selectedItems.length) {
-                continue;
-            }
-
-            selected[type] = selectedItems;
-        }
-        return selected;
     }
 
     get size() {
@@ -60,14 +46,14 @@ class Clipboard {
             this.itemGroups[type] = [];
         }
 
-        this.itemGroups[type].push(Object.assign({}, item, {$selected: true}));
+        this.itemGroups[type].push({item, selected: true});
 
         this._triggerOnChange();
     }
 
     remove(type, item) {
         const items = this.getItems(type);
-        const index = items.findIndex(_item => _item.$uri === item.$uri);
+        const index = items.findIndex(_item => _item.item.$uri === item.$uri);
         items.splice(index, 1);
 
         this._triggerOnChange();
@@ -93,10 +79,6 @@ class Clipboard {
 
     getItems(type) {
         return this.itemGroups[type] || [];
-    }
-
-    getSelectedItems(type) {
-        return this.getItems(type).filter(item => item.$selected === true);
     }
 
     getAsText(type, item) {
@@ -130,7 +112,7 @@ export const ClipboardModule = angular.module('clipboard', [])
     .component('clipboardMenu', ClipboardMenuComponent)
     .component('addToClipboard', AddToClipboardComponent)
     .config(function ($mdIconProvider) {
-        $mdIconProvider.icon('clipboard', iconClipboard, 24);
+        $mdIconProvider.icon('clipboard-outline', iconClipboardOutline, 24);
         $mdIconProvider.icon('clipboard-plus', iconClipboardPlus, 24);
         $mdIconProvider.icon('clipboard-check', iconClipboardCheck, 24);
         $mdIconProvider.icon('delete', iconDelete, 24);

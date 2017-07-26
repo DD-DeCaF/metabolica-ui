@@ -19,7 +19,7 @@ class AddToClipboardController {
     }
 
     checkIfAdded(type, item) {
-        return this._$clipboard.getItems(type).some(_item => _item.$uri === item.$uri);
+        return this._$clipboard.getItems(type).some(_item => _item.item.$uri === item.$uri);
     }
 
     addToClipboard(type, value) {
