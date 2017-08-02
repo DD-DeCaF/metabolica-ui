@@ -568,3 +568,13 @@ function MeasurementTableFactory(potion, Item, Route) {
 
     return potion.register('/measurement-table', MeasurementTable);
 }
+
+ResourcesModule.factory('Policy', PolicyFactory);
+function PolicyFactory(potion, Item, Route) {
+    class Policy extends Item {
+        static testPermissions = Route.GET('/test-permissions');
+
+    }
+
+    return potion.register('/policy', Policy);
+}

@@ -13,7 +13,7 @@ class AppController {
 
         this.appName = appName;
 
-        let allNavigation = appNavigation;
+        let allNavigation = appNavigation.filter(nav => $rootScope.allowedPermissions.includes(nav.permission));
         if (!$rootScope.isAuthenticated) {
             allNavigation = allNavigation.filter(nav => !nav.authRequired);
         }
