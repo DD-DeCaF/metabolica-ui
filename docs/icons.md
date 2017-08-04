@@ -3,7 +3,9 @@ Icons
 
 SVG icons can be found at [metabolica-ui/img/icons](https://github.com/biosustain/metabolica-ui/tree/master/img/icons)
 
-Extra icons can be downloaded at https://material.io/icons/
+Extra icons can be downloaded at https://material.io/icons/  
+You then need to edit the svg file and remove `fill="#000000'` in the first line.
+Otherwise the icon will always be black, regardless of theme.
 
 Icon provider
 ------------
