@@ -13,20 +13,12 @@ import iconClearAll from '../../../../img/icons/clear-all.svg';
 class Clipboard {
     constructor(registry) {
         this.registry = registry;
-        this.itemGroups = {};
+        this.items = [];
         this.hooks = [];
     }
 
-    get size() {
-        if (Object.entries(this.itemGroups).length === 0) {
-            return 0;
-        } else {
-            return Object.values(this.itemGroups).reduce((sum, items) => sum + items.length, 0);
-        }
-    }
-
     isEmpty() {
-        return this.size === 0;
+        return this.items.length === 0;
     }
 
     canAdd(type) {
@@ -34,27 +26,18 @@ class Clipboard {
     }
 
     clear() {
-        this.itemGroups = {};
+        this.items = [];
 
         this._triggerOnChange();
     }
 
-    add(type, item) {
-        if (this.registry[type] === undefined) {
-            return;
-        } else if (this.itemGroups[type] === undefined) {
-            this.itemGroups[type] = [];
-        }
-
-        this.itemGroups[type].push({item, selected: true});
-
+    add(type, value) {
+        this.items.push([type, value]);
         this._triggerOnChange();
     }
 
-    remove(type, item) {
-        const items = this.getItems(type);
-        const index = items.findIndex(_item => _item.item.$uri === item.$uri);
-        items.splice(index, 1);
+    remove(type, value) {
+        this.items = this.items.filter(([itemType, itemValue]) => itemType !== type  && itemValue.$uri !== value.$uri);
 
         this._triggerOnChange();
     }
@@ -77,18 +60,21 @@ class Clipboard {
         }
     }
 
-    getItems(type) {
-        return this.itemGroups[type] || [];
+    getItemsOfType(type) {
+        return this.items.filter(([itemType, itemValue]) => itemType === type);
     }
 
-    getAsText(type, item) {
-        const config = this.registry[type];
+    getItemsGroupedByType() {
+        const itemGroups = {};
 
-        if (config === undefined) {
-            return;
-        }
+        this.items.forEach(([type, value]) => {
+            if (itemGroups[type] === undefined) {
+                itemGroups[type] = [];
+            }
+            itemGroups[type].push(value);
+        });
 
-        return `${config.name} ${item.identifier}`;
+        return itemGroups;
     }
 }
 

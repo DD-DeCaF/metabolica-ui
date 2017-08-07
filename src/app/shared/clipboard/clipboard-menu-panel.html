@@ -7,34 +7,34 @@
   </md-toolbar>
 
   <md-content class="clipboard-panel">
-    <md-list ng-show="items.length > 0" ng-repeat="(type, items) in $ctrl._$clipboard.itemGroups">
+    <md-list ng-show="items.length > 0" ng-repeat="(type, items) in $ctrl.itemGroups">
       <md-subheader md-colors="md-no-sticky">{{ $ctrl.getTypePluralName(type) }}</md-subheader>
 
       <md-list-item layout="row" ng-repeat="item in items">
         <md-checkbox ng-model="item.selected" ng-change="$ctrl.onSelectionChange()"
                      aria-label="Select for sharing"></md-checkbox>
-        <p>{{ item.item.identifier }}</p>
+        <p>{{ item.value.identifier }}</p>
         <md-menu class="md-secondary">
           <md-button aria-label="More" class="md-icon-button" ng-click="$mdMenu.open($event)">
             <md-icon>more_vert</md-icon>
           </md-button>
           <md-menu-content width="4">
             <md-menu-item>
-              <md-button ng-click="$ctrl.remove(type, item.item)">
+              <md-button ng-click="$ctrl.remove(type, item.value)">
                 <md-icon md-svg-icon="delete"></md-icon>
                 Remove
               </md-button>
             </md-menu-item>
-            <md-menu-divider ng-if="$ctrl.navigation.length"></md-menu-divider>
+            <md-menu-divider></md-menu-divider>
             <md-menu-item>
               <md-menu md-position-mode="target-right target">
-                <md-button>
+                <md-button ng-click="$mdOpenMenu($event)">
                   <md-icon md-svg-icon="share"></md-icon>
                   Share
                 </md-button>
                 <md-menu-content width="4">
-                  <md-menu-item ng-repeat="target in $ctrl._$sharing.findTargets(type)">
-                    <md-button ng-click="$ctrl._$sharing.share(type, item.item, target.state)">
+                  <md-menu-item ng-repeat="target in item.sharingTargets">
+                    <md-button ng-click="$ctrl.shareWith(type, item.value, target.state)">
                       <div layout="row">
                         <p flex>{{ target.name }}</p>
                         <md-icon md-svg-icon="share" md-menu-align-target></md-icon>

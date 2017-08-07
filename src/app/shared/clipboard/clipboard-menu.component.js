@@ -5,13 +5,23 @@ import './clipboard-menu-panel.scss';
 import panelTemplate from './clipboard-menu-panel.html';
 
 class ClipboardMenuPanelController {
-    constructor($mdToast, $clipboard, $sharing, mdPanelRef) {
-        this._$mdToast = $mdToast;
+    constructor($clipboard, $sharing, mdPanelRef) {
         this._$clipboard = $clipboard;
         this._$sharing = $sharing;
         this._mdPanelRef = mdPanelRef;
 
-        this.targets = this.getTargets();
+        this.itemGroups = {};
+        for (const [type, items] of Object.entries(this._$clipboard.getItemsGroupedByType())) {
+            this.itemGroups[type] = items.map(value => {
+                return {
+                    value,
+                    selected: true,
+                    sharingTargets: this._$sharing.findTargets(type)
+                };
+            });
+        }
+
+        this.onSelectionChange();
     }
 
     onSelectionChange() {
@@ -36,9 +46,9 @@ class ClipboardMenuPanelController {
 
         for (const [type, items] of Object.entries(selected)) {
             if (items.length === 1) {
-                provided[type] = items[0].item;
+                provided[type] = items[0].value;
             } else {
-                provided[type] = items.map(_item => _item.item);
+                provided[type] = items.map(item => item.value);
             }
         }
 
@@ -46,13 +56,15 @@ class ClipboardMenuPanelController {
         this._$sharing.open(state);
     }
 
+    shareWith(type, value, state) {
+        if (this._mdPanelRef) {
+            this._mdPanelRef.close();
+        }
+        this._$sharing.share(type, value, state);
+    }
+
     remove(type, item) {
         this._$clipboard.remove(type, item);
-
-        const toastMessage = `"${this._$clipboard.getAsText(type, item)}" has been removed from the clipboard.`;
-        this._$mdToast.show(this._$mdToast.simple()
-            .textContent(toastMessage)
-            .hideDelay(2000));
 
         if (this._$clipboard.isEmpty()) {
             if (this._mdPanelRef) {
@@ -76,17 +88,17 @@ class ClipboardMenuPanelController {
     }
 
     getSelectedItemGroups() {
-        const selected = {};
+        const selectedItemGroups = {};
 
-        for (const [type, items] of Object.entries(this._$clipboard.itemGroups)) {
+        for (const [type, items] of Object.entries(this.itemGroups)) {
             const selectedItems = items.filter(item => item.selected === true);
             if (!selectedItems.length) {
                 continue;
             }
 
-            selected[type] = selectedItems;
+            selectedItemGroups[type] = selectedItems;
         }
-        return selected;
+        return selectedItemGroups;
     }
 }
 
@@ -94,7 +106,8 @@ class ClipboardMenuController {
     constructor($clipboard, $mdPanel, $sharing) {
         this._$clipboard = $clipboard;
         this._$mdPanel = $mdPanel;
-        this._$sharing = $sharing;
+        this._mdPanelRef = null;
+
     }
 
     $onDestroy() {

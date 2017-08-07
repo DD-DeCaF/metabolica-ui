@@ -1,9 +1,11 @@
 class AddToClipboardController {
-    constructor($mdToast, $clipboard) {
-        this._$mdToast = $mdToast;
+    constructor($clipboard) {
         this._$clipboard = $clipboard;
+        this.isAdded = false;
 
-        this.clipboardChangeHandler = () => this.added = this.checkIfAdded(this.type, this.value);
+        this.clipboardChangeHandler = () => {
+            this.checkIfAdded(this.type, this.value)
+        };
     }
 
     $onInit() {
@@ -11,15 +13,16 @@ class AddToClipboardController {
     }
 
     $onChanges(changes) {
-        this.added = this.checkIfAdded(this.type, this.value);
+        this.checkIfAdded(this.type, this.value);
     }
 
     $onDestroy() {
         this._$clipboard.offChange(this.clipboardChangeHandler);
     }
 
-    checkIfAdded(type, item) {
-        return this._$clipboard.getItems(type).some(_item => _item.item.$uri === item.$uri);
+    checkIfAdded(type, value) {
+        const items = this._$clipboard.getItemsOfType(type);
+        this.isAdded = items.length && items.some(([itemType, itemValue]) => itemValue.$uri === value.$uri);
     }
 
     addToClipboard(type, value) {
@@ -32,11 +35,6 @@ class AddToClipboardController {
         }
 
         this._$clipboard.add(type, value);
-
-        const toastMessage = `"${this._$clipboard.getAsText(type, value)}" has been added to the clipboard.`;
-        this._$mdToast.show(this._$mdToast.simple()
-            .textContent(toastMessage)
-            .hideDelay(2000));
     }
 }
 
@@ -47,10 +45,8 @@ export const AddToClipboardComponent = {
         value: '<',
     },
     template: `
-    <md-button ng-hide="$ctrl.added" class="md-icon-button" ng-click="$ctrl.addToClipboard($ctrl.type, $ctrl.value)">
-      <md-icon md-svg-icon="clipboard-plus"></md-icon>
-    </md-button>
-    <md-button ng-show="$ctrl.added" class="md-icon-button" ng-disabled="true">
-      <md-icon md-svg-icon="clipboard-check"></md-icon>
+    <md-button ng-disabled="$ctrl.isAdded" class="md-icon-button" ng-click="$ctrl.addToClipboard($ctrl.type, $ctrl.value)">
+      <md-icon ng-hide="$ctrl.isAdded" md-svg-icon="clipboard-plus"></md-icon>
+      <md-icon ng-show="$ctrl.isAdded" md-svg-icon="clipboard-check"></md-icon>
     </md-button>`
 };
