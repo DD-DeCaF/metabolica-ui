@@ -37,7 +37,7 @@ class Clipboard {
     }
 
     remove(type, value) {
-        this.items = this.items.filter(([itemType, itemValue]) => itemType !== type  && itemValue.$uri !== value.$uri);
+        this.items = this.items.filter(([itemType, itemValue]) => !(itemType === type  && itemValue.$uri === value.$uri));
 
         this._triggerOnChange();
     }

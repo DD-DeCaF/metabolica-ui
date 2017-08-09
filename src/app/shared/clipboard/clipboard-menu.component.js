@@ -9,18 +9,9 @@ class ClipboardMenuPanelController {
         this._$clipboard = $clipboard;
         this._$sharing = $sharing;
         this._mdPanelRef = mdPanelRef;
-
         this.itemGroups = {};
-        for (const [type, items] of Object.entries(this._$clipboard.getItemsGroupedByType())) {
-            this.itemGroups[type] = items.map(value => {
-                return {
-                    value,
-                    selected: true,
-                    sharingTargets: this._$sharing.findTargets(type)
-                };
-            });
-        }
 
+        this.updateItemGroups();
         this.onSelectionChange();
     }
 
@@ -75,6 +66,8 @@ class ClipboardMenuPanelController {
 
     clear() {
         this._$clipboard.clear();
+        this.updateItemGroups();
+
         if (this._mdPanelRef) {
             this._mdPanelRef.close();
         }
@@ -84,6 +77,20 @@ class ClipboardMenuPanelController {
         const config = this._$clipboard.registry[type];
         if (config) {
             return config.pluralName;
+        }
+    }
+
+    updateItemGroups() {
+        this.itemGroups = {};
+
+        for (const [type, items] of Object.entries(this._$clipboard.getItemsGroupedByType())) {
+            this.itemGroups[type] = items.map(value => {
+                return {
+                    value,
+                    selected: true,
+                    sharingTargets: this._$sharing.findTargets(type)
+                };
+            });
         }
     }
 
