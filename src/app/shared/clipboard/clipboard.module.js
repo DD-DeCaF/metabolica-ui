@@ -14,7 +14,7 @@ class Clipboard {
     constructor(registry) {
         this.registry = registry;
         this.items = [];
-        this.hooks = [];
+        this.hooks = new Set();
     }
 
     isEmpty() {
@@ -43,15 +43,11 @@ class Clipboard {
     }
 
     onChange(hookFn) {
-        this.hooks.push(hookFn);
+        this.hooks.add(hookFn);
     }
 
     offChange(hookFn) {
-        const index = this.hooks.indexOf(hookFn);
-
-        if (index > -1) {
-            this.hooks.splice(index, 1);
-        }
+        this.hooks.delete(hookFn);
     }
 
     _triggerOnChange() {
@@ -66,14 +62,13 @@ class Clipboard {
 
     getItemsGroupedByType() {
         const itemGroups = {};
-
-        this.items.forEach(([type, value]) => {
-            if (itemGroups[type] === undefined) {
-                itemGroups[type] = [];
+        for(const [type, value] of this.items){
+            if(!itemGroups[type]){
+                itemGroups[type] = [value];
+            } else {
+                itemGroups[type].push(value);
             }
-            itemGroups[type].push(value);
-        });
-
+        }
         return itemGroups;
     }
 }

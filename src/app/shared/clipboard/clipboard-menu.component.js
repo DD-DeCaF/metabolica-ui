@@ -10,20 +10,30 @@ class ClipboardMenuPanelController {
         this._$sharing = $sharing;
         this._mdPanelRef = mdPanelRef;
         this.itemGroups = {};
+        this.sharingTargets = [];
 
-        this.updateItemGroups();
+        for (const [type, items] of Object.entries(this._$clipboard.getItemsGroupedByType())) {
+            this.itemGroups[type] = items.map(value => {
+                return {
+                    value,
+                    selected: true,
+                    sharingTargets: this._$sharing.findTargets(type)
+                };
+            });
+        }
+
         this.onSelectionChange();
     }
 
     onSelectionChange() {
-        this.targets = this.getTargets();
+        this.sharingTargets = this.getSharingTargets();
     }
 
-    getTargets() {
-        const selected = this.getSelectedItemGroups();
+    getSharingTargets() {
+        const selectedItemGroups = this.getSelectedItemGroups();
 
         return this._$sharing.registry.filter(({_name, accept}) =>
-            accept.some(({type, multiple}) => selected[type] !== undefined && (multiple || !(selected[type].length > 1))
+            accept.some(({type, multiple}) => selectedItemGroups[type] !== undefined && (multiple || !(selectedItemGroups[type].length > 1))
             ));
     }
 
@@ -32,10 +42,10 @@ class ClipboardMenuPanelController {
             this._mdPanelRef.close();
         }
 
-        const selected = this.getSelectedItemGroups();
+        const selectedItemGroups = this.getSelectedItemGroups();
         const provided = {};
 
-        for (const [type, items] of Object.entries(selected)) {
+        for (const [type, items] of Object.entries(selectedItemGroups)) {
             if (items.length === 1) {
                 provided[type] = items[0].value;
             } else {
@@ -54,9 +64,9 @@ class ClipboardMenuPanelController {
         this._$sharing.share(type, value, state);
     }
 
-    remove(type, item) {
-        this._$clipboard.remove(type, item);
-        this.updateItemGroups();
+    remove(type, value) {
+        this._$clipboard.remove(type, value);
+        this.itemGroups[type] = this.itemGroups[type].filter(item => item.value.$uri !== value.$uri);
 
         if (this._$clipboard.isEmpty()) {
             if (this._mdPanelRef) {
@@ -67,7 +77,7 @@ class ClipboardMenuPanelController {
 
     clear() {
         this._$clipboard.clear();
-        this.updateItemGroups();
+        this.itemGroups = {};
 
         if (this._mdPanelRef) {
             this._mdPanelRef.close();
@@ -81,37 +91,19 @@ class ClipboardMenuPanelController {
         }
     }
 
-    updateItemGroups() {
-        this.itemGroups = {};
-
-        for (const [type, items] of Object.entries(this._$clipboard.getItemsGroupedByType())) {
-            this.itemGroups[type] = items.map(value => {
-                return {
-                    value,
-                    selected: true,
-                    sharingTargets: this._$sharing.findTargets(type)
-                };
-            });
-        }
-    }
-
     getSelectedItemGroups() {
-        const selectedItemGroups = {};
-
-        for (const [type, items] of Object.entries(this.itemGroups)) {
-            const selectedItems = items.filter(item => item.selected === true);
-            if (!selectedItems.length) {
-                continue;
-            }
-
-            selectedItemGroups[type] = selectedItems;
-        }
-        return selectedItemGroups;
+        return Object.entries(this.itemGroups)
+            .map(([type, items]) => [type, items.filter(item => item.selected)])
+            .filter(([type, items]) => items.length > 0)
+            .reduce((result, [type, items]) => {
+                result[type] = items;
+                return result;
+            }, {});
     }
 }
 
 class ClipboardMenuController {
-    constructor($clipboard, $mdPanel, $sharing) {
+    constructor($clipboard, $mdPanel) {
         this._$clipboard = $clipboard;
         this._$mdPanel = $mdPanel;
         this._mdPanelRef = null;

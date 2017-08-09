@@ -6,7 +6,7 @@
     </div>
   </md-toolbar>
 
-  <md-content class="clipboard-panel">
+  <md-content id="clipboard-panel">
     <md-list ng-show="items.length > 0" ng-repeat="(type, items) in $ctrl.itemGroups">
       <md-subheader md-colors="md-no-sticky">{{ $ctrl.getTypePluralName(type) }}</md-subheader>
 
@@ -59,12 +59,12 @@
         <md-icon md-svg-icon="clear-all"></md-icon>
       </md-button>
       <md-menu md-position-mode="target-right target">
-        <md-button ng-disabled="!$ctrl.targets.length" class="md-icon-button" ng-click="$mdOpenMenu($event)">
+        <md-button ng-disabled="!$ctrl.sharingTargets.length" class="md-icon-button" ng-click="$mdOpenMenu($event)">
           <md-icon md-svg-icon="share"></md-icon>
         </md-button>
 
         <md-menu-content width="4">
-          <md-menu-item ng-repeat="target in $ctrl.targets">
+          <md-menu-item ng-repeat="target in $ctrl.sharingTargets">
             <md-button ng-click="$ctrl.open(target.state)">
               <div layout="row">
                 <p flex>{{ target.name }}</p>
