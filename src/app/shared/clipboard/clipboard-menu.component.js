@@ -56,6 +56,7 @@ class ClipboardMenuPanelController {
 
     remove(type, item) {
         this._$clipboard.remove(type, item);
+        this.updateItemGroups();
 
         if (this._$clipboard.isEmpty()) {
             if (this._mdPanelRef) {
