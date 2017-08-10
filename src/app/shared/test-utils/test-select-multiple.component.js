@@ -15,6 +15,8 @@ class TestSelectMultipleController {
 
             this.groupedTests = Array.from(groups.entries()).map(([type, tests]) => ({type, tests}));
 
+            // Some pages don't desire an auto-selection behaviour, therefore the need of this.autoSelect
+            // Projects without default tests would have all tests selected at first load. this.autoSelect avoids it.
             if (this.autoSelect) {
                 this.selectedTests = this.tests
                     .filter(test => !this.unselectedTests.some(unselectedTest => unselectedTest.id === test.id));
@@ -23,15 +25,16 @@ class TestSelectMultipleController {
                 if (!this.defaultTestsUsed && this.tests.length && this.project) {
                     this.project.defaultTests().then(defaultTests => {
                         if (defaultTests.length) {
-                            this.selectedTests = defaultTests.reduce((selectedTests, defaultTest) => {
-                                const found = this.tests.find(test => test.id === defaultTest.id);
-                                return found ? [...selectedTests, found] : selectedTests;
-                            }, []);
+                            this.selectedTests = defaultTests
+                                .filter(defaultTest => this.tests.some(test => test.id === defaultTest.id));
                             this.onSelection({selectedTests: this.selectedTests});
                         }
                     });
                     this.defaultTestsUsed = true;
                 }
+            } else {
+                this.selectedTests = this.selectedTests.filter(test => this.tests.includes(test));
+                this.onSelection({selectedTests: this.selectedTests});
             }
         }
     }
@@ -42,6 +45,12 @@ class TestSelectMultipleController {
         }
     }
 
+    /** @function onMenuClose
+     * This method is bound to the md-on-close attribute of <md-select>, therefore it gets called every time the user
+     * closes the dropdown menu.
+     * It updates this.unselectedTests with a list of tests (from this.tests) that are not selected
+     * The method also triggers this.onSelection(), which passes the selected tests to the parent component
+     */
     onMenuClose() {
         this.unselectedTests = this.tests
             .filter(test => !this.selectedTests.some(selectedTest => selectedTest.id === test.id));
