@@ -1,5 +1,5 @@
 class TestLabelController {
-    $onChanges(changes) {
+    $onChanges() {
         if (this.test) {
             this.label = this.test.displayName;
             this.tooltip = `${this.test.type} ${this.test.displayName}`;

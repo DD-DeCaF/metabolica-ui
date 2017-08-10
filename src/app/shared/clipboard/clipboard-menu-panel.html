@@ -1,0 +1,79 @@
+<div class="md-whiteframe-3dp" md-colors="{background: 'default-accent-200'}">
+  <md-toolbar layout="row">
+    <div class="md-toolbar-tools">
+      <span flex></span>
+      <md-icon md-svg-icon="clipboard-outline"></md-icon>
+    </div>
+  </md-toolbar>
+
+  <md-content id="clipboard-panel">
+    <md-list ng-show="items.length > 0" ng-repeat="(type, items) in $ctrl.itemGroups">
+      <md-subheader md-colors="md-no-sticky">{{ $ctrl.getTypePluralName(type) }}</md-subheader>
+
+      <md-list-item layout="row" ng-repeat="item in items">
+        <md-checkbox ng-model="item.selected" ng-change="$ctrl.onSelectionChange()"
+                     aria-label="Select for sharing"></md-checkbox>
+        <p>{{ item.value.identifier }}</p>
+        <md-menu class="md-secondary">
+          <md-button aria-label="More" class="md-icon-button" ng-click="$mdMenu.open($event)">
+            <md-icon>more_vert</md-icon>
+          </md-button>
+          <md-menu-content width="4">
+            <md-menu-item>
+              <md-button ng-click="$ctrl.remove(type, item.value)">
+                <md-icon md-svg-icon="delete"></md-icon>
+                Remove
+              </md-button>
+            </md-menu-item>
+            <md-menu-divider></md-menu-divider>
+            <md-menu-item>
+              <md-menu md-position-mode="target-right target">
+                <md-button ng-click="$mdOpenMenu($event)">
+                  <md-icon md-svg-icon="share"></md-icon>
+                  Share
+                </md-button>
+                <md-menu-content width="4">
+                  <md-menu-item ng-repeat="target in item.sharingTargets">
+                    <md-button ng-click="$ctrl.shareWith(type, item.value, target.state)">
+                      <div layout="row">
+                        <p flex>{{ target.name }}</p>
+                        <md-icon md-svg-icon="share" md-menu-align-target></md-icon>
+                      </div>
+                    </md-button>
+                  </md-menu-item>
+                </md-menu-content>
+              </md-menu>
+            </md-menu-item>
+          </md-menu-content>
+        </md-menu>
+
+      </md-list-item>
+    </md-list>
+  </md-content>
+
+
+  <md-toolbar layout="row">
+    <div class="md-toolbar-tools">
+
+      <md-button class="md-icon-button" ng-click="$ctrl.clear()">
+        <md-icon md-svg-icon="clear-all"></md-icon>
+      </md-button>
+      <md-menu md-position-mode="target-right target">
+        <md-button ng-disabled="!$ctrl.sharingTargets.length" class="md-icon-button" ng-click="$mdOpenMenu($event)">
+          <md-icon md-svg-icon="share"></md-icon>
+        </md-button>
+
+        <md-menu-content width="4">
+          <md-menu-item ng-repeat="target in $ctrl.sharingTargets">
+            <md-button ng-click="$ctrl.open(target.state)">
+              <div layout="row">
+                <p flex>{{ target.name }}</p>
+                <md-icon md-svg-icon="share" md-menu-align-target></md-icon>
+              </div>
+            </md-button>
+          </md-menu-item>
+        </md-menu-content>
+      </md-menu>
+    </div>
+  </md-toolbar>
+</div>

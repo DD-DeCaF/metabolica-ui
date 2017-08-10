@@ -264,3 +264,6 @@ tmp
 
 ## NGINX
 static
+
+## Documentation generated with Typedoc
+docs/

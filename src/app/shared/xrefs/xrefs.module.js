@@ -10,8 +10,12 @@ class XRefRegistryProvider {
     }
 
     // XXX is component needed?
-    register(resource, config) {
-        this.sources[resource] = config;
+    register(type, config) {
+        if (typeof type === 'string') {
+            this.sources[type] = config;
+        } else if (type) {
+            this.sources[type.constructor.name] = config;
+        }
     }
 
     $get() {
@@ -36,11 +40,14 @@ export const XRefsModule = angular.module('xrefs', ['ngMaterial'])
             menus = [];
         }
 
-        return function (item, event) {
+        return function (event, item, type) {
             let config;
+            if (!type) {
+                type = item.constructor.name;
+            }
 
-			if (xrefRegistry[item.constructor.name]) {
-				config = xrefRegistry[item.constructor.name](item);
+			if (xrefRegistry[type]) {
+				config = xrefRegistry[type](item);
 			}
 
             if (!config) {

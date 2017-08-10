@@ -16,10 +16,11 @@ import {SearchModule} from './search/search.module';
 
 import {DirectivesModule} from './shared/directives-legacy.module';
 import {XRefsModule} from './shared/xrefs/xrefs.module';
-
 import {TestUtilsModule} from './shared/test-utils/test-utils.module';
+import {ClipboardModule} from './shared/clipboard/clipboard.module';
 
 import iconPuzzle from '../../img/icons/puzzle.svg';
+import iconShare from '../../img/icons/share.svg';
 
 
 class AppNavigationProvider {
@@ -83,7 +84,8 @@ export const AppModule = angular.module('App', [
         XRefsModule.name,
         SearchModule.name,
         DirectivesModule.name,
-        TestUtilsModule.name
+        TestUtilsModule.name,
+        ClipboardModule.name
     ])
     .provider('appNavigation', AppNavigationProvider)
     .provider('appName', AppNameProvider)
@@ -114,6 +116,7 @@ export const AppModule = angular.module('App', [
     })
     .config(function ($mdIconProvider) {
         $mdIconProvider.icon('puzzle', iconPuzzle, 24);
+        $mdIconProvider.icon('share', iconShare, 24);
     })
     .config(function ($stateProvider, $urlRouterProvider, $locationProvider) {
         /**
