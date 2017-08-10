@@ -13,11 +13,20 @@ class TestSelectController {
 
             this.groupedTests = Array.from(groups.entries()).map(([type, tests]) => ({type, tests}));
 
+            // Some pages don't desire an auto-selection behaviour, therefore the need of this.autoSelect
+            // Projects without any default test would have a test selected at first load. this.autoSelect avoids it.
             if (this.autoSelect) {
-                if (!this.selectedTest || !this.tests.some(test => test.id === this.selectedTest.id)) {
-                    this.selectedTest = this.tests && this.tests.length ? this.tests[0] : null;
-                    this.onSelection({selectedTest: this.selectedTest});
+                if (this.tests.length) {
+                    if (this.selectedTest) {
+                        this.selectedTest = this.tests.find(test => test.id === this.selectedTest.id);
+                    }
+                    if (!this.selectedTest) {
+                        this.selectedTest = this.tests[0];
+                    }
+                } else {
+                    this.selectedTest = null;
                 }
+                this.onSelection({selectedTest: this.selectedTest});
 
                 if (!this.defaultTestsUsed && this.tests.length && this.project) {
                     this.project.defaultTests().then(defaultTests => {
@@ -28,6 +37,9 @@ class TestSelectController {
                     });
                     this.defaultTestsUsed = true;
                 }
+            } else if (this.selectedTest) {
+                this.selectedTest = this.tests.find(test => test.id === this.selectedTest.id);
+                this.onSelection({selectedTest: this.selectedTest});
             }
         }
     }
