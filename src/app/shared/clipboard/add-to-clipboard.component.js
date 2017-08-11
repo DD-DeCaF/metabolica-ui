@@ -4,7 +4,7 @@ class AddToClipboardController {
         this.isAdded = false;
 
         this.clipboardChangeHandler = () => {
-            this.checkIfAdded(this.type, this.value)
+            this.checkIfAdded(this.type, this.value);
         };
     }
 
@@ -12,7 +12,7 @@ class AddToClipboardController {
         this._$clipboard.onChange(this.clipboardChangeHandler);
     }
 
-    $onChanges(changes) {
+    $onChanges() {
         this.checkIfAdded(this.type, this.value);
     }
 
@@ -22,7 +22,7 @@ class AddToClipboardController {
 
     checkIfAdded(type, value) {
         const items = this._$clipboard.getItemsOfType(type);
-        this.isAdded = items.length && items.some(([itemType, itemValue]) => itemValue.$uri === value.$uri);
+        this.isAdded = items.length && items.some(([, itemValue]) => itemValue.$uri === value.$uri);
     }
 
     addToClipboard(type, value) {

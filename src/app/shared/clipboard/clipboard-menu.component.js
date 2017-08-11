@@ -13,13 +13,11 @@ class ClipboardMenuPanelController {
         this.sharingTargets = [];
 
         for (const [type, items] of Object.entries(this._$clipboard.getItemsGroupedByType())) {
-            this.itemGroups[type] = items.map(value => {
-                return {
-                    value,
-                    selected: true,
-                    sharingTargets: this._$sharing.findTargets(type)
-                };
-            });
+            this.itemGroups[type] = items.map(value => ({
+                value,
+                selected: true,
+                sharingTargets: this._$sharing.findTargets(type)
+            }));
         }
 
         this.onSelectionChange();
@@ -94,7 +92,7 @@ class ClipboardMenuPanelController {
     getSelectedItemGroups() {
         return Object.entries(this.itemGroups)
             .map(([type, items]) => [type, items.filter(item => item.selected)])
-            .filter(([type, items]) => items.length > 0)
+            .filter(([, items]) => items.length > 0)
             .reduce((result, [type, items]) => {
                 result[type] = items;
                 return result;

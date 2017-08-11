@@ -37,7 +37,7 @@ class Clipboard {
     }
 
     remove(type, value) {
-        this.items = this.items.filter(([itemType, itemValue]) => !(itemType === type  && itemValue.$uri === value.$uri));
+        this.items = this.items.filter(([itemType, itemValue]) => !(itemType === type && itemValue.$uri === value.$uri));
 
         this._triggerOnChange();
     }
@@ -57,13 +57,13 @@ class Clipboard {
     }
 
     getItemsOfType(type) {
-        return this.items.filter(([itemType, itemValue]) => itemType === type);
+        return this.items.filter(([itemType,]) => itemType === type);
     }
 
     getItemsGroupedByType() {
         const itemGroups = {};
-        for(const [type, value] of this.items){
-            if(!itemGroups[type]){
+        for (const [type, value] of this.items) {
+            if (!itemGroups[type]) {
                 itemGroups[type] = [value];
             } else {
                 itemGroups[type].push(value);
@@ -74,7 +74,7 @@ class Clipboard {
 }
 
 class ClipboardProvider {
-    constructor(){
+    constructor() {
         this.registry = [];
     }
 
@@ -82,7 +82,7 @@ class ClipboardProvider {
         this.registry[name] = config;
     }
 
-    $get($injector) {
+    $get() {
         return new Clipboard(this.registry);
     }
 }
