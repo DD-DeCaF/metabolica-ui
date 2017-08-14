@@ -30,8 +30,10 @@ class TestSelectController {
 
                 if (!this.defaultTestsUsed && this.tests.length && this.project) {
                     this.project.defaultTests().then(defaultTests => {
-                        if (defaultTests.length) {
-                            this.selectedTest = defaultTests[0];
+                        const selectedTest = defaultTests
+                            .find(defaultTest => this.tests.map(test => test.id).includes(defaultTest.id));
+                        if (selectedTest) { // if no default test is found, the previous selection won't be lost
+                            this.selectedTest = selectedTest;
                             this.onSelection({selectedTest: this.selectedTest});
                         }
                     });

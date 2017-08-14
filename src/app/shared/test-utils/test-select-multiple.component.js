@@ -25,9 +25,12 @@ class TestSelectMultipleController {
                 if (!this.defaultTestsUsed && this.tests.length && this.project) {
                     this.project.defaultTests().then(defaultTests => {
                         if (defaultTests.length) {
-                            this.selectedTests = defaultTests
+                            const selectedTests = defaultTests
                                 .filter(defaultTest => this.tests.some(test => test.id === defaultTest.id));
-                            this.onSelection({selectedTests: this.selectedTests});
+                            if (selectedTests.length) { // if no default test is found, the previous selection won't be lost
+                                this.selectedTests = selectedTests;
+                                this.onSelection({selectedTests: this.selectedTests});
+                            }
                         }
                     });
                     this.defaultTestsUsed = true;
