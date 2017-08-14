@@ -1,7 +1,6 @@
 class TestSelectController {
     constructor($sce) {
         this._$sce = $sce;
-        this.defaultTestsUsed = false;
     }
 
     $onChanges(changes) {
@@ -13,33 +12,24 @@ class TestSelectController {
 
             this.groupedTests = Array.from(groups.entries()).map(([type, tests]) => ({type, tests}));
 
-            // Some pages don't desire an auto-selection behaviour, therefore the need of this.autoSelect
-            // Projects without any default test would have a test selected at first load. this.autoSelect avoids it.
-            if (this.autoSelect) {
-                if (this.tests.length) {
-                    if (this.selectedTest) {
-                        this.setSelection(this.tests.find(test => test.id === this.selectedTest.id));
-                    }
-                    if (!this.selectedTest) {
-                        this.setSelection(this.tests[0]);
-                    }
-                } else {
-                    this.setSelection(null);
-                }
-
-                if (!this.defaultTestsUsed && this.tests.length && this.project) {
-                    this.project.readDefaultTests().then(defaultTests => {
-                        const selectedTest = defaultTests
-                            .find(defaultTest => this.tests.map(test => test.id).includes(defaultTest.id));
-                        if (selectedTest) { // if no default test is found, the previous selection won't be lost
-                            this.setSelection(selectedTest);
-                        }
-                    });
-                    this.defaultTestsUsed = true;
-                }
-            } else if (this.selectedTest) {
+            if (this.selectedTest) { // makes sure the current selected test is present in this.tests
                 this.setSelection(this.tests.find(test => test.id === this.selectedTest.id));
             }
+
+            // If at this point this.selectedTest is falsy, this.autoSelect manages a selection
+            if (this.autoSelect && !this.selectedTest && this.tests.length) {
+                this.setSelection(this.tests[0]);
+            }
+        }
+
+        if (changes.project) {
+            this.project.readDefaultTests().then(defaultTests => {
+                const selectedTest = defaultTests
+                    .find(defaultTest => this.tests.map(test => test.id).includes(defaultTest.id));
+                if (selectedTest) { // if no default test is found, the previous selection won't be lost
+                    this.setSelection(selectedTest);
+                }
+            });
         }
     }
 
