@@ -18,32 +18,34 @@ class TestSelectController {
             if (this.autoSelect) {
                 if (this.tests.length) {
                     if (this.selectedTest) {
-                        this.selectedTest = this.tests.find(test => test.id === this.selectedTest.id);
+                        this.setSelection(this.tests.find(test => test.id === this.selectedTest.id));
                     }
                     if (!this.selectedTest) {
-                        this.selectedTest = this.tests[0];
+                        this.setSelection(this.tests[0]);
                     }
                 } else {
-                    this.selectedTest = null;
+                    this.setSelection(null);
                 }
-                this.onSelection({selectedTest: this.selectedTest});
 
                 if (!this.defaultTestsUsed && this.tests.length && this.project) {
-                    this.project.defaultTests().then(defaultTests => {
+                    this.project.readDefaultTests().then(defaultTests => {
                         const selectedTest = defaultTests
                             .find(defaultTest => this.tests.map(test => test.id).includes(defaultTest.id));
                         if (selectedTest) { // if no default test is found, the previous selection won't be lost
-                            this.selectedTest = selectedTest;
-                            this.onSelection({selectedTest: this.selectedTest});
+                            this.setSelection(selectedTest);
                         }
                     });
                     this.defaultTestsUsed = true;
                 }
             } else if (this.selectedTest) {
-                this.selectedTest = this.tests.find(test => test.id === this.selectedTest.id);
-                this.onSelection({selectedTest: this.selectedTest});
+                this.setSelection(this.tests.find(test => test.id === this.selectedTest.id));
             }
         }
+    }
+
+    setSelection(selectedTest) {
+        this.selectedTest = selectedTest;
+        this.onSelection({selectedTest: this.selectedTest});
     }
 
     testLabelAsHTML(test) {

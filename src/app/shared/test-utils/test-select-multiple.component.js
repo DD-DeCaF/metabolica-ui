@@ -18,26 +18,21 @@ class TestSelectMultipleController {
             // Some pages don't desire an auto-selection behaviour, therefore the need of this.autoSelect
             // Projects without default tests would have all tests selected at first load. this.autoSelect avoids it.
             if (this.autoSelect) {
-                this.selectedTests = this.tests
-                    .filter(test => !this.unselectedTests.some(unselectedTest => unselectedTest.id === test.id));
-                this.onSelection({selectedTests: this.selectedTests});
+                this.setSelection(this.tests
+                    .filter(test => !this.unselectedTests.some(unselectedTest => unselectedTest.id === test.id)));
 
                 if (!this.defaultTestsUsed && this.tests.length && this.project) {
-                    this.project.defaultTests().then(defaultTests => {
-                        if (defaultTests.length) {
-                            const selectedTests = defaultTests
-                                .filter(defaultTest => this.tests.some(test => test.id === defaultTest.id));
-                            if (selectedTests.length) { // if no default test is found, the previous selection won't be lost
-                                this.selectedTests = selectedTests;
-                                this.onSelection({selectedTests: this.selectedTests});
-                            }
+                    this.project.readDefaultTests().then(defaultTests => {
+                        const selectedTests = defaultTests
+                            .filter(defaultTest => this.tests.some(test => test.id === defaultTest.id));
+                        if (selectedTests.length) { // if no default test is found, the previous selection won't be lost
+                            this.setSelection(selectedTests);
                         }
                     });
                     this.defaultTestsUsed = true;
                 }
             } else {
-                this.selectedTests = this.selectedTests.filter(test => this.tests.includes(test));
-                this.onSelection({selectedTests: this.selectedTests});
+                this.setSelection(this.selectedTests.filter(test => this.tests.includes(test)));
             }
         }
     }
@@ -57,6 +52,11 @@ class TestSelectMultipleController {
     onMenuClose() {
         this.unselectedTests = this.tests
             .filter(test => !this.selectedTests.some(selectedTest => selectedTest.id === test.id));
+        this.onSelection({selectedTests: this.selectedTests});
+    }
+
+    setSelection(selectedTests) {
+        this.selectedTests = selectedTests;
         this.onSelection({selectedTests: this.selectedTests});
     }
 
