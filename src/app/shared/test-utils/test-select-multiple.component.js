@@ -1,6 +1,8 @@
 class TestSelectMultipleController {
     constructor($sce) {
         this._$sce = $sce;
+        this.defaultTests = [];
+        this.lastValidSelection = [];
         this.selectedTests = [];
     }
 
@@ -13,30 +15,44 @@ class TestSelectMultipleController {
 
             this.groupedTests = Array.from(groups.entries()).map(([type, tests]) => ({type, tests}));
 
-            // If this.tests was an empty array, then select all tests available
-            if (changes.tests.previousValue && !changes.tests.previousValue.length) {
-                this.setSelection([...this.tests]);
-            } else { // Otherwise just make sure the current selection is still present in this.tests
-                this.setSelection(this.selectedTests
-                    .filter(selectedTest => this.tests.map(test => test.id).includes(selectedTest.id)));
-            }
-
-            // If at this point this.selectedTests is still empty, this.autoSelect manages a selection
-            if (this.autoSelect && !this.selectedTests.length && this.tests.length) {
-                this.setSelection([this.tests[0]]);
+            // If changing from an empty this.tests to a not-empty one
+            if (this.autoSelect && changes.tests.previousValue &&
+                !changes.tests.previousValue.length && changes.tests.currentValue.length) {
+                if (this.lastValidSelection.length) {  // Re-apply the last valid selection
+                    this.setSelection(this.lastValidSelection);
+                    this.lastValidSelection = [];
+                } else if (this.defaultTests.length) { // Re-apply the defaultTests selection
+                    this.setSelection(this.defaultTests);
+                } else {                               // Otherwise just select all tests
+                    this.setSelection([...this.tests]);
+                }
+            } else { // Otherwise just make sure the current selection is still valid for the current this.tests
+                this.setSelection(this.selectedTests);
             }
         }
 
-        if (changes.project && this.project) {
-            this.project.readDefaultTests().then(defaultTests => {
-                const selectedTests = defaultTests
-                    .filter(defaultTest => this.tests.some(test => test.id === defaultTest.id));
-                if (selectedTests.length) { // if no default test is found, the previous selection won't be lost
-                    this.setSelection(selectedTests);
-                }
-            });
+        if (changes.project) {
+            if (changes.project.currentValue) {
+                this.project.readDefaultTests().then(defaultTests => {
+                    this.defaultTests = defaultTests;
+                    const selectableTests = defaultTests.filter(defaultTest => this.tests.map(t => t.id).includes(defaultTest.id));
+                    if (this.autoSelect && selectableTests.length) { // if no default test is found, the previous selection won't be lost
+                        this.setSelection(selectableTests);
+                    }
+                });
+            } else {
+                this.defaultTests = [];
+            }
         }
     }
+
+    /** @function filterSelectableTests
+     * @param {array} tests - A list of tests to filter
+     * @returns {array} A list of tests that are actually present in this.tests
+     */
+    /*filterSelectableTests(tests) {
+        return tests.filter(test => this.tests.map(t => t.id).includes(test.id));
+    }*/
 
     getSelectedText() {
         if (this.selectedTests) {
@@ -53,8 +69,18 @@ class TestSelectMultipleController {
         this.setSelection(this.selectedTests);
     }
 
-    setSelection(selectedTests) {
-        this.selectedTests = selectedTests;
+    /**
+     * The function will select only those tests that are actually present in this.tests.
+     * If this.selectedTests becomes empty, the previous value is saved for later use.
+     * @function setSelection
+     * @param {Object[]} selection - The list of proposed tests to select.
+     */
+    setSelection(selection) {
+        const selectableTests = selection.filter(selectedTest => this.tests.map(t => t.id).includes(selectedTest.id));
+        if (!selectableTests.length && this.selectedTests.length) { // Passing an empty selection? Save the last selection for later use
+            this.lastValidSelection = this.selectedTests;
+        }
+        this.selectedTests = selectableTests;
         this.onSelection({selectedTests: this.selectedTests});
     }
 
