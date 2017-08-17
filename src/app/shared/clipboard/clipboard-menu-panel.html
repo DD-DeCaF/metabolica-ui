@@ -1,42 +1,44 @@
 <div layout="column" md-colors="{background: 'default-accent-200'}" flex>
-  <md-toolbar class="md-accent md-hue-1" layout="row">
-    <div class="md-toolbar-tools">
-      <span flex></span>
-      <md-icon md-svg-icon="clipboard-outline"></md-icon>
-    </div>
-  </md-toolbar>
+  <!--<md-toolbar class="md-accent md-hue-1" layout="row">-->
+    <!--<div class="md-toolbar-tools">-->
+      <!--<span flex></span>-->
+      <!--<md-icon md-svg-icon="clipboard-outline"></md-icon>-->
+    <!--</div>-->
+  <!--</md-toolbar>-->
 
   <md-content flex>
-    <md-list ng-show="items.length > 0" ng-repeat="(type, items) in $ctrl.itemGroups">
+    <section ng-show="items.length > 0" ng-repeat="(type, items) in $ctrl.itemGroups">
       <md-subheader md-colors="md-no-sticky">{{ $ctrl.getTypePluralName(type) }}</md-subheader>
 
-      <md-list-item layout="row" ng-repeat="item in items">
-        <md-checkbox ng-model="item.selected" ng-change="$ctrl.onSelectionChange()"
-                     aria-label="Select for sharing"></md-checkbox>
-        <p>{{ item.value.identifier }}</p>
-        <md-menu class="md-secondary">
-          <md-button aria-label="More" class="md-icon-button" ng-click="$mdMenu.open($event)">
-            <md-icon>more_vert</md-icon>
-          </md-button>
-          <md-menu-content width="4">
-            <md-menu-item>
-              <md-button ng-click="$ctrl.remove(type, item.value)">
-                <md-icon md-svg-icon="delete"></md-icon>
-                Remove
-              </md-button>
-            </md-menu-item>
-            <md-menu-divider></md-menu-divider>
-            <md-menu-item ng-repeat="target in item.sharingTargets">
-              <md-button ng-click="$ctrl.shareWith(type, item.value, target.state)">
-                <md-icon md-svg-icon="share"></md-icon>
-                {{ target.name }}
-              </md-button>
-            </md-menu-item>
-          </md-menu-content>
-        </md-menu>
+      <md-list class="md-dense">
+        <md-list-item layout="row" ng-repeat="item in items">
+          <md-checkbox ng-model="item.selected" ng-change="$ctrl.onSelectionChange()"
+                       aria-label="Select for sharing"></md-checkbox>
+          <p>{{ item.value.identifier }}</p>
+          <md-menu class="md-secondary">
+            <md-button aria-label="More" class="md-icon-button" ng-click="$mdMenu.open($event)">
+              <md-icon>more_vert</md-icon>
+            </md-button>
+            <md-menu-content width="4">
+              <md-menu-item>
+                <md-button ng-click="$ctrl.remove(type, item.value)">
+                  <md-icon md-svg-icon="delete"></md-icon>
+                  Remove
+                </md-button>
+              </md-menu-item>
+              <md-menu-divider></md-menu-divider>
+              <md-menu-item ng-repeat="target in item.sharingTargets">
+                <md-button ng-click="$ctrl.shareWith(type, item.value, target.state)">
+                  <md-icon md-svg-icon="share"></md-icon>
+                  {{ target.name }}
+                </md-button>
+              </md-menu-item>
+            </md-menu-content>
+          </md-menu>
 
-      </md-list-item>
-    </md-list>
+        </md-list-item>
+      </md-list>
+    </section>
   </md-content>
   <md-toolbar class="md-accent md-hue-1">
     <div class="md-toolbar-tools" layout="row">
