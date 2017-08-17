@@ -41,7 +41,7 @@ class AddToClipboardController {
 export const AddToClipboardComponent = {
     controller: AddToClipboardController,
     bindings: {
-        type: '<',
+        type: '@',
         value: '<',
     },
     template: `
