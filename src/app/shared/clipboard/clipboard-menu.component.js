@@ -87,6 +87,7 @@ class ClipboardMenuPanelController {
         if (config) {
             return config.pluralName;
         }
+        return `${type}s`;
     }
 
     getSelectedItemGroups() {
@@ -124,6 +125,7 @@ class ClipboardMenuController {
         this._$mdPanel.open({
             animation,
             attachTo: angular.element(document.body),
+            panelClass: 'clipboard-menu-panel md-whiteframe-3dp',
             controllerAs: '$ctrl',
             position,
             openFrom: event,

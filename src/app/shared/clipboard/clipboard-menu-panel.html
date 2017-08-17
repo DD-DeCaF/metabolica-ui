@@ -1,12 +1,12 @@
-<div class="md-whiteframe-3dp" md-colors="{background: 'default-accent-200'}">
-  <md-toolbar layout="row">
+<div layout="column" md-colors="{background: 'default-accent-200'}" flex>
+  <md-toolbar class="md-accent md-hue-1" layout="row">
     <div class="md-toolbar-tools">
       <span flex></span>
       <md-icon md-svg-icon="clipboard-outline"></md-icon>
     </div>
   </md-toolbar>
 
-  <md-content id="clipboard-panel">
+  <md-content flex>
     <md-list ng-show="items.length > 0" ng-repeat="(type, items) in $ctrl.itemGroups">
       <md-subheader md-colors="md-no-sticky">{{ $ctrl.getTypePluralName(type) }}</md-subheader>
 
@@ -26,23 +26,11 @@
               </md-button>
             </md-menu-item>
             <md-menu-divider></md-menu-divider>
-            <md-menu-item>
-              <md-menu md-position-mode="target-right target">
-                <md-button ng-click="$mdOpenMenu($event)">
-                  <md-icon md-svg-icon="share"></md-icon>
-                  Share
-                </md-button>
-                <md-menu-content width="4">
-                  <md-menu-item ng-repeat="target in item.sharingTargets">
-                    <md-button ng-click="$ctrl.shareWith(type, item.value, target.state)">
-                      <div layout="row">
-                        <p flex>{{ target.name }}</p>
-                        <md-icon md-svg-icon="share" md-menu-align-target></md-icon>
-                      </div>
-                    </md-button>
-                  </md-menu-item>
-                </md-menu-content>
-              </md-menu>
+            <md-menu-item ng-repeat="target in item.sharingTargets">
+              <md-button ng-click="$ctrl.shareWith(type, item.value, target.state)">
+                <md-icon md-svg-icon="share"></md-icon>
+                {{ target.name }}
+              </md-button>
             </md-menu-item>
           </md-menu-content>
         </md-menu>
@@ -50,14 +38,12 @@
       </md-list-item>
     </md-list>
   </md-content>
-
-
-  <md-toolbar layout="row">
-    <div class="md-toolbar-tools">
-
+  <md-toolbar class="md-accent md-hue-1">
+    <div class="md-toolbar-tools" layout="row">
       <md-button class="md-icon-button" ng-click="$ctrl.clear()">
         <md-icon md-svg-icon="clear-all"></md-icon>
       </md-button>
+      <span flex></span>
       <md-menu md-position-mode="target-right target">
         <md-button ng-disabled="!$ctrl.sharingTargets.length" class="md-icon-button" ng-click="$mdOpenMenu($event)">
           <md-icon md-svg-icon="share"></md-icon>
