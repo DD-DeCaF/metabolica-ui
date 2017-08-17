@@ -20,22 +20,21 @@
               <md-icon>more_vert</md-icon>
             </md-button>
             <md-menu-content width="4">
-              <md-menu-item>
-                <md-button ng-click="$ctrl.remove(type, item.value)">
-                  <md-icon md-svg-icon="delete"></md-icon>
-                  Remove
-                </md-button>
-              </md-menu-item>
-              <md-menu-divider></md-menu-divider>
               <md-menu-item ng-repeat="target in item.sharingTargets">
                 <md-button ng-click="$ctrl.shareWith(type, item.value, target.state)">
                   <md-icon md-svg-icon="share"></md-icon>
                   {{ target.name }}
                 </md-button>
               </md-menu-item>
+              <md-menu-divider ng-if="item.sharingTargets.length"></md-menu-divider>
+              <md-menu-item>
+                <md-button ng-click="$ctrl.remove(type, item.value)">
+                  <md-icon md-svg-icon="delete"></md-icon>
+                  Remove
+                </md-button>
+              </md-menu-item>
             </md-menu-content>
           </md-menu>
-
         </md-list-item>
       </md-list>
     </section>
