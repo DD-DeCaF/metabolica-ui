@@ -5,4 +5,8 @@ genotype {
   .invalid {
     color: $warn;
   }
+
+  .gnomic-plasmid > .gnomic-feature, .gnomic-plasmid > .gnomic-fusion {
+    font-size: 90%;
+  }
 }
