@@ -10,17 +10,9 @@ app {
   flex-direction: column;
 }
 
-#content > ui-view {
-  overflow-y: scroll; // XXX hack to fix overflow issues that keep happening 
-}
-
 .md-sidenav-left {
   transition: width 750ms;
 }
-
-//.project-sidenav-left {
-//    width: 55px;
-//}
 
 a {
   color: rgba(0, 0, 0, 0.54);

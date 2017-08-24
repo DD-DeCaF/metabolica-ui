@@ -16,8 +16,11 @@ import {SearchModule} from './search/search.module';
 
 import {DirectivesModule} from './shared/directives-legacy.module';
 import {XRefsModule} from './shared/xrefs/xrefs.module';
+import {TestUtilsModule} from './shared/test-utils/test-utils.module';
+import {ClipboardModule} from './shared/clipboard/clipboard.module';
 
 import iconPuzzle from '../../img/icons/puzzle.svg';
+import iconShare from '../../img/icons/share.svg';
 
 
 class AppNavigationProvider {
@@ -27,9 +30,10 @@ class AppNavigationProvider {
     }
 
     // XXX is component needed?
-    register(state, {title, position=null, authRequired=true, icon='puzzle', order=Number.MAX_VALUE, stateParams={}} = {}) {
-		if(!position) {
-			if(state.startsWith('app.project.')) {
+    register(state, {title, position = null, authRequired = true, icon = 'puzzle', order = Number.MAX_VALUE,
+        stateParams = {}} = {}) {
+		if (!position) {
+			if (state.startsWith('app.project.')) {
 				position = 'project';
 			} else {
 				position = 'global';
@@ -79,7 +83,9 @@ export const AppModule = angular.module('App', [
         DocsModule.name,
         XRefsModule.name,
         SearchModule.name,
-        DirectivesModule.name
+        DirectivesModule.name,
+        TestUtilsModule.name,
+        ClipboardModule.name
     ])
     .provider('appNavigation', AppNavigationProvider)
     .provider('appName', AppNameProvider)
@@ -95,10 +101,10 @@ export const AppModule = angular.module('App', [
         $mdThemingProvider.theme('default')
             .primaryPalette('blue-grey')
             .accentPalette('grey', {
-                default: '400'
+                'default': '400'
             })
             .backgroundPalette('grey', {
-                default: 'A100'
+                'default': 'A100'
             });
     })
     .config(function ($httpProvider, potionProvider) {
@@ -110,6 +116,7 @@ export const AppModule = angular.module('App', [
     })
     .config(function ($mdIconProvider) {
         $mdIconProvider.icon('puzzle', iconPuzzle, 24);
+        $mdIconProvider.icon('share', iconShare, 24);
     })
     .config(function ($stateProvider, $urlRouterProvider, $locationProvider) {
         /**
@@ -136,15 +143,15 @@ export const AppModule = angular.module('App', [
     })
     .run(function ($transitions, $state, $location, $log, $mdDialog, $window, appName) {
         // https://github.com/angular/material/issues/3418
-        $transitions.onStart({}, transition => {
+        $transitions.onStart({}, () => {
             $mdDialog.cancel();
         });
 
         $transitions.onStart({}, transition => {
             transition.promise.finally(() => {
                 let title = $state.current.data && $state.current.data.title;
-                $window.document.title = title ? `${appName} – ${title}`: appName;
-            })
+                $window.document.title = title ? `${appName} – ${title}` : appName;
+            });
         });
     });
 

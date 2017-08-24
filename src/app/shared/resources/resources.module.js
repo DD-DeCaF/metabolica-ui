@@ -1,10 +1,10 @@
+/* eslint no-unused-vars: 0*/
 import angular from 'angular';
 
 import 'reflect-metadata'; // used by 'potion-client'
 import {Item, Route} from 'potion-client/angular';
 
-import {Genotype} from 'gnomic-grammar'; // TODO remove dependency, use service instead.
-import {Aggregate, Test} from './legacy/types';
+import {Aggregate} from './legacy/types';
 import {Variant} from './legacy/variant';
 
 export const ResourcesModule = angular
@@ -65,6 +65,8 @@ function ProjectFactory(potion, Item, Experiment, ExperimentPhase, Strain, Pool,
     class Project extends Item {
         readPermissions = Route.GET('/permissions');
         readSummary = Route.GET('/summary');
+        defaultTests = Route.GET('/default-tests');
+        updateDefaultTests = Route.POST('/update-default-tests');
     }
     return potion.register('/project', Project);
 }
@@ -76,6 +78,19 @@ function ProjectMembershipFactory(potion, User, Project) {
     return potion.register('/project-membership', ProjectMembership);
 }
 
+/**
+ * Test
+ */
+
+ResourcesModule.factory('Test', TestFactory);
+function TestFactory(potion) {
+    class Test extends Item {
+        update = Route.PATCH('');
+    }
+    return potion.register('/test', Test, {
+        readonly: ['createdBy', 'createdAt', 'updatedAt']
+    });
+}
 
 /**
  * Chemical Entities
@@ -141,7 +156,7 @@ function GenomeDiffFactory(potion, User, Experiment, Sample) {
 
         async readItems(...args) {
             let items = await this._readItems(...args);
-            return items.map((item) => new Variant(item));
+            return items.map(item => new Variant(item));
         }
 
         get name() {
@@ -192,14 +207,14 @@ function DeviceFactory(potion) {
  */
 
 ResourcesModule.factory('Sample', SampleFactory);
-function SampleFactory(potion, Experiment, Medium, Plate, Strain) {
+function SampleFactory(potion, Experiment, Medium, Plate, Strain, Test) {
     class Sample extends Item {
         static aggregateTests = Route.GET('/aggregate-tests');
         static _aggregateScalars = Route.GET('/aggregate-scalars');
 
         static aggregateScalars(...args) {
             return this._aggregateScalars(...args)
-                .then(aggregate => new Aggregate(aggregate))
+                .then(aggregate => new Aggregate(aggregate));
         }
 
         _readSeries = Route.GET('/series');
@@ -207,8 +222,8 @@ function SampleFactory(potion, Experiment, Medium, Plate, Strain) {
         readSeries(...args) {
             return this._readSeries(...args)
                 .then(series => series
-                    .map((item) => Object.assign(item, {
-                        test: new Test(item.test),
+                    .map(item => Object.assign(item, {
+                        test: item.test,
                         sample: this
                     })));
         }
@@ -254,7 +269,9 @@ function PlateFactory(potion, User) {
         readSamples = Route.GET('/samples');
 
         get typeDefinition() {
-            return Plate.readTypes().then((definitions) => new Map(definitions.map(definition => [definition.type, definition]))).get(this.type)
+            return Plate.readTypes()
+                .then(definitions => new Map(definitions.map(definition => [definition.type, definition])))
+                .get(this.type);
         }
     }
 
@@ -282,10 +299,10 @@ function PoolFactory(potion, $cacheFactory, User, Strain, Medium, ChemicalEntity
     class Pool extends Item {
 
         get typeAsText() {
-            return POOL_TYPES[this.type] || this.type
+            return POOL_TYPES[this.type] || this.type;
         }
 
-        get fullGenotypeObject() {
+        get fullGenotype() {
             // Try to get the genotype from cache
             let cached = cache.get(this.identifier);
             if (cached) {
@@ -294,24 +311,10 @@ function PoolFactory(potion, $cacheFactory, User, Strain, Medium, ChemicalEntity
 
             let parent = null;
             if (this.parentPool) {
-                parent = this.parentPool.fullGenotypeObject;
+                parent = this.parentPool.fullGenotype;
             }
 
-            return cache.put(this.identifier, Genotype.parse(this.genotype || '', {parent}));
-        }
-
-        get genotypeObject() {
-            // Try to get the genotype from cache
-            let cached = cache.get(this.genotype);
-            if (cached) {
-                return cached;
-            }
-
-            if (!this.genotype) {
-                return null;
-            }
-
-            return cache.put(this.genotype, Genotype.parse(this.genotype));
+            return cache.put(this.identifier, [parent || '', this.genotype || ''].join(' '));
         }
 
         readSamples = Route.GET('/samples');
@@ -335,7 +338,8 @@ function StrainFactory(potion, $cacheFactory, User, Organism) {
     const cache = $cacheFactory('strain-genotype');
 
     class Strain extends Item {
-        get fullGenotypeObject() {
+
+        get fullGenotype() {
             // Try to get the genotype from cache
             let cached = cache.get(this.identifier);
             if (cached) {
@@ -344,29 +348,11 @@ function StrainFactory(potion, $cacheFactory, User, Organism) {
 
             let parent = null;
             if (this.parentStrain) {
-                parent = this.parentStrain.fullGenotypeObject;
+                parent = this.parentStrain.fullGenotype;
             } else {
-                parent = this.pool.fullGenotypeObject;
+                parent = this.pool.fullGenotype;
             }
-
-            return cache.put(this.identifier, Genotype.parse(this.genotype || '', {parent}));
-        }
-
-        get genotypeObject() {
-            let genotype = this.genotype || this.pool.genotype;
-
-            // Try to get the genotype from cache
-            let cached = cache.get(genotype);
-            if (cached) {
-                return cached;
-            }
-
-            if (!genotype) {
-                return null;
-            }
-
-            // Cache the genotype
-            return cache.put(genotype, Genotype.parse(genotype));
+            return cache.put(this.identifier, [parent || '', this.genotype || this.pool.genotype || ''].join(' '));
         }
 
         readSamples = Route.GET('/samples');
@@ -391,7 +377,7 @@ function StrainFactory(potion, $cacheFactory, User, Organism) {
  */
 
 ResourcesModule.factory('Experiment', ExperimentFactory);
-function ExperimentFactory(potion, User, Device) {
+function ExperimentFactory(potion, User, Device, Test) {
     class Experiment extends Item {
         static readCompartmentTypes = Route.GET('/compartment-types');
         readSamples = Route.GET('/samples');
@@ -401,7 +387,7 @@ function ExperimentFactory(potion, User, Device) {
 
         async readScalarTable(...args) {
             let data = await this._readScalarTable(...args);
-            return {aggregate: new Aggregate(data), total: data.total}
+            return {aggregate: new Aggregate(data), total: data.total};
         }
 
         listDataShapes = Route.GET('/list-data-shapes');
@@ -420,12 +406,12 @@ function ExperimentFactory(potion, User, Device) {
 }
 
 ResourcesModule.factory('ExperimentPhase', ExperimentPhaseFactory);
-function ExperimentPhaseFactory(potion) {
+function ExperimentPhaseFactory(potion, Test) {
     class ExperimentPhase extends Item {
         _aggregateScalars = Route.GET('/aggregate-scalars');
 
         async aggregateScalars(...args) {
-            return new Aggregate(await this._aggregateScalars(...args))
+            return new Aggregate(await this._aggregateScalars(...args));
         }
     }
     return potion.register('/experiment-phase', ExperimentPhase);
@@ -526,8 +512,7 @@ function MeasurementTableFactory(potion, Item, Route) {
             return this._generateTable(...args)
                 .then(table => {
                     const tests = new Map(Object
-                        .entries(table.tests)
-                        .map(([key, test]) => [key, new Test(test)]));
+                        .entries(table.tests));
 
                     return table.measurements
                         .map(measurement => Object.assign(measurement, {test: tests.get(measurement.test)}));
@@ -538,14 +523,14 @@ function MeasurementTableFactory(potion, Item, Route) {
             return this._generateTableAggregate(...args)
                 .then(table => {
                     const tests = new Map(Object
-                        .entries(table.tests)
-                        .map(([key, test]) => [key, new Test(test)]));
+                        .entries(table.tests));
 
                     return table.measurements
                         .map(measurement => Object.assign(measurement,
                             {
                                 test: tests.get(measurement.test),
-                                samplePoolGenotypeChange: table.genotypeChanges[measurement.samplePoolGenotypeChange]
+                                samplePoolGenotypeChange: table.genotypeChanges[measurement.samplePoolGenotypeChange],
+                                samplePoolGenotype: table.genotypes[measurement.samplePoolGenotype]
                             }));
                 });
         }
@@ -555,8 +540,7 @@ function MeasurementTableFactory(potion, Item, Route) {
                 .then(table => {
                     if (table.columns.includes('test')) {
                         const tests = new Map(Object
-                            .entries(table.tests)
-                            .map(([key, test]) => [key, new Test(test)]));
+                            .entries(table.tests));
 
                         const t = table.columns.indexOf('test');
 

@@ -5,28 +5,25 @@ class XRefController {
 
 	$onChanges() {
 		if (this.value) {
-			let config = this._xrefRegistry[this.value.constructor.name];
-
-			if (config) {
-				let {state, stateParams} = config(this.value);
-				this.state = state;
-				this.stateParams = stateParams;
-			} else {
-				this.state = null;
-				this.stateParams = null;
-			}
+            const config = this._xrefRegistry[this.type || this.value.constructor.name];
+            if (config) {
+                const {state, stateParams} = config(this.value);
+                this.state = state;
+                this.stateParams = stateParams;
+            }
 		}
 	}
 }
 
 export const XRefComponent = {
-	template: `
+    template: `
     <a ui-state="$ctrl.state" ui-state-params="$ctrl.stateParams">
-      <ng-transclude>{{ $ctrl.value.identifier || $ctrl.value.barcode }}</ng-transclude>
+      <ng-transclude>{{ $ctrl.value.identifier || $ctrl.value.barcode || $ctrl.value.toString() }}</ng-transclude>
     </a>`,
-	controller: XRefController,
-	transclude: true,
-	bindings: {
-		value: '<'
+    controller: XRefController,
+    transclude: true,
+    bindings: {
+        type: '<',
+        value: '<'
 	}
 };

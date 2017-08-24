@@ -13,13 +13,14 @@ const COMPARABLE_VARIANT_PROPERTIES = [
 export class Variant {
 	constructor(item) {
 		Object.assign(this, item);
-		this.key = `${Object.values(pluck(this.toJSON(), COMPARABLE_VARIANT_PROPERTIES)).filter((value) => value !== null && value !== undefined).join('-')}+${this.reference.uri}`;
+		this.key = `${Object.values(pluck(this.toJSON(), COMPARABLE_VARIANT_PROPERTIES))
+            .filter(value => value !== null && value !== undefined).join('-')}+${this.reference.uri}`;
 	}
 
 	toJSON() {
 		let obj = {};
 
-		for (let key of Object.keys(this).filter((key) => !key.startsWith('$') && !key.startsWith('_'))) {
+		for (let key of Object.keys(this).filter(key => !key.startsWith('$') && !key.startsWith('_'))) {
 			obj[key] = this[key];
 		}
 

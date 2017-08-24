@@ -20,9 +20,11 @@ class AppController {
         this.projectNavigation = allNavigation.filter(nav => nav.position == 'project');
         this.navigation = allNavigation.filter(nav => nav.position == 'global');
 
+        this.projectsFetched = false;
         this.projects = [];
-        Project.query().then((projects) => {
-            this.projects = projects
+        Project.query().then(projects => {
+            this.projects = projects;
+            this.projectsFetched = true;
         });
 
         this.lockLeftSidenavOpen = true;
@@ -53,7 +55,7 @@ class AppController {
     }
 
     isLeftSidenavLockedOpen() {
-        return this.lockLeftSidenavOpen && this._$mdMedia('gt-sm')
+        return this.lockLeftSidenavOpen && this._$mdMedia('gt-sm');
     }
 
     isSidenavOpen(menuId) {
@@ -62,21 +64,21 @@ class AppController {
     }
 
     openSidenav(menuId) {
-        if(menuId == 'left' && this._$mdMedia('gt-sm')) {
+        if (menuId == 'left' && this._$mdMedia('gt-sm')) {
             this.lockLeftSidenavOpen = true;
         }
 
-        if(!this._$mdSidenav(menuId).isOpen()) {
+        if (!this._$mdSidenav(menuId).isOpen()) {
             this._$mdSidenav(menuId).open();
         }
     }
 
     closeSidenav(menuId) {
-        if(menuId == 'left') {
+        if (menuId == 'left') {
             this.lockLeftSidenavOpen = false;
         }
 
-        if(this._$mdSidenav(menuId).isOpen()){
+        if (this._$mdSidenav(menuId).isOpen()) {
             this._$mdSidenav(menuId).close();
         }
     }

@@ -46,6 +46,11 @@
       </div>
     </md-toolbar>
 
+    <md-progress-linear
+      md-mode="indeterminate"
+      ng-hide="$ctrl.project || $ctrl.projectsFetched">
+    </md-progress-linear>
+
     <md-content>
       <md-list ng-hide="$ctrl.project">
         <md-subheader class="md-no-sticky">Projects</md-subheader>

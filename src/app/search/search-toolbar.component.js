@@ -28,25 +28,25 @@ class SearchToolbarController {
             let defer = this._$q.defer();
             source.query(resource, searchText)
                 .then(results => defer.resolve({
-                    results: results,
+                    results,
                     source
                 }))
                 .catch(() => defer.resolve({source, results: []}));
             searches.push(defer.promise);
         }
 
-        return this._$q.all(searches).then((searches) => {
-            return searches
-                .map(({source, results}) => results
+        return this._$q.all(searches)
+            .then(searches =>
+                searches.map(({source, results}) => results
                     .map(result => ({
                         source,
                         state: source.state,
                         stateParams: source.stateParams(result),
                         text: source.formatAsText(result)
                     })))
-                .reduce((a, b) => a.concat(b), [])
-                .sort((a, b) => a.text.localeCompare(b.text));
-        });
+                    .reduce((a, b) => a.concat(b), [])
+                    .sort((a, b) => a.text.localeCompare(b.text))
+        );
     }
 
     selectedItemChange(item) {
@@ -56,7 +56,8 @@ class SearchToolbarController {
             this._$state.go(item.state, item.stateParams);
 
             // NOTE workaround for https://github.com/angular/material/issues/5407
-            this._$mdUtil.enableScrolling()
+            this._$mdUtil.enableScrolling();
+            this.showSearch = false;
         }
     }
 }

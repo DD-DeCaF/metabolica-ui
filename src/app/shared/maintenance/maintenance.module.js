@@ -1,21 +1,23 @@
 import angular from 'angular';
-import maintenanceDialogTemplate from './maintenance.dialog.html'
+import maintenanceDialogTemplate from './maintenance.dialog.html';
 
 function HttpInterceptorFactory($q, $rootScope, httpBuffer) {
     return {
-        responseError: function (rejection) {
+        responseError(rejection) {
             switch (rejection.status) {
                 case 502:
                 case 503:
-                    var deferred = $q.defer();
+                {
+                    let deferred = $q.defer();
                     httpBuffer.append(rejection.config, deferred);
                     $rootScope.$broadcast('event:http-maintenance', rejection);
                     return deferred.promise;
+                }
             }
 
             return $q.reject(rejection);
         }
-    }
+    };
 }
 
 /*
@@ -24,10 +26,10 @@ function HttpInterceptorFactory($q, $rootScope, httpBuffer) {
  */
 function HttpBufferFactory($injector) {
     /** Holds all the requests, so they can be re-requested in future. */
-    var buffer = [];
+    let buffer = [];
 
     /** Service initialized later because of circular dependency problem. */
-    var $http;
+    let $http;
 
     function retryHttpRequest(config, deferred) {
         function successCallback(response) {
@@ -46,19 +48,19 @@ function HttpBufferFactory($injector) {
         /**
          * Appends HTTP request configuration object with deferred response attached to buffer.
          */
-        append: function (config, deferred) {
+        append(config, deferred) {
             buffer.push({
-                config: config,
-                deferred: deferred
+                config,
+                deferred
             });
         },
 
         /**
          * Abandon or reject (if reason provided) all the buffered requests.
          */
-        rejectAll: function (reason) {
+        rejectAll(reason) {
             if (reason) {
-                for (var i = 0; i < buffer.length; ++i) {
+                for (let i = 0; i < buffer.length; ++i) {
                     buffer[i].deferred.reject(reason);
                 }
             }
@@ -68,8 +70,8 @@ function HttpBufferFactory($injector) {
         /**
          * Retries all the buffered requests clears the buffer.
          */
-        retryAll: function (updater) {
-            for (var i = 0; i < buffer.length; ++i) {
+        retryAll(updater) {
+            for (let i = 0; i < buffer.length; ++i) {
                 retryHttpRequest(updater(buffer[i].config), buffer[i].deferred);
             }
             buffer = [];
@@ -86,7 +88,7 @@ export const MaintenanceModule = angular.module('shared.maintenance', [])
     .run(function ($rootScope, $mdDialog, httpBuffer) {
         let maintenanceDialogIsOpen = false;
 
-        $rootScope.$on('event:http-maintenance', (event, rejection) => {
+        $rootScope.$on('event:http-maintenance', () => {
             if (!maintenanceDialogIsOpen) {
                 maintenanceDialogIsOpen = true;
 
@@ -94,11 +96,11 @@ export const MaintenanceModule = angular.module('shared.maintenance', [])
                     controller($scope, appName) {
                         $scope.appName = appName;
                         $scope.retry = () => {
-                            httpBuffer.retryAll((config) => config);
+                            httpBuffer.retryAll(config => config);
 
                             $mdDialog.hide();
                             maintenanceDialogIsOpen = false;
-                        }
+                        };
                     },
                     template: maintenanceDialogTemplate,
                     parent: angular.element(document.body),

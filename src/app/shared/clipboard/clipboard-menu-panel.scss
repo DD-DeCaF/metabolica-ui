@@ -1,0 +1,16 @@
+.clipboard-menu-panel {
+  width: 500px;
+  max-height: 350px;
+  border-radius: 4px;
+  overflow: hidden;
+  display: flex;
+  flex: 1;
+}
+
+.md-toolbar-tools>add-to-clipboard:first-child {
+  margin-left: -8px;
+}
+
+.md-toolbar-tools>add-to-clipboard:last-child {
+  margin-right: -8px;
+}
