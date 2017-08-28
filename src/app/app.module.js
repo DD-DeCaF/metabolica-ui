@@ -63,9 +63,29 @@ class AppNameProvider {
 
 class AppAuthProvider {
     isRequired = true;
+    trustedHosts = [];
 
-    $get() {
-        return this.isRequired;
+    $get($location) {
+        return {
+            isRequired: this.isRequired,
+            setHosts: hosts => {
+                this.trustedHosts = hosts;
+            },
+            isTrusted: url => {
+                // current host is always trusted
+                if (url.startsWith('/') || url.indexOf($location.host()) > -1) {
+                    return true;
+                }
+
+                for (let host of this.trustedHosts) {
+                    if (url.indexOf(host) > -1) {
+                        return true;
+                    }
+                }
+
+                return false;
+            },
+        };
     }
 }
 
