@@ -68,7 +68,7 @@ class AppAuthProvider {
     $get($location) {
         return {
             isRequired: this.isRequired,
-            setHosts: hosts => {
+            setTrustedHosts: hosts => {
                 this.trustedHosts = hosts;
             },
             isTrusted: url => {
