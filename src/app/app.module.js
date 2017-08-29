@@ -73,7 +73,7 @@ class AppAuthProvider {
         return {
             isRequired: this.isRequired,
             isTrustedURL: url => {
-                let hostname = new URL(url, $location.absUrl()).hostname;
+                const hostname = new URL(url, $location.absUrl()).hostname;
                 return hostname === $location.host() || this.trustedHosts.has(hostname);
             },
         };
