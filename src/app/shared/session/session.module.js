@@ -75,7 +75,7 @@ function SessionInterceptorFactory($q, $injector, appAuth) {
             let $localStorage = $injector.get('$localStorage');
 
             // Authorization header should be passed to trusted hosts only
-            if ($localStorage.sessionJWT && appAuth.isTrusted(config.url)) {
+            if ($localStorage.sessionJWT && appAuth.isTrustedURL(config.url)) {
                 config.headers.Authorization = `Bearer ${$localStorage.sessionJWT}`;
             }
             return config;
