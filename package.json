@@ -10,8 +10,10 @@
     "angular-material-data-table": "^0.10.10",
     "angular-messages": "^1.6.2",
     "angular-ui-router": "1.0.0-rc.1",
+    "angularfire": "^2.3.0",
     "babel-polyfill": "^6.22.0",
     "chroma-js": "^1.2.2",
+    "firebase": "^3.6.6",
     "ngstorage": "^0.3.11",
     "plotly.js": "^1.28.1",
     "potion-client": "1.5.2",
@@ -23,6 +25,7 @@
     "start": "webpack-dev-server"
   },
   "devDependencies": {
+    "@types/node": "^8.0.25",
     "babel-cli": "^6.24.1",
     "babel-core": "^6.22.1",
     "babel-eslint": "^7.2.3",

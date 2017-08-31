@@ -23,6 +23,7 @@ import iconPuzzle from '../../img/icons/puzzle.svg';
 import iconShare from '../../img/icons/share.svg';
 
 
+
 class AppNavigationProvider {
     constructor() {
         // Two lists of components: for authorised and unauthorised users
@@ -70,6 +71,15 @@ class AppAuthProvider {
 }
 
 
+class AppSocialAuthProvider {
+    socialAllowed = false;
+
+    $get() {
+        return this.socialAllowed;
+    }
+}
+
+
 export const AppModule = angular.module('App', [
         'ngAnimate',
         'ngAria',
@@ -90,6 +100,7 @@ export const AppModule = angular.module('App', [
     .provider('appNavigation', AppNavigationProvider)
     .provider('appName', AppNameProvider)
     .provider('appAuth', AppAuthProvider)
+    .provider('appSocialAuth', AppSocialAuthProvider)
     .component('app', AppComponent)
     .component('appHome', AppHomeComponent)
     .component('appToolbar', AppToolbarComponent)

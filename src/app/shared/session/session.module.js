@@ -1,5 +1,6 @@
-import angular from 'angular';
+import * as angular from 'angular';
 import 'ngstorage';
+import * as firebase from 'firebase';
 
 import {ResourcesModule} from '../resources/resources.module';
 
@@ -47,17 +48,24 @@ function SessionFactory($http, $localStorage, $rootScope, User, potion) {
             }
         },
 
-        authenticate(credentials) {
+        authenticate(credentials, socialAuth = false) {
             return $http.post(`${potion.host}${potion.prefix}/auth`, credentials)
                 .then(response => {
+                    $localStorage.socialAuth = socialAuth;
                     $localStorage.sessionJWT = response.data.token;
                     $rootScope.$broadcast('session:login');
                 });
         },
 
         logout(next = null) {
+            let reload = false;
+            if ($localStorage.socialAuth) {
+                reload = true;
+                firebase.auth().signOut();
+            }
+            delete $localStorage.socialAuth;
             delete $localStorage.sessionJWT;
-            $rootScope.$broadcast('session:logout', {next});
+            $rootScope.$broadcast('session:logout', {next, reload: reload});
         },
 
         login(next = null) {
@@ -97,13 +105,17 @@ export const SessionModule = angular
     ])
     .factory('Session', SessionFactory)
     .factory('sessionInterceptor', SessionInterceptorFactory)
-    .run(function ($rootScope, $state, $location, $log, $mdDialog, Session, Project, appAuth) {
+    .run(function ($rootScope, $state, $location, $log, $mdDialog, $timeout, Session, Project, appAuth) {
         $rootScope.$on('session:login', () => {
             $rootScope.isAuthenticated = true;
         });
 
         $rootScope.$on('session:logout', (event, options) => {
             $state.go('login', options);
+            if (options.reload) {
+                location.reload();
+                options.reload = false;
+            }
         });
 
         if (!Session.isAuthenticated()) {

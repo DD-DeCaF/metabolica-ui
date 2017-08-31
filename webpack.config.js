@@ -28,7 +28,15 @@ module.exports = function () {
                 inject: 'head',
                 template: './src/index.html',
                 filename: 'index.html'
-            })
+            }),
+            new webpack.EnvironmentPlugin([
+                'API_KEY',
+                'AUTH_DOMAIN',
+                'DATABASE_URL',
+                'PROJECT_ID',
+                'STORAGE_BUCKET',
+                'SENDER_ID'
+            ])
         ],
         module: {
             rules: [
