@@ -6,7 +6,7 @@ export default function GenotypeFactory(potion, Item, Route) {
         static formatGnomicAsHTML = Route.GET('/format-gnomic-as-html');
         static gnomicToGenotype = Route.GET('/gnomic-to-genotype');
         static formatFeatureAsText = Route.GET('/format-feature-as-text');
-        static formatFeatureAsHTML = Route.GET('format-feature-as-html');
+        static formatFeatureAsHTML = Route.GET('/format-feature-as-html');
     }
     return potion.register('/genotype', Genotype);
 }

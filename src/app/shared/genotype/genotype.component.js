@@ -1,6 +1,5 @@
 import './genotype.component.scss';
 
-
 class GenotypeController {
 
     constructor($sce, Genotype) {
@@ -9,35 +8,51 @@ class GenotypeController {
     }
 
     $onChanges() {
-        let genotype = null;
+        let gnomicString = null;
         if (this.parts) {
-            genotype = this.parts.join(' ');
+            gnomicString = this.parts.join(' ');
         } else if (this.value) {
-            genotype = this.value;
+            gnomicString = this.value;
         }
 
-        if (this.genotype === genotype) {
+        if (this.gnomic === gnomicString) {
             return;
         }
-        this.genotype = genotype;
-
+        this.gnomic = gnomicString;
         this.isValid = true;
-        if (!genotype) {
-            this.genotypeHTML = this._$sce.trustAsHtml('&mdash;');
-        } else if (typeof genotype === 'string' || genotype instanceof String) {
-            genotype = genotype.replace(/ {2,}/g, ' ').trim(); // remove potential extra spaces
-            this.genotypeHTML = this._$sce.trustAsHtml(escapeHTML(genotype));
-            this._Genotype.formatGnomicAsHTML({value: genotype}, {cache: true})
-                .then(response => {
-                    if (!response.valid) {
-                        this.isValid = false;
-                    } else {
-                        this.genotypeHTML = this._$sce.trustAsHtml(response.html);
-                    }
-                });
+
+        if (this.gnomic && (typeof this.gnomic === 'string' || this.gnomic instanceof String)) {
+            this.gnomicHTML = this._$sce.trustAsHtml(escapeHTML(this.gnomic));
+            if (this.isFeature) {
+                this.parseAsFeature();
+            } else {
+                this.parseAsGenotype();
+            }
         } else {
-            this.genotypeHTML = '';
+            this.gnomicHTML = this._$sce.trustAsHtml('&mdash;');
         }
+    }
+
+    parseAsGenotype() {
+        this._Genotype.formatGnomicAsHTML({value: this.gnomic}, {cache: true})
+            .then(response => {
+                if (!response.valid) {
+                    this.isValid = false;
+                } else {
+                    this.gnomicHTML = this._$sce.trustAsHtml(response.html);
+                }
+            });
+    }
+
+    parseAsFeature() {
+        this._Genotype.formatFeatureAsHTML({value: this.gnomic}, {cache: true})
+            .then(response => {
+                if (!response.valid) {
+                    this.isValid = false;
+                } else {
+                    this.gnomicHTML = this._$sce.trustAsHtml(response.html);
+                }
+            });
     }
 }
 
@@ -45,10 +60,11 @@ class GenotypeController {
 export const GenotypeComponent = {
     bindings: {
         parts: '<',
-        value: '<'
+        value: '<',
+        isFeature: '<'
     },
     controller: GenotypeController,
-    template: `<span ng-class="{invalid: !$ctrl.isValid}" ng-bind-html="$ctrl.genotypeHTML"></span>`
+    template: `<span ng-class="{invalid: !$ctrl.isValid}" ng-bind-html="$ctrl.gnomicHTML"></span>`
 };
 
 
