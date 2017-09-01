@@ -100,7 +100,7 @@ export const SessionModule = angular
     ])
     .factory('Session', SessionFactory)
     .factory('sessionInterceptor', SessionInterceptorFactory)
-    .run(function ($rootScope, $state, $location, $log, $mdDialog, Session, Project, Policy, appAuth, appNavigation) {
+    .run(function ($rootScope, $state, $location, $log, $mdDialog, Session, Project, appAuth) {
         $rootScope.$on('session:login', () => {
             $rootScope.isAuthenticated = true;
         });
@@ -108,9 +108,6 @@ export const SessionModule = angular
         $rootScope.$on('session:logout', (event, options) => {
             $state.go('login', options);
         });
-
-        const collectedPermissions = Array.from(new Set(appNavigation.map(({permission}) => permission)));
-        $rootScope.allowedPermisisons = [];
 
         if (!Session.isAuthenticated()) {
             $rootScope.isAuthenticated = false;
@@ -126,9 +123,5 @@ export const SessionModule = angular
         } else {
             $rootScope.isAuthenticated = true;
             $log.info(`Session expires ${Session.expires}`);
-
-            Policy.testPermissions({permissions: JSON.stringify(collectedPermissions)}).then(allowedPermissions => {
-                $rootScope.allowedPermissions = allowedPermissions;
-            });
         }
     });

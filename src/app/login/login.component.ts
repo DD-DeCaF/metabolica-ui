@@ -17,7 +17,7 @@ class LoginController {
      * @param Session  comment about Session parameter
      * @param appName  The application name to show during login
      */
-    constructor($scope, $timeout, $state, $stateParams, $location, Session, appName: string) {
+    constructor($scope, $timeout, $state, $stateParams, $location, Session, appAuth, appName: string) {
         this.appName = appName;
         this.credentials = {
             username: '',
@@ -27,6 +27,9 @@ class LoginController {
         this.authenticate = async (form: any, credentials: Credentials) => {
             try {
                 await Session.authenticate(credentials);
+
+                // fetch permissions from the server
+                appAuth.fetchPermissions();
 
                 if ($stateParams.next) {
                     $timeout(() => {

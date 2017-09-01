@@ -4,7 +4,7 @@ import './app.component.scss';
 
 class AppController {
 
-    constructor($state, $rootScope, appNavigation, appName, Session, Project, $mdSidenav, $mdMedia) {
+    constructor($state, $rootScope, appNavigation, appAuth, appName, Session, Project, $mdSidenav, $mdMedia) {
         this._Session = Session;
         this._$rootScope = $rootScope;
         this._$state = $state;
@@ -13,7 +13,7 @@ class AppController {
 
         this.appName = appName;
 
-        let allNavigation = appNavigation.filter(nav => $rootScope.allowedPermissions.includes(nav.permission));
+        let allNavigation = appNavigation.filter(nav => appAuth.hasPermission(nav.permission));
         if (!$rootScope.isAuthenticated) {
             allNavigation = allNavigation.filter(nav => !nav.authRequired);
         }
