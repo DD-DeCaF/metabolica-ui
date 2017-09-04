@@ -30,7 +30,7 @@ class AppNavigationProvider {
 
     // XXX is component needed?
     register(state, {title, position = null, authRequired = true, icon = 'puzzle', order = Number.MAX_VALUE,
-        stateParams = {}, permission=null} = {}) {
+        stateParams = {}, requirePermission=null} = {}) {
 		if (!position) {
 			if (state.startsWith('app.project.')) {
 				position = 'project';
@@ -39,7 +39,7 @@ class AppNavigationProvider {
 			}
 		}
 
-        let module = {state: `${state}(${JSON.stringify(stateParams)})`, title, position, icon, order, authRequired, permission};
+        let module = {state: `${state}(${JSON.stringify(stateParams)})`, title, position, icon, order, authRequired, requirePermission};
         this.navigation.push(module);
     }
 
@@ -165,10 +165,7 @@ export const AppModule = angular.module('App', [
         $urlRouterProvider.otherwise('/app/home');
         $locationProvider.html5Mode(true);
     })
-    .run(function ($transitions, $state, $location, $log, $mdDialog, $window, appName, appAuth, appNavigation) {
-        // fetch permissions from the server
-        appAuth.fetchPermissions();
-
+    .run(function ($transitions, $state, $location, $log, $mdDialog, $window, appName) {
         // https://github.com/angular/material/issues/3418
         $transitions.onStart({}, () => {
             $mdDialog.cancel();
@@ -179,23 +176,5 @@ export const AppModule = angular.module('App', [
                 let title = $state.current.data && $state.current.data.title;
                 $window.document.title = title ? `${appName} – ${title}` : appName;
             });
-        });
-
-        $transitions.onBefore({}, transition => {
-            const targetState = transition.to().name;
-
-            for(const nav of appNavigation){
-                // FIXME: Store stateName as an attribute on nav object?
-                const stateName = nav.state.split('(')[0];
-
-                if (stateName === targetState || targetState.startsWith(`${stateName}.`)) {
-                    if (!appAuth.hasPermission(nav.permission)){
-                        // FIXME: Show another page with error message, or stay in the same page with a flash message?
-                        return $state.target('login');
-                    }
-                }
-            }
-
-            return true;
         });
     });

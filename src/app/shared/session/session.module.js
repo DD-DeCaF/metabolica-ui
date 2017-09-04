@@ -111,7 +111,7 @@ export const SessionModule = angular
 
         if (!Session.isAuthenticated()) {
             $rootScope.isAuthenticated = false;
-            if (appAuth.isRequired) {
+            if (appAuth) {
                 setTimeout(() => {
                     let next;
                     if (!$state.includes('login')) {
