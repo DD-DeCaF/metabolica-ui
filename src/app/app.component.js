@@ -4,18 +4,17 @@ import './app.component.scss';
 
 class AppController {
 
-    constructor($state, $rootScope, appNavigation, appAuth, appName, Session, Project, Policy, $mdSidenav, $mdMedia, $q, $transitions) {
+    constructor($state, $rootScope, appNavigation, appName, Session, Project, Policy, $mdSidenav, $mdMedia) {
         this._Session = Session;
         this._Policy = Policy;
         this._$rootScope = $rootScope;
         this._$state = $state;
         this._$mdSidenav = $mdSidenav;
         this._$mdMedia = $mdMedia;
-        this._$q = $q;
 
         this.appName = appName;
 
-        const allRequiredPermissions = new Set(appNavigation.map(({requirePermission}) => requirePermission));
+        const allRequiredPermissions = new Set(appNavigation.filter(({requirePermission}) => requirePermission).map(({requirePermission}) => requirePermission));
 
         this._Policy.testPermissions({
             permissions: JSON.stringify(allRequiredPermissions)
@@ -45,7 +44,7 @@ class AppController {
     switchTo(project) {
         let $state = this._$state;
 
-        if (this.project == project) {
+        if (this.project === project) {
             $state.go('app.project', {projectId: project.id});
         } else {
             // switch to a (different) project while staying in the same route.
@@ -77,11 +76,11 @@ class AppController {
 
     isSidenavOpen(menuId) {
         return this._$mdSidenav(menuId).isOpen() ||
-            (menuId == 'left' && this.isLeftSidenavLockedOpen());
+            (menuId === 'left' && this.isLeftSidenavLockedOpen());
     }
 
     openSidenav(menuId) {
-        if (menuId == 'left' && this._$mdMedia('gt-sm')) {
+        if (menuId === 'left' && this._$mdMedia('gt-sm')) {
             this.lockLeftSidenavOpen = true;
         }
 
@@ -91,7 +90,7 @@ class AppController {
     }
 
     closeSidenav(menuId) {
-        if (menuId == 'left') {
+        if (menuId === 'left') {
             this.lockLeftSidenavOpen = false;
         }
 
