@@ -65,13 +65,10 @@ class AppAuthProvider {
     isRequired = true;
     trustedHosts = new Set();
 
-    addTrustedHost(host) {
-        this.trustedHosts.add(host);
-    }
-
     $get($location) {
         return {
             isRequired: this.isRequired,
+            trustedHosts: this.trustedHosts,
             isTrustedURL: url => {
                 const hostname = new URL(url, $location.absUrl()).hostname;
                 return hostname === $location.host() || this.trustedHosts.has(hostname);
