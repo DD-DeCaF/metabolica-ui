@@ -16,6 +16,14 @@ export const ResourcesModule = angular
  * User Management
  */
 
+
+ResourcesModule.factory('Organization', OrganizationFactory);
+function OrganizationFactory(potion) {
+    class Organization extends Item {
+    }
+    return potion.register('/organization', Organization);
+}
+
 ResourcesModule.factory('Group', GroupFactory);
 function GroupFactory(potion) {
     class Group extends Item {
@@ -60,7 +68,7 @@ function GroupMembershipFactory(potion, Group, User) {
  */
 
 ResourcesModule.factory('Project', ProjectFactory);
-function ProjectFactory(potion, Item, Experiment, ExperimentPhase, Strain, Pool, Plate, Sample, Device, Organism, GenomeDiff, DNAComponent, Medium, ChemicalEntity) {
+function ProjectFactory(potion, Item, Experiment, ExperimentPhase, Organization, Strain, Pool, Plate, Sample, Device, Organism, GenomeDiff, DNAComponent, Medium, ChemicalEntity) {
     // NOTE injects are there to work around AngularJS circular dependency resolution issues
     class Project extends Item {
         readPermissions = Route.GET('/permissions');
