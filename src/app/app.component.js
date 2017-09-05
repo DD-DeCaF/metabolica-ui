@@ -6,7 +6,6 @@ class AppController {
 
     constructor($state, $rootScope, appNavigation, appName, Session, Project, Policy, $mdSidenav, $mdMedia) {
         this._Session = Session;
-        this._Policy = Policy;
         this._$rootScope = $rootScope;
         this._$state = $state;
         this._$mdSidenav = $mdSidenav;
@@ -16,7 +15,7 @@ class AppController {
 
         const allRequiredPermissions = new Set(appNavigation.filter(({requirePermission}) => requirePermission).map(({requirePermission}) => requirePermission));
 
-        this._Policy.testPermissions({
+        Policy.testPermissions({
             permissions: JSON.stringify(allRequiredPermissions)
         }).then(allowedPermissions => {
             allowedPermissions = new Set(allowedPermissions);

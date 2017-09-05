@@ -179,18 +179,21 @@ export const AppModule = angular.module('App', [
         });
 
 
+        const restrictedStates = appNavigation.filter(({requirePermission}) => requirePermission).map(({state, requirePermission}) => {
+            // FIXME - appNavigate stores sref values instead of original state names
+            // get state from ref
+            const stateName = state.split('(')[0];
+
+            return {
+                state: $state.target(stateName).$state(),
+                requirePermission
+            }
+        });
+
         $transitions.onBefore({}, transition => {
             const targetState = transition.targetState().$state();
 
-            for (const nav of appNavigation) {
-                if (!nav.requirePermission) {
-                    continue;
-                }
-
-                // get state from ref
-                const stateName = nav.state.split('(')[0];
-                const state = $state.target(stateName).$state();
-
+            for (const {state, requirePermission} of restrictedStates) {
                 if (targetState.includes[state.name]) {
                     return $q((resolve, reject) => {
                         if (!Session.isAuthenticated()) {
@@ -198,7 +201,7 @@ export const AppModule = angular.module('App', [
                         }
 
                         Policy.testPermissions({
-                            permissions: JSON.stringify([nav.requirePermission])
+                            permissions: JSON.stringify([requirePermission])
                         }).then(allowedPermissions => {
                             if (allowedPermissions.length) {
                                 resolve(true);
