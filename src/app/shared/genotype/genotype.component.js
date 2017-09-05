@@ -23,7 +23,7 @@ class GenotypeController {
 
         if (this.gnomic && (typeof this.gnomic === 'string' || this.gnomic instanceof String) && this.gnomic.trim().length) {
             this.gnomicHTML = this._$sce.trustAsHtml(escapeHTML(this.gnomic));
-            if (this.isFeature) {
+            if (this.isFeature && !this.gnomic.startsWith('(')) {
                 this.parseAsFeature();
             } else {
                 this.parseAsGenotype();
