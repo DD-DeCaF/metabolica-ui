@@ -165,7 +165,7 @@ export const AppModule = angular.module('App', [
         $urlRouterProvider.otherwise('/app/home');
         $locationProvider.html5Mode(true);
     })
-    .run(function ($transitions, $state, $location, $log, $mdDialog, $window, appName) {
+    .run(function ($transitions, $state, $location, $log, $mdDialog, $window, $q, appName, appNavigation, Session, Policy) {
         // https://github.com/angular/material/issues/3418
         $transitions.onStart({}, () => {
             $mdDialog.cancel();
@@ -176,5 +176,41 @@ export const AppModule = angular.module('App', [
                 let title = $state.current.data && $state.current.data.title;
                 $window.document.title = title ? `${appName} – ${title}` : appName;
             });
+        });
+
+
+        $transitions.onBefore({}, transition => {
+            const targetState = transition.targetState().$state();
+
+            for (const nav of appNavigation) {
+                if (!nav.requirePermission) {
+                    continue;
+                }
+
+                // get state from ref
+                const stateName = nav.state.split('(')[0];
+                const state = $state.target(stateName).$state();
+
+                if (targetState.includes[state.name]) {
+                    return $q((resolve, reject) => {
+                        if (!Session.isAuthenticated()) {
+                            resolve(false);
+                        }
+
+                        Policy.testPermissions({
+                            permissions: JSON.stringify([nav.requirePermission])
+                        }).then(allowedPermissions => {
+                            if (allowedPermissions.length) {
+                                resolve(true);
+                            } else {
+                                resolve(false);
+                            }
+                        }).catch(() => {
+                            resolve(false);
+                        });
+                    });
+                }
+            }
+            return true;
         });
     });

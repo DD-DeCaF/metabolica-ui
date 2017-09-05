@@ -15,31 +15,17 @@ class AppController {
 
         this.appName = appName;
 
-        let allNavigation = appNavigation.filter(nav => appAuth.hasPermission(nav.permission));
-        if (!$rootScope.isAuthenticated) {
-            allNavigation = allNavigation.filter(nav => !nav.authRequired);
-        }
-        this.projectNavigation = allNavigation.filter(nav => nav.position == 'project');
-        this.navigation = allNavigation.filter(nav => nav.position == 'global');
+        const allRequiredPermissions = new Set(appNavigation.map(({requirePermission}) => requirePermission));
 
-        $transitions.onBefore({}, transition => {
-            const targetState = transition.targetState().$state();
-
-            for(const nav of appNavigation){
-                if (!nav.requirePermission){
-                    continue;
-                }
-
-                // get state from ref
-                const stateName = nav.state.split('(')[0];
-                const state = $state.target(stateName).$state();
-
-                if (targetState.includes[state.name]) {
-                    return this.checkPermissions([nav.requirePermission]);
-                }
-            }
-
-            return true;
+        this._Policy.testPermissions({
+            permissions: JSON.stringify(allRequiredPermissions)
+        }).then(allowedPermissions => {
+            allowedPermissions = new Set(allowedPermissions);
+            const allNavigation = appNavigation.filter(nav => !(nav.scope !== 'project' && nav.requirePermission && !allowedPermissions.has(nav.requirePermission)));
+            this.initializeNavigation(allNavigation);
+        }).catch(() => {
+            const allNavigation = appNavigation.filter(nav => !(nav.scope !== 'project' && nav.requirePermission));
+            this.initializeNavigation(allNavigation);
         });
 
         this.projectsFetched = false;
@@ -80,22 +66,13 @@ class AppController {
         return this.lockLeftSidenavOpen && this._$mdMedia('gt-sm');
     }
 
-    checkPermissions(permissions){
-        return this._$q((resolve, reject) => {
-            if (!this._Session.isAuthenticated()) {
-                resolve(false);
-            }
+    initializeNavigation(allNavigation) {
+        if (!this._$rootScope.isAuthenticated) {
+            allNavigation = allNavigation.filter(nav => !nav.authRequired);
+        }
 
-            this._Policy.testPermissions({permissions: JSON.stringify(permissions)}).then(allowedPermissions => {
-                if (allowedPermissions.length){
-                    resolve(true);
-                } else {
-                    resolve(false);
-                }
-            }).catch(() => {
-                resolve(false);
-            });
-        });
+        this.projectNavigation = allNavigation.filter(nav => nav.position === 'project');
+        this.navigation = allNavigation.filter(nav => nav.position === 'global');
     }
 
     isSidenavOpen(menuId) {

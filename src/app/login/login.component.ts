@@ -28,9 +28,6 @@ class LoginController {
             try {
                 await Session.authenticate(credentials);
 
-                // fetch permissions from the server
-                appAuth.fetchPermissions();
-
                 if ($stateParams.next) {
                     $timeout(() => {
                         $location
