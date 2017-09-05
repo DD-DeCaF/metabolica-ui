@@ -17,7 +17,7 @@ class LoginController {
      * @param Session  comment about Session parameter
      * @param appName  The application name to show during login
      */
-    constructor($scope, $timeout, $state, $stateParams, $location, Session, appAuth, appName: string) {
+    constructor($scope, $timeout, $state, $stateParams, $location, Session, appName: string) {
         this.appName = appName;
         this.credentials = {
             username: '',

@@ -180,7 +180,7 @@ export const AppModule = angular.module('App', [
 
 
         const restrictedStates = appNavigation.filter(({requirePermission}) => requirePermission).map(({state, requirePermission}) => {
-            // FIXME - appNavigate stores sref values instead of original state names
+            // FIXME - appNavigationProvider stores sref values instead of original state names
             // get state from ref
             const stateName = state.split('(')[0];
 

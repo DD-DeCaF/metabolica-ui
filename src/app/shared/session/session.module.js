@@ -47,7 +47,6 @@ function SessionFactory($http, $localStorage, $rootScope, User, potion) {
             }
         },
 
-
         authenticate(credentials) {
             return $http.post(`${potion.host}${potion.prefix}/auth`, credentials)
                 .then(response => {
