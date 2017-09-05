@@ -21,7 +21,7 @@ class GenotypeController {
         this.gnomic = gnomicString;
         this.isValid = true;
 
-        if (this.gnomic && (typeof this.gnomic === 'string' || this.gnomic instanceof String)) {
+        if (this.gnomic && (typeof this.gnomic === 'string' || this.gnomic instanceof String) && this.gnomic.trim().length) {
             this.gnomicHTML = this._$sce.trustAsHtml(escapeHTML(this.gnomic));
             if (this.isFeature) {
                 this.parseAsFeature();
