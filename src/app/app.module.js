@@ -65,8 +65,8 @@ class AppAuthProvider {
     isRequired = true;
     trustedHosts = new Set();
 
-    setTrustedHosts(hosts) {
-        this.trustedHosts = new Set(hosts);
+    addTrustedHost(host) {
+        this.trustedHosts.add(host);
     }
 
     $get($location) {
@@ -165,7 +165,3 @@ export const AppModule = angular.module('App', [
             });
         });
     });
-
-
-
-
