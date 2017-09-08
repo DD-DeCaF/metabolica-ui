@@ -63,15 +63,15 @@ class AppNameProvider {
 
 class AppAuthProvider {
     isRequired = true;
-    trustedHosts = new Set();
+    trustedURLs = new Set();
 
     $get($location) {
         return {
             isRequired: this.isRequired,
-            trustedHosts: this.trustedHosts,
+            trustedURLs: this.trustedURLs,
             isTrustedURL: url => {
-                const hostname = new URL(url, $location.absUrl()).hostname;
-                return hostname === $location.host() || this.trustedHosts.has(hostname);
+                const currentURL = new URL(url, $location.absUrl());
+                return currentURL.hostname === $location.host() || Array.from(this.trustedURLs).some(trustedURL => currentURL.href.startsWith(trustedURL));
             },
         };
     }
