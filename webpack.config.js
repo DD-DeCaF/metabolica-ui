@@ -56,7 +56,9 @@ module.exports = function () {
                     ],
                     options: {
                         transpileOnly: false,
-                        isolatedModules: true
+                        compilerOptions: {
+                            isolatedModules: true   
+                        }
                     }
                 },
                 {
