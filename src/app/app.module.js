@@ -63,9 +63,17 @@ class AppNameProvider {
 
 class AppAuthProvider {
     isRequired = true;
+    trustedURLs = new Set();
 
-    $get() {
-        return this.isRequired;
+    $get($location) {
+        return {
+            isRequired: this.isRequired,
+            trustedURLs: this.trustedURLs,
+            isTrustedURL: url => {
+                const currentURL = new URL(url, $location.absUrl());
+                return currentURL.hostname === $location.host() || Array.from(this.trustedURLs).some(trustedURL => currentURL.href.startsWith(trustedURL));
+            },
+        };
     }
 }
 
@@ -154,7 +162,3 @@ export const AppModule = angular.module('App', [
             });
         });
     });
-
-
-
-

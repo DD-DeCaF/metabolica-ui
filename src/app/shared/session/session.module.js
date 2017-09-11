@@ -73,7 +73,9 @@ function SessionInterceptorFactory($q, $injector, appAuth) {
     return {
         request(config) {
             let $localStorage = $injector.get('$localStorage');
-            if ($localStorage.sessionJWT) {
+
+            // Authorization header should be passed to trusted hosts only
+            if ($localStorage.sessionJWT && appAuth.isTrustedURL(config.url)) {
                 config.headers.Authorization = `Bearer ${$localStorage.sessionJWT}`;
             }
             return config;
@@ -108,7 +110,7 @@ export const SessionModule = angular
 
         if (!Session.isAuthenticated()) {
             $rootScope.isAuthenticated = false;
-            if (appAuth) {
+            if (appAuth.isRequired) {
                 setTimeout(() => {
                     let next;
                     if (!$state.includes('login')) {
