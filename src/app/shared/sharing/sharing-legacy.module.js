@@ -81,7 +81,9 @@ function $sharingProvider() {
                 // TODO transfer to $stateParams if receiving state supports it (needs to be specified on register).
                 async open(state) {
                     transfer = provided;
-                    await $state.go(state);
+                    // We need to force the relod of the target state if it is same as the current state.
+                    // It's possible when sharing functionality is used from clipboard.
+                    await $state.go(state, {}, {reload: true});
                     transfer = {};
                 }
 
