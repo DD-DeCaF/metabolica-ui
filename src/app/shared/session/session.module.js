@@ -4,7 +4,9 @@ import 'ngstorage';
 import {ResourcesModule} from '../resources/resources.module';
 
 
-function SessionFactory($http, $localStorage, $rootScope, User, potion) {
+function SessionFactory($http, $localStorage, $rootScope, $q, User, Policy, potion) {
+    let permissionsCache = {};
+
     const Session = {
         isAuthenticated() {
             return this.expires > new Date();
@@ -51,17 +53,42 @@ function SessionFactory($http, $localStorage, $rootScope, User, potion) {
             return $http.post(`${potion.host}${potion.prefix}/auth`, credentials)
                 .then(response => {
                     $localStorage.sessionJWT = response.data.token;
+                    permissionsCache = {};
                     $rootScope.$broadcast('session:login');
                 });
         },
 
         logout(next = null) {
             delete $localStorage.sessionJWT;
+            permissionsCache = {};
             $rootScope.$broadcast('session:logout', {next});
         },
 
         login(next = null) {
             $rootScope.$broadcast('session:logout', {next});
+        },
+
+        testPermissions(permissions) {
+            permissions = JSON.stringify(permissions);
+
+            return $q((resolve, reject) => {
+                if (!this.isAuthenticated()) {
+                    resolve(false);
+                    return;
+                }
+
+                if (permissionsCache[permissions]) {
+                    resolve(permissionsCache[permissions]);
+                    return;
+                }
+
+                Policy.testPermissions({permissions}).then(allowedPermissions => {
+                    permissionsCache[permissions] = !!allowedPermissions.length;
+                    resolve(permissionsCache[permissions]);
+                }).catch(() => {
+                    resolve(false);
+                });
+            });
         }
     };
 
@@ -110,7 +137,7 @@ export const SessionModule = angular
 
         if (!Session.isAuthenticated()) {
             $rootScope.isAuthenticated = false;
-            if (appAuth) {
+            if (appAuth.isRequired) {
                 setTimeout(() => {
                     let next;
                     if (!$state.includes('login')) {

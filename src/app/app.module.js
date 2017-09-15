@@ -61,35 +61,17 @@ class AppNameProvider {
 
 
 class AppAuthProvider {
-    allowedPermissions = new Set();
     isRequired = true;
     trustedURLs = new Set();
 
-    $get($injector, $location) {
+    $get($location) {
         return {
-            allowedPermissions: this.allowedPermissions,
             isRequired: this.isRequired,
             trustedURLs: this.trustedURLs,
-            fetchPermissions: () => {
-                const appNavigation = $injector.get('appNavigation');
-                const Policy = $injector.get('Policy');
-                const Session = $injector.get('Session');
-
-                if (!Session.isAuthenticated()) {
-                    this.allowedPermissions = new Set();
-                    return;
-                }
-
-                const permissions = Array.from(new Set(appNavigation.map(({permission}) => permission))).filter(permission => permission);
-                Policy.testPermissions({permissions: JSON.stringify(permissions)}).then(allowedPermissions => {
-                    this.allowedPermissions = new Set(allowedPermissions);
-                });
-            },
-            hasPermission: permission => permission? this.allowedPermissions.has(permission): true,
             isTrustedURL: url => {
                 const currentURL = new URL(url, $location.absUrl());
                 return currentURL.hostname === $location.host() || Array.from(this.trustedURLs).some(trustedURL => currentURL.href.startsWith(trustedURL));
-            }
+            },
         };
     }
 }
@@ -194,24 +176,8 @@ export const AppModule = angular.module('App', [
             const targetState = transition.targetState().$state();
 
             for (const {state, requirePermission} of restrictedStates) {
-                if (targetState.includes[state.name]) {
-                    return $q((resolve, reject) => {
-                        if (!Session.isAuthenticated()) {
-                            resolve(false);
-                        }
-
-                        Policy.testPermissions({
-                            permissions: JSON.stringify([requirePermission])
-                        }).then(allowedPermissions => {
-                            if (allowedPermissions.length) {
-                                resolve(true);
-                            } else {
-                                resolve(false);
-                            }
-                        }).catch(() => {
-                            resolve(false);
-                        });
-                    });
+                if (requirePermission && targetState.includes[state.name]) {
+                    return Session.testPermissions([requirePermission]);
                 }
             }
             return true;

@@ -13,17 +13,23 @@ class AppController {
 
         this.appName = appName;
 
-        const allRequiredPermissions = new Set(appNavigation.filter(({requirePermission}) => requirePermission).map(({requirePermission}) => requirePermission));
+        let allNavigation = appNavigation;
+        if (!$rootScope.isAuthenticated) {
+            allNavigation = allNavigation.filter(nav => !nav.authRequired);
+        }
+
+        this.projectNavigation = allNavigation.filter(nav => nav.position === 'project');
+        this.navigation = allNavigation.filter(nav => nav.position === 'global');
+
+        const allRequiredPermissions = new Set(this.navigation.filter(({requirePermission}) => requirePermission).map(({requirePermission}) => requirePermission));
 
         Policy.testPermissions({
             permissions: JSON.stringify(allRequiredPermissions)
         }).then(allowedPermissions => {
             allowedPermissions = new Set(allowedPermissions);
-            const allNavigation = appNavigation.filter(nav => !(nav.scope !== 'project' && nav.requirePermission && !allowedPermissions.has(nav.requirePermission)));
-            this.initializeNavigation(allNavigation);
+            this.navigation = this.navigation.filter(nav => !(nav.requirePermission && !allowedPermissions.has(nav.requirePermission)));
         }).catch(() => {
-            const allNavigation = appNavigation.filter(nav => !(nav.scope !== 'project' && nav.requirePermission));
-            this.initializeNavigation(allNavigation);
+            this.navigation = this.navigation.filter(nav => !nav.requirePermission);
         });
 
         this.projectsFetched = false;
@@ -62,15 +68,6 @@ class AppController {
 
     isLeftSidenavLockedOpen() {
         return this.lockLeftSidenavOpen && this._$mdMedia('gt-sm');
-    }
-
-    initializeNavigation(allNavigation) {
-        if (!this._$rootScope.isAuthenticated) {
-            allNavigation = allNavigation.filter(nav => !nav.authRequired);
-        }
-
-        this.projectNavigation = allNavigation.filter(nav => nav.position === 'project');
-        this.navigation = allNavigation.filter(nav => nav.position === 'global');
     }
 
     isSidenavOpen(menuId) {
