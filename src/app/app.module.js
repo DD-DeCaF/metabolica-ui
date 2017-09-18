@@ -10,7 +10,6 @@ import {AppHomeComponent} from './app-home.component';
 import {AppToolbarComponent} from './app-toolbar.component';
 import {SessionModule} from './shared/session/session.module';
 import {SharingModule} from './shared/sharing/sharing-legacy.module';
-import {LoginModule} from './login/login.module';
 import {DocsModule} from './docs/docs.module';
 import {SearchModule} from './search/search.module';
 
@@ -87,7 +86,6 @@ export const AppModule = angular.module('App', [
         MdDataTable,
         SessionModule.name,
         SharingModule.name,
-        LoginModule.name,
         DocsModule.name,
         XRefsModule.name,
         SearchModule.name,

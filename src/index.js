@@ -7,16 +7,19 @@ import {PlotlyModule} from './app/shared/plotly/plotly-legacy.module';
 export {PlotlyModule} from './app/shared/plotly/plotly-legacy.module';
 import {GenotypeModule} from './app/shared/genotype/genotype.module';
 export {GenotypeModule} from './app/shared/genotype/genotype.module';
+import {LoginModule} from './app/login/login.module';
+export {LoginModule} from './app/login/login.module';
 import {MaintenanceModule} from './app/shared/maintenance/maintenance.module';
 import './utils.scss';
 
 
 export const DevAppModule = angular.module('DevApp', [
+    LoginModule.name,
     ProjectModule.name,
     AppModule.name,
     MaintenanceModule.name,
 	PlotlyModule.name,
-    GenotypeModule.name
+    GenotypeModule.name,
 ]).config(function (appNameProvider) {
     appNameProvider.name = 'Metabolica (Dev)';
 });
