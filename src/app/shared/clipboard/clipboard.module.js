@@ -10,7 +10,7 @@ import iconDelete from '../../../../img/icons/delete.svg';
 import iconClearAll from '../../../../img/icons/clear-all.svg';
 
 
-class Clipboard {
+export class Clipboard {
     constructor(registry) {
         this.registry = registry;
         this.items = [];
@@ -73,7 +73,7 @@ class Clipboard {
     }
 }
 
-class ClipboardProvider {
+export class ClipboardProvider {
     constructor() {
         this.registry = [];
     }
