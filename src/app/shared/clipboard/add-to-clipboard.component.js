@@ -26,7 +26,7 @@ class AddToClipboardController {
     }
 
     addToClipboard(type, value) {
-        if (!(this.type && this.value)) {
+        if (!(type && value)) {
             return;
         }
 

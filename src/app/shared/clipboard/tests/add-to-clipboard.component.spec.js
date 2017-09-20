@@ -1,37 +1,15 @@
 import angular from 'angular';
 import {AddToClipboardComponent} from '../add-to-clipboard.component';
 
-const author1 = 'Uri Alon';
-const author2 = 'Bernhard O. Palsson';
+const sampleAuthor = 'Uri Alon';
 
-const book1 = {
+const sampleBook = {
     name: 'An Introduction to Systems Biology: Design Principles of Biological Circuits',
-    author: author1,
-};
-
-const book2 = {
-    name: 'Phosphate In Pediatric Health And Disease',
-    author: author1,
-};
-
-const book3 = {
-    name: 'Systems Biology: Properties of Reconstructed Networks ',
-    author: author2
-};
-
-const book4 = {
-    name: 'Systems Biology: Simulation of Dynamic Network States',
-    author: author2
-};
-
-const book5 = {
-    name: 'Systems Biology: Constraint-Based Reconstruction and Analysis',
-    author: author2
+    author: sampleAuthor,
 };
 
 describe('AddToClipboardComponent', () => {
-    let app;
-    let controller, element, scope;
+    let app, $ctrl, element, scope, clipboardService, compileService, rootScopeService;
 
     beforeEach(angular.mock.module('App'));
 
@@ -54,20 +32,69 @@ describe('AddToClipboardComponent', () => {
         });
     });
 
-    beforeEach(angular.mock.inject(($rootScope, $compile) => {
+    beforeEach(angular.mock.inject(($rootScope, $compile, $clipboard) => {
+        rootScopeService = $rootScope;
+        compileService = $compile;
+        clipboardService = $clipboard;
+
         scope = $rootScope.$new();
 
-        scope.sampleAuthor = author1;
-        scope.sampleBook = book1;
+        scope.sampleAuthor = sampleAuthor;
+        scope.sampleBook = sampleBook;
         scope.$apply();
 
         element = angular.element('<add-to-clipboard type="book" value="sampleBook"></add-to-clipboard>');
         element = $compile(element)(scope);
 
-        controller = element.controller('addToClipboard');
+        $ctrl = element.controller('addToClipboard');
     }));
 
-    it('should have value found', () => {
-        expect(controller.value).toBe(book1);
+    it('Should have found bindings', () => {
+
+        expect($ctrl.value).toBe(sampleBook);
+    });
+
+    it('Should not be added by default', () => {
+        expect($ctrl.isAdded).toBeFalsy();
+    });
+
+    it('Should be able to add the item', () => {
+        $ctrl.addToClipboard($ctrl.type, $ctrl.value);
+
+        expect($ctrl.isAdded).toBe(true);
+        expect(clipboardService.items).toEqual([['book', sampleBook]]);
+    });
+
+    it('Should not be able to add the item if type is not given', () => {
+        let newElement = angular.element('<add-to-clipboard value="sampleBook" ></add-to-clipboard>');
+        newElement = compileService(newElement)(scope);
+
+        let controller = newElement.controller('addToClipboard');
+
+        controller.addToClipboard(controller.type, controller.value);
+
+        expect(controller.isAdded).toBeFalsy();
+    });
+
+    it('Should not be able to add the item if value is not given', () => {
+        let newElement = angular.element('<add-to-clipboard type="book" ></add-to-clipboard>');
+        newElement = compileService(newElement)(scope);
+
+        let controller = newElement.controller('addToClipboard');
+
+        controller.addToClipboard(controller.type, controller.value);
+
+        expect(controller.isAdded).toBeFalsy();
+    });
+
+    it('Should not be able to add the item if type is not registered', () => {
+        let newElement = angular.element('<add-to-clipboard type="unknownType" value="sampleBook" ></add-to-clipboard>');
+        newElement = compileService(newElement)(scope);
+
+        let controller = newElement.controller('addToClipboard');
+
+        controller.addToClipboard(controller.type, controller.value);
+
+        expect(controller.isAdded).toBeFalsy();
     });
 });
