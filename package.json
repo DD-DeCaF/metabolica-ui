@@ -20,7 +20,8 @@
   "scripts": {
     "docs": "./scripts/generate-docs.sh",
     "build": "webpack",
-    "start": "webpack-dev-server"
+    "start": "webpack-dev-server",
+    "test": "karma start karma.conf.js"
   },
   "devDependencies": {
     "@types/jasmine": "^2.6.0",
