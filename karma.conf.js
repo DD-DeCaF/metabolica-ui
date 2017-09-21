@@ -1,10 +1,9 @@
+// Karma configuration
 const webpackConfig = require('./webpack.config')();
 
+// https://github.com/webpack-contrib/karma-webpack/issues/24#issuecomment-257613167
 const commonsChunkPluginIndex = webpackConfig.plugins.findIndex(plugin => plugin.chunkNames);
 webpackConfig.plugins.splice(commonsChunkPluginIndex, 1);
-
-// Karma configuration
-// Generated on Tue Sep 19 2017 13:52:19 GMT+0200 (CEST)
 
 module.exports = function (config) {
     config.set({

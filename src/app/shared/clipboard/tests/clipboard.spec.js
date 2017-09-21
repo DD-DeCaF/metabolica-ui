@@ -11,32 +11,43 @@ const clipboardRegistry = {
     },
 };
 
-const author1 = 'Uri Alon';
-const author2 = 'Bernhard O. Palsson';
+const author1 = {
+    name: 'Uri Alon',
+    $uri: '/api/authors/1'
+};
+const author2 = {
+    name: 'Bernhard O. Palsson',
+    $uri: '/api/authors/2'
+};
 
 const book1 = {
     name: 'An Introduction to Systems Biology: Design Principles of Biological Circuits',
     author: author1,
+    $uri: '/api/books/1'
 };
 
 const book2 = {
     name: 'Phosphate In Pediatric Health And Disease',
     author: author1,
+    $uri: '/api/books/2'
 };
 
 const book3 = {
     name: 'Systems Biology: Properties of Reconstructed Networks ',
-    author: author2
+    author: author2,
+    $uri: '/api/books/3'
 };
 
 const book4 = {
     name: 'Systems Biology: Simulation of Dynamic Network States',
-    author: author2
+    author: author2,
+    $uri: '/api/books/4'
 };
 
 const book5 = {
     name: 'Systems Biology: Constraint-Based Reconstruction and Analysis',
-    author: author2
+    author: author2,
+    $uri: '/api/books/5'
 };
 
 describe('Clipboard', () => {
@@ -185,26 +196,26 @@ describe('Clipboard', () => {
 
         clipboard.add('author', author1);
         clipboard.add('author', author2);
-        clipboard.add('books', book2);
-        clipboard.add('books', book3);
-        clipboard.add('books', book1);
-        clipboard.add('books', book5);
-        clipboard.add('books', book4);
+        clipboard.add('authors', book2);
+        clipboard.add('authors', book3);
+        clipboard.add('authors', book1);
+        clipboard.add('authors', book5);
+        clipboard.add('authors', book4);
 
         const itemsGroupedByType = clipboard.getItemsGroupedByType();
 
         expect(Object.keys(itemsGroupedByType).length).toBe(2);
 
         expect(itemsGroupedByType['author'].length).toBe(2);
-        expect(itemsGroupedByType['books'].length).toBe(5);
+        expect(itemsGroupedByType['authors'].length).toBe(5);
 
         // items in a group should be in the same order as they were added
         expect(itemsGroupedByType['author'][0]).toBe(author1);
         expect(itemsGroupedByType['author'][1]).toBe(author2);
-        expect(itemsGroupedByType['books'][0]).toBe(book2);
-        expect(itemsGroupedByType['books'][1]).toBe(book3);
-        expect(itemsGroupedByType['books'][2]).toBe(book1);
-        expect(itemsGroupedByType['books'][3]).toBe(book5);
-        expect(itemsGroupedByType['books'][4]).toBe(book4);
+        expect(itemsGroupedByType['authors'][0]).toBe(book2);
+        expect(itemsGroupedByType['authors'][1]).toBe(book3);
+        expect(itemsGroupedByType['authors'][2]).toBe(book1);
+        expect(itemsGroupedByType['authors'][3]).toBe(book5);
+        expect(itemsGroupedByType['authors'][4]).toBe(book4);
     });
 });

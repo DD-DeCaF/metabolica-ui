@@ -4,7 +4,7 @@ import './clipboard-menu-panel.scss';
 
 import panelTemplate from './clipboard-menu-panel.html';
 
-class ClipboardMenuPanelController {
+export class ClipboardMenuPanelController {
     constructor($clipboard, $sharing, mdPanelRef) {
         this._$clipboard = $clipboard;
         this._$sharing = $sharing;
@@ -65,6 +65,7 @@ class ClipboardMenuPanelController {
     remove(type, value) {
         this._$clipboard.remove(type, value);
         this.itemGroups[type] = this.itemGroups[type].filter(item => item.value.$uri !== value.$uri);
+        this.onSelectionChange();
 
         if (this._$clipboard.isEmpty()) {
             if (this._mdPanelRef) {
@@ -76,6 +77,7 @@ class ClipboardMenuPanelController {
     clear() {
         this._$clipboard.clear();
         this.itemGroups = {};
+        this.onSelectionChange();
 
         if (this._mdPanelRef) {
             this._mdPanelRef.close();

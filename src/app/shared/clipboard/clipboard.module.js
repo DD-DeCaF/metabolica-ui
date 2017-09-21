@@ -79,7 +79,7 @@ export class Clipboard {
     }
 }
 
-export class ClipboardProvider {
+class ClipboardProvider {
     constructor() {
         this.registry = [];
     }

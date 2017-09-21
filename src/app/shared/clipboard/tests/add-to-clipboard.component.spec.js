@@ -1,5 +1,4 @@
 import angular from 'angular';
-import {AddToClipboardComponent} from '../add-to-clipboard.component';
 
 const sampleAuthor = 'Uri Alon';
 
@@ -9,7 +8,7 @@ const sampleBook = {
 };
 
 describe('AddToClipboardComponent', () => {
-    let app, $ctrl, element, scope, clipboardService, compileService, rootScopeService;
+    let app, $ctrl, element, scope, clipboardService, compileService;
 
     beforeEach(angular.mock.module('App'));
 
@@ -33,7 +32,6 @@ describe('AddToClipboardComponent', () => {
     });
 
     beforeEach(angular.mock.inject(($rootScope, $compile, $clipboard) => {
-        rootScopeService = $rootScope;
         compileService = $compile;
         clipboardService = $clipboard;
 
