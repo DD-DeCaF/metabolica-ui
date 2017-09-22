@@ -174,7 +174,7 @@ const book5 = {
 };
 
 describe('AddToClipboardComponent', () => {
-    let _$clipboard, _$sharing, $ctrl, targetStates;
+    let $clipboard, $sharing, $ctrl, targetStates;
 
     beforeEach(angular.mock.module('App'));
 
@@ -197,32 +197,33 @@ describe('AddToClipboardComponent', () => {
             });
     });
 
-    beforeEach(angular.mock.inject(($clipboard, $sharing) => {
-        _$clipboard = $clipboard;
-        _$sharing = $sharing;
+    beforeEach(angular.mock.inject((_$clipboard_, _$sharing_) => {
+        $clipboard = _$clipboard_;
+        $sharing = _$sharing_;
 
+        // clear the clipboard before running each test
+        $clipboard.clear();
     }));
 
 
     it('Panel controller should be empty by default', () => {
-        const $ctrl = new ClipboardMenuPanelController(_$clipboard, _$sharing, null);
+        const $ctrl = new ClipboardMenuPanelController($clipboard, $sharing, null);
         expect($ctrl.itemGroups).toEqual({});
         expect($ctrl.sharingTargets).toEqual([]);
     });
 
     it('Should be able to share single item to both targets who accept single and multiple', () => {
-        _$clipboard.clear();
-        _$clipboard.add('author', author1);
-        $ctrl = new ClipboardMenuPanelController(_$clipboard, _$sharing, null);
+        $clipboard.add('author', author1);
+        $ctrl = new ClipboardMenuPanelController($clipboard, $sharing, null);
         targetStates = new Set($ctrl.sharingTargets.map(({state}) => state));
         expect(targetStates).toEqual(new Set([
             'app.project.authors',
             'app.project.mixed',
         ]));
 
-        _$clipboard.clear();
-        _$clipboard.add('book', book1);
-        $ctrl = new ClipboardMenuPanelController(_$clipboard, _$sharing, null);
+        $clipboard.clear();
+        $clipboard.add('book', book1);
+        $ctrl = new ClipboardMenuPanelController($clipboard, $sharing, null);
         targetStates = new Set($ctrl.sharingTargets.map(({state}) => state));
         expect(targetStates).toEqual(new Set([
             'app.project.books',
@@ -230,10 +231,10 @@ describe('AddToClipboardComponent', () => {
             'app.project.mixed',
         ]));
 
-        _$clipboard.clear();
-        _$clipboard.add('book', book1);
-        _$clipboard.add('book', book2);
-        $ctrl = new ClipboardMenuPanelController(_$clipboard, _$sharing, null);
+        $clipboard.clear();
+        $clipboard.add('book', book1);
+        $clipboard.add('book', book2);
+        $ctrl = new ClipboardMenuPanelController($clipboard, $sharing, null);
         $ctrl.itemGroups['book'][0].selected = false;
         // We need to call onSelectionChange() manually, because it's only triggered by click, and we're not clicking.
         $ctrl.onSelectionChange();
@@ -246,32 +247,31 @@ describe('AddToClipboardComponent', () => {
     });
 
     it('Sharing targets which cannot accept multiple objects should be removed when multiple items of that type are selected', () => {
-        _$clipboard.clear();
-        _$clipboard.add('book', book1);
-        _$clipboard.add('book', book2);
-        $ctrl = new ClipboardMenuPanelController(_$clipboard, _$sharing, null);
+        $clipboard.add('book', book1);
+        $clipboard.add('book', book2);
+        $ctrl = new ClipboardMenuPanelController($clipboard, $sharing, null);
         targetStates = new Set($ctrl.sharingTargets.map(({state}) => state));
         expect(targetStates.has('app.project.book')).toBe(false);
     });
 
     it('Should be able to share multiple items to sharing targets which accept multiple', () => {
-        _$clipboard.clear();
-        _$clipboard.add('author', author1);
-        _$clipboard.add('author', author2);
-        $ctrl = new ClipboardMenuPanelController(_$clipboard, _$sharing, null);
+        $clipboard.clear();
+        $clipboard.add('author', author1);
+        $clipboard.add('author', author2);
+        $ctrl = new ClipboardMenuPanelController($clipboard, $sharing, null);
         targetStates = new Set($ctrl.sharingTargets.map(({state}) => state));
         expect(targetStates).toEqual(new Set([
             'app.project.authors',
             'app.project.mixed',
         ]));
 
-        _$clipboard.clear();
-        _$clipboard.add('book', book1);
-        _$clipboard.add('book', book2);
-        _$clipboard.add('book', book3);
-        _$clipboard.add('book', book4);
-        _$clipboard.add('book', book5);
-        $ctrl = new ClipboardMenuPanelController(_$clipboard, _$sharing, null);
+        $clipboard.clear();
+        $clipboard.add('book', book1);
+        $clipboard.add('book', book2);
+        $clipboard.add('book', book3);
+        $clipboard.add('book', book4);
+        $clipboard.add('book', book5);
+        $ctrl = new ClipboardMenuPanelController($clipboard, $sharing, null);
         targetStates = new Set($ctrl.sharingTargets.map(({state}) => state));
         expect(targetStates).toEqual(new Set([
             'app.project.books',
@@ -280,13 +280,12 @@ describe('AddToClipboardComponent', () => {
     });
 
     it('Should be able to share mix of items to sharing targets which accept them', () => {
-        _$clipboard.clear();
-        _$clipboard.add('author', author1);
-        _$clipboard.add('author', author2);
-        _$clipboard.add('book', book1);
-        _$clipboard.add('book', book2);
-        _$clipboard.add('book', book3);
-        $ctrl = new ClipboardMenuPanelController(_$clipboard, _$sharing, null);
+        $clipboard.add('author', author1);
+        $clipboard.add('author', author2);
+        $clipboard.add('book', book1);
+        $clipboard.add('book', book2);
+        $clipboard.add('book', book3);
+        $ctrl = new ClipboardMenuPanelController($clipboard, $sharing, null);
         targetStates = new Set($ctrl.sharingTargets.map(({state}) => state));
         expect(targetStates).toEqual(new Set([
             'app.project.authors',
@@ -296,27 +295,25 @@ describe('AddToClipboardComponent', () => {
     });
 
     it('Should be able to clear all items', () => {
-        _$clipboard.clear();
-        _$clipboard.add('author', author1);
-        _$clipboard.add('author', author2);
-        _$clipboard.add('book', book1);
-        _$clipboard.add('book', book2);
-        _$clipboard.add('book', book3);
-        $ctrl = new ClipboardMenuPanelController(_$clipboard, _$sharing, null);
+        $clipboard.add('author', author1);
+        $clipboard.add('author', author2);
+        $clipboard.add('book', book1);
+        $clipboard.add('book', book2);
+        $clipboard.add('book', book3);
+        $ctrl = new ClipboardMenuPanelController($clipboard, $sharing, null);
         $ctrl.clear();
         expect($ctrl.itemGroups).toEqual({});
         expect($ctrl.sharingTargets).toEqual([]);
-        expect(_$clipboard.items).toEqual([]);
+        expect($clipboard.items).toEqual([]);
     });
 
     it('Should be able to remove items', () => {
-        _$clipboard.clear();
-        _$clipboard.add('author', author1);
-        _$clipboard.add('author', author2);
-        _$clipboard.add('book', book1);
-        _$clipboard.add('book', book2);
-        _$clipboard.add('book', book3);
-        $ctrl = new ClipboardMenuPanelController(_$clipboard, _$sharing, null);
+        $clipboard.add('author', author1);
+        $clipboard.add('author', author2);
+        $clipboard.add('book', book1);
+        $clipboard.add('book', book2);
+        $clipboard.add('book', book3);
+        $ctrl = new ClipboardMenuPanelController($clipboard, $sharing, null);
 
         $ctrl.remove('author', author1);
         expect($ctrl.itemGroups['author'].length).toBe(1);
@@ -333,29 +330,28 @@ describe('AddToClipboardComponent', () => {
         $ctrl.remove('book', book3);
         expect($ctrl.itemGroups).toEqual({author: [], book: []});
         expect($ctrl.sharingTargets).toEqual([]);
-        expect(_$clipboard.items).toEqual([]);
+        expect($clipboard.items).toEqual([]);
     });
 
     it('Registered pluralName should be return for known types', () => {
-        $ctrl = new ClipboardMenuPanelController(_$clipboard, _$sharing, null);
+        $ctrl = new ClipboardMenuPanelController($clipboard, $sharing, null);
         expect($ctrl.getTypePluralName('author')).toBe('Many Authors');
         expect($ctrl.getTypePluralName('book')).toBe('So Many Books');
     });
 
     it('pluralName should be extra `s` for unknown types', () => {
-        $ctrl = new ClipboardMenuPanelController(_$clipboard, _$sharing, null);
+        $ctrl = new ClipboardMenuPanelController($clipboard, $sharing, null);
         expect($ctrl.getTypePluralName('mango')).toBe('mangos');
         expect($ctrl.getTypePluralName('unknownType123')).toBe('unknownType123s');
     });
 
     it('Should be able to get selected item groups', () => {
-        _$clipboard.clear();
-        _$clipboard.add('author', author1);
-        _$clipboard.add('author', author2);
-        _$clipboard.add('book', book1);
-        _$clipboard.add('book', book2);
-        _$clipboard.add('book', book3);
-        $ctrl = new ClipboardMenuPanelController(_$clipboard, _$sharing, null);
+        $clipboard.add('author', author1);
+        $clipboard.add('author', author2);
+        $clipboard.add('book', book1);
+        $clipboard.add('book', book2);
+        $clipboard.add('book', book3);
+        $ctrl = new ClipboardMenuPanelController($clipboard, $sharing, null);
 
         expect($ctrl.getSelectedItemGroups()['author'].length).toBe(2);
         expect($ctrl.getSelectedItemGroups()['book'].length).toBe(3);

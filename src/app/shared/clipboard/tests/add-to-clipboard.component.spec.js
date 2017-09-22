@@ -8,7 +8,7 @@ const sampleBook = {
 };
 
 describe('AddToClipboardComponent', () => {
-    let app, $ctrl, element, scope, clipboardService, compileService;
+    let app, $ctrl, element, scope, $rootScope, $clipboard, $compile;
 
     beforeEach(angular.mock.module('App'));
 
@@ -31,9 +31,10 @@ describe('AddToClipboardComponent', () => {
         });
     });
 
-    beforeEach(angular.mock.inject(($rootScope, $compile, $clipboard) => {
-        compileService = $compile;
-        clipboardService = $clipboard;
+    beforeEach(angular.mock.inject((_$rootScope_, _$compile_, _$clipboard_) => {
+        $rootScope = _$rootScope_;
+        $compile = _$compile_;
+        $clipboard = _$clipboard_;
 
         scope = $rootScope.$new();
 
@@ -60,12 +61,12 @@ describe('AddToClipboardComponent', () => {
         $ctrl.addToClipboard($ctrl.type, $ctrl.value);
 
         expect($ctrl.isAdded).toBe(true);
-        expect(clipboardService.items).toEqual([['book', sampleBook]]);
+        expect($clipboard.items).toEqual([['book', sampleBook]]);
     });
 
     it('Should not be able to add the item if type is not given', () => {
         let newElement = angular.element('<add-to-clipboard value="sampleBook" ></add-to-clipboard>');
-        newElement = compileService(newElement)(scope);
+        newElement = $compile(newElement)(scope);
 
         let controller = newElement.controller('addToClipboard');
 
@@ -76,7 +77,7 @@ describe('AddToClipboardComponent', () => {
 
     it('Should not be able to add the item if value is not given', () => {
         let newElement = angular.element('<add-to-clipboard type="book" ></add-to-clipboard>');
-        newElement = compileService(newElement)(scope);
+        newElement = $compile(newElement)(scope);
 
         let controller = newElement.controller('addToClipboard');
 
@@ -87,7 +88,7 @@ describe('AddToClipboardComponent', () => {
 
     it('Should not be able to add the item if type is not registered', () => {
         let newElement = angular.element('<add-to-clipboard type="unknownType" value="sampleBook" ></add-to-clipboard>');
-        newElement = compileService(newElement)(scope);
+        newElement = $compile(newElement)(scope);
 
         let controller = newElement.controller('addToClipboard');
 
