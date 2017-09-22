@@ -1,15 +1,4 @@
-import {Clipboard} from '../clipboard.module';
-
-const clipboardRegistry = {
-    author: {
-        name: 'Author',
-        pluralName: 'Authors'
-    },
-    book: {
-        name: 'Book',
-        pluralName: 'Books'
-    },
-};
+import {ClipboardProvider} from '../clipboard.module';
 
 const author1 = {
     name: 'Uri Alon',
@@ -51,36 +40,44 @@ const book5 = {
 };
 
 describe('Clipboard', () => {
-    it('Should be empty when created', () => {
-        const clipboard = new Clipboard(clipboardRegistry);
+    let $clipboard;
 
-        expect(clipboard.isEmpty()).toBe(true);
+    beforeEach(() => {
+        let $clipboardProvider = new ClipboardProvider();
+        $clipboardProvider.register('author', {
+            name: 'Author',
+            pluralName: 'Authors'
+        });
+        $clipboardProvider.register('book', {
+            name: 'Book',
+            pluralName: 'Books'
+        });
+        $clipboard = $clipboardProvider.$get();
+    });
+
+    it('Should be empty when created', () => {
+
+        expect($clipboard.isEmpty()).toBe(true);
     });
 
     it('Should be able to add items of registered type', () => {
-        const clipboard = new Clipboard(clipboardRegistry);
+        expect($clipboard.canAdd('author')).toBe(true);
 
-        expect(clipboard.canAdd('author')).toBe(true);
+        $clipboard.add('author', author1);
+        expect($clipboard.items.length).toBe(1);
 
-        clipboard.add('author', author1);
-        expect(clipboard.items.length).toBe(1);
+        $clipboard.add('book', book1);
+        expect($clipboard.items.length).toBe(2);
 
-        clipboard.add('book', book1);
-        expect(clipboard.items.length).toBe(2);
-
-        clipboard.add('book', book2);
-        expect(clipboard.items.length).toBe(3);
+        $clipboard.add('book', book2);
+        expect($clipboard.items.length).toBe(3);
     });
 
     it('Should not be able to add items of unregistered type', () => {
-        const clipboard = new Clipboard(clipboardRegistry);
-
-        expect(clipboard.canAdd('unknownType')).toBe(false);
+        expect($clipboard.canAdd('unknownType')).toBe(false);
     });
 
     it('Registered hooks should be triggered whenever clipboard changes', () => {
-        const clipboard = new Clipboard(clipboardRegistry);
-
         // this would be increased whenever a change occurs in the clipboard
         let changeCounter = 0;
         const hookFn = function () {
@@ -88,47 +85,45 @@ describe('Clipboard', () => {
         };
 
         // register a hook for change event on clipboard
-        clipboard.onChange(hookFn);
+        $clipboard.onChange(hookFn);
 
         // An item is added, it's a change in the clipboard, hooks listening for change should be triggered.
-        clipboard.add('author', author1);
+        $clipboard.add('author', author1);
         expect(changeCounter).toBe(1);
 
         // Another item is added, it's a change in the clipboard, hooks listening for change should be triggered.
-        clipboard.add('book', book1);
+        $clipboard.add('book', book1);
         expect(changeCounter).toBe(2);
 
         // An item is removed, it's a change in the clipboard, hooks listening for change should be triggered.
-        clipboard.remove('author', author1);
+        $clipboard.remove('author', author1);
         expect(changeCounter).toBe(3);
 
         // It was already removed, it's not a change in the clipboard, hooks listening for change should not be
         // triggered.
-        clipboard.remove('author', author1);
+        $clipboard.remove('author', author1);
         expect(changeCounter).toBe(3);
 
         // Duplicates are allowed, it's allowed so a change in the clipboard, hooks listening for change should be
         // triggered.
-        clipboard.add('book', book1);
+        $clipboard.add('book', book1);
         expect(changeCounter).toBe(4);
-        clipboard.add('book', book1);
+        $clipboard.add('book', book1);
         expect(changeCounter).toBe(5);
 
         // There are some items on the clipboard, so clearing them is a change in the clipboard, hooks listening for
         // change should be triggered.
-        clipboard.clear();
+        $clipboard.clear();
         expect(changeCounter).toBe(6);
 
         // There are no items on the clipboard, clearing the clipboard is not a change, hooks listening for
         // change should not be triggered.
-        clipboard.clear();
+        $clipboard.clear();
         expect(changeCounter).toBe(6);
     });
 
 
     it('Unregistered hooks should be triggered whenever clipboard changes', () => {
-        const clipboard = new Clipboard(clipboardRegistry);
-
         // this would be increased whenever a change occurs in the clipboard
         let changeCounter = 0;
         const hookFn = function () {
@@ -136,73 +131,67 @@ describe('Clipboard', () => {
         };
 
         // register a hook for change event on clipboard
-        clipboard.onChange(hookFn);
+        $clipboard.onChange(hookFn);
 
         // An item is added, it's a change in the clipboard, hooks listening for change should be triggered.
-        clipboard.add('author', author1);
+        $clipboard.add('author', author1);
         expect(changeCounter).toBe(1);
 
         // Another item is added, it's a change in the clipboard, hooks listening for change should be triggered.
-        clipboard.add('book', book1);
+        $clipboard.add('book', book1);
         expect(changeCounter).toBe(2);
 
         // An item is removed, it's a change in the clipboard, hooks listening for change should be triggered.
-        clipboard.remove('author', author1);
+        $clipboard.remove('author', author1);
         expect(changeCounter).toBe(3);
 
         // counter value should not be updated after hookFn has stopped listening for changes.
-        clipboard.offChange(hookFn);
-        clipboard.add(book2);
+        $clipboard.offChange(hookFn);
+        $clipboard.add(book2);
         expect(changeCounter).toBe(3);
-        clipboard.add(book3);
+        $clipboard.add(book3);
         expect(changeCounter).toBe(3);
     });
 
     it('Same hook function cannot be registered multiple times for listening to clipboard changes', () => {
-        const clipboard = new Clipboard(clipboardRegistry);
-
         const hookFn = function () {
             // does nothing, it's a silent listener
         };
 
         // register a hook for change event on clipboard
-        clipboard.onChange(hookFn);
+        $clipboard.onChange(hookFn);
 
-        expect(clipboard.hooks.size).toBe(1);
+        expect($clipboard.hooks.size).toBe(1);
 
         // register again
-        clipboard.onChange(hookFn);
-        expect(clipboard.hooks.size).toBe(1);
+        $clipboard.onChange(hookFn);
+        expect($clipboard.hooks.size).toBe(1);
     });
 
     it('Should be able to get items by type', () => {
-        const clipboard = new Clipboard(clipboardRegistry);
+        $clipboard.add('author', author1);
+        expect($clipboard.getItemsOfType('author').length).toBe(1);
+        expect($clipboard.getItemsOfType('author')[0][0]).toBe('author');
+        expect($clipboard.getItemsOfType('author')[0][1]).toBe(author1);
 
-        clipboard.add('author', author1);
-        expect(clipboard.getItemsOfType('author').length).toBe(1);
-        expect(clipboard.getItemsOfType('author')[0][0]).toBe('author');
-        expect(clipboard.getItemsOfType('author')[0][1]).toBe(author1);
+        $clipboard.add('author', author2);
+        expect($clipboard.getItemsOfType('author').length).toBe(2);
 
-        clipboard.add('author', author2);
-        expect(clipboard.getItemsOfType('author').length).toBe(2);
+        expect($clipboard.getItemsOfType('book').length).toBe(0);
 
-        expect(clipboard.getItemsOfType('book').length).toBe(0);
-
-        expect(clipboard.getItemsOfType('unknownType').length).toBe(0);
+        expect($clipboard.getItemsOfType('unknownType').length).toBe(0);
     });
 
     it('Should be able to get items grouped by type', () => {
-        const clipboard = new Clipboard(clipboardRegistry);
+        $clipboard.add('author', author1);
+        $clipboard.add('author', author2);
+        $clipboard.add('authors', book2);
+        $clipboard.add('authors', book3);
+        $clipboard.add('authors', book1);
+        $clipboard.add('authors', book5);
+        $clipboard.add('authors', book4);
 
-        clipboard.add('author', author1);
-        clipboard.add('author', author2);
-        clipboard.add('authors', book2);
-        clipboard.add('authors', book3);
-        clipboard.add('authors', book1);
-        clipboard.add('authors', book5);
-        clipboard.add('authors', book4);
-
-        const itemsGroupedByType = clipboard.getItemsGroupedByType();
+        const itemsGroupedByType = $clipboard.getItemsGroupedByType();
 
         expect(Object.keys(itemsGroupedByType).length).toBe(2);
 
