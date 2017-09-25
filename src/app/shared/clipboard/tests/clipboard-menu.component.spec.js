@@ -82,7 +82,7 @@ const MicedListComponent = {
     </ui>`
 };
 
-angular.module('App')
+angular.module('DevApp')
     .component('authorList', AuthorListComponent)
     .component('bookList', BookListComponent)
     .component('bookDetail', BookDetailComponent)
@@ -176,10 +176,10 @@ const book5 = {
 describe('AddToClipboardComponent', () => {
     let $clipboard, $sharing, $ctrl, targetStates;
 
-    beforeEach(angular.mock.module('App'));
+    beforeEach(angular.mock.module('DevApp'));
 
     beforeEach(() => {
-        angular.module('App')
+        angular.module('DevApp')
             .config($clipboardProvider => {
                 $clipboardProvider.register('author', {
                     name: 'Author',
