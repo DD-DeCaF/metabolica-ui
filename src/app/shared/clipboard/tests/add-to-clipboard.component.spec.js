@@ -1,99 +1,71 @@
-import angular from 'angular';
-
-const sampleAuthor = 'Uri Alon';
-
-const sampleBook = {
-    name: 'An Introduction to Systems Biology: Design Principles of Biological Circuits',
-    author: sampleAuthor,
-};
+import {ClipboardProvider} from '../clipboard.module';
+import {AddToClipboardController} from '../add-to-clipboard.component';
 
 describe('AddToClipboardComponent', () => {
-    let app, $ctrl, element, scope, $rootScope, $clipboard, $compile;
+    let $ctrl, $clipboard;
 
-    beforeEach(angular.mock.module('App'));
+    const book = {
+        name: 'An Introduction to Systems Biology: Design Principles of Biological Circuits',
+        author: 'Uri Alon',
+    };
 
     beforeEach(() => {
-        app = angular.module('App');
+        let $clipboardProvider = new ClipboardProvider();
 
-        app.config($clipboardProvider => {
-            $clipboardProvider.register('author', {
-                name: 'Author',
-                pluralName: 'Authors'
-            });
-
-            $clipboardProvider.register('book', {
-                name: 'Book',
-                pluralName: 'Books'
-            });
-        }).run($httpBackend => {
-            // blank response
-            $httpBackend.whenGET(/^\/_karma_webpack_.*/).respond('');
+        $clipboardProvider.register('book', {
+            name: 'Book',
+            pluralName: 'Books'
         });
-    });
 
-    beforeEach(angular.mock.inject((_$rootScope_, _$compile_, _$clipboard_) => {
-        $rootScope = _$rootScope_;
-        $compile = _$compile_;
-        $clipboard = _$clipboard_;
+        $clipboard = $clipboardProvider.$get();
 
-        scope = $rootScope.$new();
+        $ctrl = new AddToClipboardController($clipboard);
 
-        scope.sampleAuthor = sampleAuthor;
-        scope.sampleBook = sampleBook;
-        scope.$apply();
-
-        element = angular.element('<add-to-clipboard type="book" value="sampleBook"></add-to-clipboard>');
-        element = $compile(element)(scope);
-
-        $ctrl = element.controller('addToClipboard');
-    }));
-
-    it('Should have found bindings', () => {
-
-        expect($ctrl.value).toBe(sampleBook);
+        // Need to set bindings manually because not using AngularJS context to create controller
+        $ctrl.type = 'book';
+        $ctrl.value = book;
+        // Need to call $onInit() because not using AngularJS context to create the controller
+        $ctrl.$onInit();
     });
 
     it('Should not be added by default', () => {
-        expect($ctrl.isAdded).toBeFalsy();
+        expect($ctrl.isAdded).toBe(false);
     });
 
     it('Should be able to add the item', () => {
-        $ctrl.addToClipboard($ctrl.type, $ctrl.value);
+        $ctrl.addToClipboard('book', book);
 
         expect($ctrl.isAdded).toBe(true);
-        expect($clipboard.items).toEqual([['book', sampleBook]]);
+        expect($clipboard.items).toEqual([['book', book]]);
+    });
+
+    it('Should not be added anymore if clipboard has been cleared or the item has been removed from the clipboard.', () => {
+        $ctrl.addToClipboard('book', book);
+        expect($ctrl.isAdded).toBe(true);
+
+        $clipboard.clear();
+        expect($ctrl.isAdded).toBe(false);
+
+        $ctrl.addToClipboard('book', book);
+        expect($ctrl.isAdded).toBe(true);
+
+        $clipboard.remove('book', book);
+        expect($ctrl.isAdded).toBe(false);
     });
 
     it('Should not be able to add the item if type is not given', () => {
-        let newElement = angular.element('<add-to-clipboard value="sampleBook" ></add-to-clipboard>');
-        newElement = $compile(newElement)(scope);
-
-        let controller = newElement.controller('addToClipboard');
-
-        controller.addToClipboard(controller.type, controller.value);
-
-        expect(controller.isAdded).toBeFalsy();
+        $ctrl.addToClipboard(null, book);
+        expect($ctrl.isAdded).toBe(false);
     });
 
     it('Should not be able to add the item if value is not given', () => {
-        let newElement = angular.element('<add-to-clipboard type="book" ></add-to-clipboard>');
-        newElement = $compile(newElement)(scope);
-
-        let controller = newElement.controller('addToClipboard');
-
-        controller.addToClipboard(controller.type, controller.value);
-
-        expect(controller.isAdded).toBeFalsy();
+        $ctrl.addToClipboard('author', null);
+        expect($ctrl.isAdded).toBe(false);
     });
 
     it('Should not be able to add the item if type is not registered', () => {
-        let newElement = angular.element('<add-to-clipboard type="unknownType" value="sampleBook" ></add-to-clipboard>');
-        newElement = $compile(newElement)(scope);
+        $ctrl.addToClipboard('unknownType', book);
 
-        let controller = newElement.controller('addToClipboard');
-
-        controller.addToClipboard(controller.type, controller.value);
-
-        expect(controller.isAdded).toBeFalsy();
+        expect($ctrl.isAdded).toBe(false);
     });
 });

@@ -1,4 +1,4 @@
-class AddToClipboardController {
+export class AddToClipboardController {
     constructor($clipboard) {
         this._$clipboard = $clipboard;
         this.isAdded = false;
@@ -22,7 +22,7 @@ class AddToClipboardController {
 
     checkIfAdded(type, value) {
         const items = this._$clipboard.getItemsOfType(type);
-        this.isAdded = items.length && items.some(([, itemValue]) => itemValue.$uri === value.$uri);
+        this.isAdded = items.length > 0 && items.some(([, itemValue]) => itemValue.$uri === value.$uri);
     }
 
     addToClipboard(type, value) {

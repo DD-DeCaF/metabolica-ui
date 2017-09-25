@@ -44,14 +44,17 @@ describe('Clipboard', () => {
 
     beforeEach(() => {
         let $clipboardProvider = new ClipboardProvider();
+
         $clipboardProvider.register('author', {
             name: 'Author',
             pluralName: 'Authors'
         });
+
         $clipboardProvider.register('book', {
             name: 'Book',
             pluralName: 'Books'
         });
+
         $clipboard = $clipboardProvider.$get();
     });
 
