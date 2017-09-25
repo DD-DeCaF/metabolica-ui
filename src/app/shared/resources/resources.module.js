@@ -518,13 +518,7 @@ function MeasurementTableFactory(potion, Item, Route) {
 
         static generateTable(...args) {
             return this._generateTable(...args)
-                .then(table => {
-                    const tests = new Map(Object
-                        .entries(table.tests));
-
-                    return table.measurements
-                        .map(measurement => Object.assign(measurement, {test: tests.get(measurement.test)}));
-                });
+                .then(table => table);
         }
 
         static generateTableAggregate(...args) {
