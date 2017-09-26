@@ -89,6 +89,29 @@ function SessionFactory($http, $localStorage, $rootScope, $q, User, Policy, poti
                     resolve(false);
                 });
             });
+        },
+
+        testProjectPermissions(project, permissions) {
+            permissions = JSON.stringify(permissions);
+            const cacheKey = `${project.id}-${permissions}`;
+
+            return $q((resolve, reject) => {
+                if (!this.isAuthenticated()) {
+                    resolve(false);
+                    return;
+                }
+
+                if (permissionsCache[cacheKey]) {
+                    resolve(permissionsCache[cacheKey]);
+                    return;
+                }
+                Policy.testProjectPermissions({project, permissions}).then(allowedPermissions => {
+                    permissionsCache[cacheKey] = !!allowedPermissions.length;
+                    resolve(permissionsCache[cacheKey]);
+                }).catch(() => {
+                    resolve(false);
+                });
+            });
         }
     };
 

@@ -147,7 +147,7 @@ export const AppModule = angular.module('App', [
         $urlRouterProvider.otherwise('/app/home');
         $locationProvider.html5Mode(true);
     })
-    .run(function ($transitions, $state, $location, $log, $mdDialog, $window, $q, appName, appNavigation, Session, Policy) {
+    .run(function ($transitions, $state, $location, $log, $mdDialog, $window, $q, $rootScope, appName, appNavigation, Session) {
         // https://github.com/angular/material/issues/3418
         $transitions.onStart({}, () => {
             $mdDialog.cancel();
@@ -177,7 +177,7 @@ export const AppModule = angular.module('App', [
 
             for (const {state, requirePermission} of restrictedStates) {
                 if (requirePermission && targetState.includes[state.name]) {
-                    return Session.testPermissions([requirePermission]);
+                    return $rootScope.project ? Session.testProjectPermissions($rootScope.project, [requirePermission]) : Session.testPermissions([requirePermission]);
                 }
             }
             return true;

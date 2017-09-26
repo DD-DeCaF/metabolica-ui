@@ -4,8 +4,9 @@ import './app.component.scss';
 
 class AppController {
 
-    constructor($state, $rootScope, appNavigation, appName, Session, Project, Policy, $mdSidenav, $mdMedia) {
+    constructor($state, $rootScope, appNavigation, appName, Session, Project, Policy, $mdSidenav, $mdMedia, $stateParams) {
         this._Session = Session;
+        this._Policy = Policy;
         this._$rootScope = $rootScope;
         this._$state = $state;
         this._$mdSidenav = $mdSidenav;
@@ -13,24 +14,30 @@ class AppController {
 
         this.appName = appName;
 
-        let allNavigation = appNavigation;
+        this.allNavigation = appNavigation;
         if (!$rootScope.isAuthenticated) {
-            allNavigation = allNavigation.filter(nav => !nav.authRequired);
+            this.allNavigation = this.allNavigation.filter(nav => !nav.authRequired);
         }
 
-        this.projectNavigation = allNavigation.filter(nav => nav.position === 'project');
-        this.navigation = allNavigation.filter(nav => nav.position === 'global');
+        this.projectNavigation = this.allNavigation.filter(nav => nav.position === 'project');
+        this.navigation = this.allNavigation.filter(nav => nav.position === 'global');
+        this.projectNavigationPermissions = new Set(this.projectNavigation.filter(({requirePermission}) => requirePermission).map(({requirePermission}) => requirePermission));
+        this.navigationPermissions = new Set(this.navigation.filter(({requirePermission}) => requirePermission).map(({requirePermission}) => requirePermission));
 
-        const allRequiredPermissions = new Set(this.navigation.filter(({requirePermission}) => requirePermission).map(({requirePermission}) => requirePermission));
+        if (this.project){
+            this.filterProjectNavigation(this.project);
+        }
 
-        Policy.testPermissions({
-            permissions: JSON.stringify(allRequiredPermissions)
-        }).then(allowedPermissions => {
-            allowedPermissions = new Set(allowedPermissions);
-            this.navigation = this.navigation.filter(nav => !(nav.requirePermission && !allowedPermissions.has(nav.requirePermission)));
-        }).catch(() => {
-            this.navigation = this.navigation.filter(nav => !nav.requirePermission);
-        });
+        if (this.navigationPermissions.size) {
+            Policy.testPermissions({
+                permissions: JSON.stringify(this.navigationPermissions)
+            }).then(allowedPermissions => {
+                allowedPermissions = new Set(allowedPermissions);
+                this.navigation = this.navigation.filter(nav => !(nav.requirePermission && !allowedPermissions.has(nav.requirePermission)));
+            }).catch(() => {
+                this.navigation = this.navigation.filter(nav => !nav.requirePermission);
+            });
+        }
 
         this.projectsFetched = false;
         this.projects = [];
@@ -49,6 +56,8 @@ class AppController {
     switchTo(project) {
         let $state = this._$state;
 
+        this.filterProjectNavigation(project);
+
         if (this.project === project) {
             $state.go('app.project', {projectId: project.id});
         } else {
@@ -60,6 +69,23 @@ class AppController {
                 $state.go('app.project', {projectId: project.id});
             }
         }
+    }
+
+    filterProjectNavigation(project) {
+        this.projectNavigation = this.allNavigation.filter(nav => nav.position === 'project');
+        if (!this.projectNavigationPermissions.size) {
+            return;
+        }
+
+        this._Policy.testProjectPermissions({
+            project,
+            permissions: JSON.stringify(this.projectNavigationPermissions)
+        }).then(allowedPermissions => {
+            allowedPermissions = new Set(allowedPermissions);
+            this.projectNavigation = this.projectNavigation.filter(nav => !(nav.requirePermission && !allowedPermissions.has(nav.requirePermission)));
+        }).catch(() => {
+            this.projectNavigation = this.projectNavigation.filter(nav => !nav.requirePermission);
+        });
     }
 
     logout() {

@@ -573,6 +573,7 @@ ResourcesModule.factory('Policy', PolicyFactory);
 function PolicyFactory(potion, Item, Route) {
     class Policy extends Item {
         static testPermissions = Route.GET('/test-permissions');
+        static testProjectPermissions = Route.GET('/test-project-permissions');
     }
 
     return potion.register('/policy', Policy);
