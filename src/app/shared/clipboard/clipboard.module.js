@@ -26,9 +26,12 @@ class Clipboard {
     }
 
     clear() {
+        const oldItemsCount = this.items.length;
         this.items = [];
 
-        this._triggerOnChange();
+        if (oldItemsCount > 0) {
+            this._triggerOnChange();
+        }
     }
 
     add(type, value) {
@@ -37,9 +40,12 @@ class Clipboard {
     }
 
     remove(type, value) {
+        const oldItemsCount = this.items.length;
         this.items = this.items.filter(([itemType, itemValue]) => !(itemType === type && itemValue.$uri === value.$uri));
 
-        this._triggerOnChange();
+        if (this.items.length < oldItemsCount) {
+            this._triggerOnChange();
+        }
     }
 
     onChange(hookFn) {
@@ -73,7 +79,7 @@ class Clipboard {
     }
 }
 
-class ClipboardProvider {
+export class ClipboardProvider {
     constructor() {
         this.registry = [];
     }
