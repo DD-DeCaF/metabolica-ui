@@ -69,7 +69,7 @@ class MixedListController {
     }
 }
 
-const MicedListComponent = {
+const MixedListComponent = {
     controller: MixedListController,
     template: `
     <h3>Authors</h3>
@@ -86,7 +86,7 @@ angular.module('DevApp')
     .component('authorList', AuthorListComponent)
     .component('bookList', BookListComponent)
     .component('bookDetail', BookDetailComponent)
-    .component('mixedList', MicedListComponent)
+    .component('mixedList', MixedListComponent)
     .config($stateProvider => {
         $stateProvider
             .state('app.authors', {

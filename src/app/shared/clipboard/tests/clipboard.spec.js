@@ -43,7 +43,7 @@ describe('Clipboard', () => {
     let $clipboard;
 
     beforeEach(() => {
-        let $clipboardProvider = new ClipboardProvider();
+        const $clipboardProvider = new ClipboardProvider();
 
         $clipboardProvider.register('author', {
             name: 'Author',
@@ -126,7 +126,7 @@ describe('Clipboard', () => {
     });
 
 
-    it('Unregistered hooks should be triggered whenever clipboard changes', () => {
+    it('Unregistered hooks should not be triggered whenever clipboard changes', () => {
         // this would be increased whenever a change occurs in the clipboard
         let changeCounter = 0;
         const hookFn = function () {
@@ -150,32 +150,16 @@ describe('Clipboard', () => {
 
         // counter value should not be updated after hookFn has stopped listening for changes.
         $clipboard.offChange(hookFn);
-        $clipboard.add(book2);
+        $clipboard.add('book', book2);
         expect(changeCounter).toBe(3);
-        $clipboard.add(book3);
+        $clipboard.remove('book', book2);
         expect(changeCounter).toBe(3);
-    });
-
-    it('Same hook function cannot be registered multiple times for listening to clipboard changes', () => {
-        const hookFn = function () {
-            // does nothing, it's a silent listener
-        };
-
-        // register a hook for change event on clipboard
-        $clipboard.onChange(hookFn);
-
-        expect($clipboard.hooks.size).toBe(1);
-
-        // register again
-        $clipboard.onChange(hookFn);
-        expect($clipboard.hooks.size).toBe(1);
     });
 
     it('Should be able to get items by type', () => {
         $clipboard.add('author', author1);
         expect($clipboard.getItemsOfType('author').length).toBe(1);
-        expect($clipboard.getItemsOfType('author')[0][0]).toBe('author');
-        expect($clipboard.getItemsOfType('author')[0][1]).toBe(author1);
+        expect($clipboard.getItemsOfType('author')).toEqual([['author', author1],]);
 
         $clipboard.add('author', author2);
         expect($clipboard.getItemsOfType('author').length).toBe(2);
