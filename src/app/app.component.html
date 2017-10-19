@@ -1,88 +1,45 @@
-<div layout="row" flex>
-  <!-- TODO: we need a menu icon that can open the sidebar when sidebar is hidden (small screen size) -->
-  <md-sidenav layout="column" class="md-sidenav-left md-whiteframe-z2" md-component-id="left"
-              md-is-locked-open="$ctrl.isLeftSidenavLockedOpen()">
-    <md-toolbar ng-style="{backgroundColor: $ctrl.project.color}" class="project-color">
-      <div class="md-toolbar-tools">
-        <h1>
-          <a ng-if="$ctrl.project"
-             style="white-space: nowrap"
-             ui-sref="app.project({projectId: $ctrl.project.id})">
-            {{ $ctrl.project.name }}</a>
-          <span ng-if="!$ctrl.project">{{ $ctrl.appName }}</span>
-        </h1>
+<mat-sidenav-container fxFlexFill>
+  <mat-sidenav #sidenav class="mat-elevation-z3" mode="side" opened="true">
 
-        <md-menu md-position-mode="target-right target">
-          <md-button aria-label="More" class="md-icon-button" ng-click="$mdMenu.open($event)">
-            <md-icon>arrow_drop_down</md-icon>
-          </md-button>
-          <md-menu-content width="4">
-            <md-menu-item ui-sref="app.home">
-              <md-button>
-                <div layout="row">
-                  <p flex>Home</p>
-                  <md-icon md-menu-align-target>home</md-icon>
-                </div>
-              </md-button>
-            </md-menu-item>
-            <md-menu-divider></md-menu-divider>
-            <!--<md-subheader>Projects</md-subheader>-->
-            <md-menu-item ng-repeat="project in $ctrl.projects">
-              <md-button ng-click="$ctrl.switchTo(project)">
-                <div layout="row">
-                  <p flex>{{ project.name }}</p>
-                  <md-icon md-menu-align-target
-                           ng-style="{color: project.color}">folder
-                  </md-icon>
-                </div>
-              </md-button>
-            </md-menu-item>
-          </md-menu-content>
-        </md-menu>
-        <span flex></span>
-        <md-button class="md-icon-button" ng-click="$ctrl.closeSidenav('left')">
-          <md-icon md-font-icon="chevron_left">chevron_left</md-icon>
-        </md-button>
-      </div>
-    </md-toolbar>
+    <mat-toolbar color="primary">
+      <span>Metabolica</span>
 
-    <md-progress-linear
-      md-mode="indeterminate"
-      ng-hide="$ctrl.project || $ctrl.projectsFetched">
-    </md-progress-linear>
+      <button type="button" mat-icon-button (click)="sidenav.close()">
+        <mat-icon>chevron_left</mat-icon>
+      </button>
+    </mat-toolbar>
+  </mat-sidenav>
 
-    <md-content>
-      <md-list ng-hide="$ctrl.project">
-        <md-subheader class="md-no-sticky">Projects</md-subheader>
-        <md-list-item ng-repeat="project in $ctrl.projects"
-                      ui-sref="app.project({projectId: project.id})">
-          <md-icon ng-style="{color: project.color}">folder</md-icon>
-          <p>{{ project.name }}</p>
-        </md-list-item>
-      </md-list>
+  <mat-toolbar color="primary">
 
-      <md-list ng-show="$ctrl.project">
-        <md-list-item
-          ng-repeat="component in $ctrl.projectNavigation | orderBy:'order'"
-          ui-sref="{{ component.state }}">
-          <md-icon md-svg-icon="{{ component.icon }}"></md-icon>
-          <p>{{ component.title }}</p>
-        </md-list-item>
-      </md-list>
+    <button type="button" mat-icon-button (click)="sidenav.open()">
+      <mat-icon>menu</mat-icon>
+    </button>
 
-      <md-divider></md-divider>
+    <span>Custom Toolbar</span>
+  </mat-toolbar>
 
-      <md-list>
-        <md-list-item ng-repeat="component in $ctrl.navigation" ui-sref="{{ component.state }}">
-          <md-icon md-svg-icon="{{ component.icon }}"></md-icon>
-          <p ng-if="!$ctrl.inProjectComponent">{{ component.title }}</p>
-        </md-list-item>
-      </md-list>
-    </md-content>
-  </md-sidenav>
+  <div fxLayout="column">
+    <a routerLink="/app">App</a>
+    <router-outlet></router-outlet>
+    <h1>
+      Welcome to {{title}}!
+    </h1>
+    <img width="300"
+         src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNTAgMjUwIj4KICAgIDxwYXRoIGZpbGw9IiNERDAwMzEiIGQ9Ik0xMjUgMzBMMzEuOSA2My4ybDE0LjIgMTIzLjFMMTI1IDIzMGw3OC45LTQzLjcgMTQuMi0xMjMuMXoiIC8+CiAgICA8cGF0aCBmaWxsPSIjQzMwMDJGIiBkPSJNMTI1IDMwdjIyLjItLjFWMjMwbDc4LjktNDMuNyAxNC4yLTEyMy4xTDEyNSAzMHoiIC8+CiAgICA8cGF0aCAgZmlsbD0iI0ZGRkZGRiIgZD0iTTEyNSA1Mi4xTDY2LjggMTgyLjZoMjEuN2wxMS43LTI5LjJoNDkuNGwxMS43IDI5LjJIMTgzTDEyNSA1Mi4xem0xNyA4My4zaC0zNGwxNy00MC45IDE3IDQwLjl6IiAvPgogIDwvc3ZnPg==">
 
-  <div layout="column" flex id="content">
-    <app-toolbar></app-toolbar>
-    <ui-view layout="column" flex></ui-view>
+    <h2>Here are some links to help you start: </h2>
+    <ul>
+      <li>
+        <h2><a target="_blank" rel="noopener" href="https://angular.io/tutorial">Tour of Heroes</a></h2>
+      </li>
+      <li>
+        <h2><a target="_blank" rel="noopener" href="https://github.com/angular/angular-cli/wiki">CLI Documentation</a>
+        </h2>
+      </li>
+      <li>
+        <h2><a target="_blank" rel="noopener" href="https://blog.angular.io/">Angular blog</a></h2>
+      </li>
+    </ul>
   </div>
-</div>
+</mat-sidenav-container>
