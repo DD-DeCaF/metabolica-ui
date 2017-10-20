@@ -1,8 +1,10 @@
 <mat-sidenav-container fxFlexFill>
   <mat-sidenav #sidenav class="mat-elevation-z3" mode="side" opened="true">
 
-    <mat-toolbar color="primary">
+    <mat-toolbar color="primary" fxLayout="column">
       <span>Metabolica</span>
+
+      <span fxFlex></span>
 
       <button type="button" mat-icon-button (click)="sidenav.close()">
         <mat-icon>chevron_left</mat-icon>
