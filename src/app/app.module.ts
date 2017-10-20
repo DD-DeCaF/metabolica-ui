@@ -2,42 +2,35 @@ import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 
 import { AppComponent } from './app.component';
-import { AppToolbarComponent } from './app-toolbar/app-toolbar.component';
-import { RouterModule, Route }   from '@angular/router';
 
 import { FlexLayoutModule } from '@angular/flex-layout';
 
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
-import {MetabolicaMaterialModule} from './app-material.module';
+
+import {AppMaterialModule} from './app-material.module';
+import {AppRoutingModule} from './app-routing.module';
 
 import {MatSidenavModule} from '@angular/material';
 
-const routes: Route[] = [
-  {
-    path: '',
-    redirectTo: '/app',
-    pathMatch: 'full'
-  },
-  {
-    path: 'app',
-    component: AppToolbarComponent
-  }
-];
+import { AppToolbarComponent } from './app-toolbar/app-toolbar.component';
+import { AppHomeComponent } from "./app-home/app-home.component";
 
 @NgModule({
   declarations: [
     AppComponent,
-    AppToolbarComponent
+    AppToolbarComponent,
+    AppHomeComponent
   ],
   imports: [
     BrowserModule,
     BrowserAnimationsModule,
     FlexLayoutModule,
-    RouterModule.forRoot(routes),
-    MetabolicaMaterialModule,
+    AppRoutingModule,
+    AppMaterialModule,
     MatSidenavModule
   ],
   providers: [],
   bootstrap: [AppComponent]
 })
-export class AppModule { }
+export class AppModule {
+}
