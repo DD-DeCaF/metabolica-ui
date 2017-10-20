@@ -10,8 +10,8 @@ function $sharingProvider() {
     let registry = [];
 
     return {
-        register(state, {name, accept = []} = {}) {
-            registry.push({state, name, accept});
+        register(state, {name, accept = [], icon='share'} = {}) {
+            registry.push({state, name, accept, icon});
         },
 
         $get: ['$state', '$rootScope', function ($state) {
@@ -130,7 +130,7 @@ export const SharingModule = angular.module('SharingModule', [])
 								<md-button ng-click="$ctrl.shareWith(target)">
 									<div layout="row">
 										<p flex>{{ target.name }}</p>
-										<md-icon md-svg-icon="share" md-menu-align-target></md-icon>
+										<md-icon md-svg-icon="{{ target.icon }}" md-menu-align-target></md-icon>
 									</div>
 								</md-button>
 							</md-menu-item>

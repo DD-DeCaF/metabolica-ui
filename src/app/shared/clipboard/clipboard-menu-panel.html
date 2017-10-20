@@ -22,7 +22,7 @@
             <md-menu-content width="4">
               <md-menu-item ng-repeat="target in item.sharingTargets">
                 <md-button ng-click="$ctrl.shareWith(type, item.value, target.state)">
-                  <md-icon md-svg-icon="share"></md-icon>
+                  <md-icon md-svg-icon="{{ target.icon }}"></md-icon>
                   {{ target.name }}
                 </md-button>
               </md-menu-item>
@@ -55,7 +55,7 @@
             <md-button ng-click="$ctrl.open(target.state)">
               <div layout="row">
                 <p flex>{{ target.name }}</p>
-                <md-icon md-svg-icon="share" md-menu-align-target></md-icon>
+                <md-icon md-svg-icon="{{ target.icon }}" md-menu-align-target></md-icon>
               </div>
             </md-button>
           </md-menu-item>
