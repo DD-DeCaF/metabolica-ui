@@ -1,5 +1,6 @@
-import { Component, OnInit } from '@angular/core';
-import { Router, ActivatedRoute, Params } from '@angular/router';
+import {Component, OnInit} from '@angular/core';
+import {ActivatedRoute, Params, Router} from '@angular/router';
+import {SessionService} from "../session/session.service";
 
 
 interface Credentials {
@@ -17,7 +18,7 @@ export class LoginComponent implements OnInit {
   credentials: Credentials;
   nextUrl: string;
 
-  constructor(private router: Router, private activatedRoute: ActivatedRoute) {
+  constructor(private router: Router, private activatedRoute: ActivatedRoute, private session: SessionService) {
     this.appName = 'iLoop Web Platform';
     this.credentials = {
       username: '',
@@ -32,16 +33,15 @@ export class LoginComponent implements OnInit {
   }
 
   authenticate(form: any): void {
-    if (this.credentials.username === 'valid') {
+    this.session.authenticate(this.credentials).then(() => {
       if (this.nextUrl) {
         this.router.navigateByUrl(this.nextUrl);
       } else {
         this.router.navigateByUrl('/');
       }
-    } else {
+    }).catch(invalidCredentials => {
       form.resetForm();
       form.control.setErrors({'invalidCredentials': true});
-    }
-
+    });
   }
 }

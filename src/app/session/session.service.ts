@@ -40,7 +40,7 @@ export class SessionService {
     }
   }
 
-  authenticate(credentials) {
+  authenticate(credentials): Promise<any> {
     return this.http.post(`/api/auth`, credentials)
       .toPromise().then(response => {
         this.localStorage.store('sessionJWT', response.json().token);
