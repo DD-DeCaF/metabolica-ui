@@ -6,7 +6,10 @@ import {
   MatIconModule,
   MatListModule,
   MatSidenavModule,
-  MatToolbarModule
+  MatToolbarModule,
+  MatFormFieldModule,
+  MatInputModule,
+  MatCardModule
 } from '@angular/material';
 
 
@@ -14,8 +17,10 @@ import {
  * https://material.angular.io/guide/getting-started#step-3-import-the-component-modules
  */
 @NgModule({
-  imports: [MatButtonModule, MatCheckboxModule, MatListModule, MatToolbarModule, MatIconModule, MatSidenavModule],
-  exports: [MatButtonModule, MatCheckboxModule, MatListModule, MatToolbarModule, MatIconModule, MatSidenavModule],
+  imports: [MatButtonModule, MatCheckboxModule, MatListModule, MatToolbarModule, MatIconModule, MatFormFieldModule,
+    MatInputModule, MatCardModule, MatSidenavModule],
+  exports: [MatButtonModule, MatCheckboxModule, MatListModule, MatToolbarModule, MatIconModule, MatFormFieldModule,
+    MatInputModule, MatCardModule, MatSidenavModule],
 })
 export class AppMaterialModule {
 }
