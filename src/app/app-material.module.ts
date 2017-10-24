@@ -1,13 +1,21 @@
-import { NgModule } from '@angular/core';
+import {NgModule} from '@angular/core';
 
-import { MatButtonModule, MatCheckboxModule, MatListModule, MatToolbarModule, MatIconModule } from '@angular/material';
+import {
+  MatButtonModule,
+  MatCheckboxModule,
+  MatIconModule,
+  MatListModule,
+  MatSidenavModule,
+  MatToolbarModule
+} from '@angular/material';
+
 
 /**
  * https://material.angular.io/guide/getting-started#step-3-import-the-component-modules
  */
 @NgModule({
-  imports: [MatButtonModule, MatCheckboxModule, MatListModule, MatToolbarModule, MatIconModule],
-  exports: [MatButtonModule, MatCheckboxModule, MatListModule, MatToolbarModule, MatIconModule],
+  imports: [MatButtonModule, MatCheckboxModule, MatListModule, MatToolbarModule, MatIconModule, MatSidenavModule],
+  exports: [MatButtonModule, MatCheckboxModule, MatListModule, MatToolbarModule, MatIconModule, MatSidenavModule],
 })
 export class AppMaterialModule {
 }

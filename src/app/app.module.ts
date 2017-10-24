@@ -1,19 +1,20 @@
-import { BrowserModule } from '@angular/platform-browser';
-import { NgModule } from '@angular/core';
+import {NgModule} from '@angular/core';
 
-import { AppComponent } from './app.component';
-
-import { FlexLayoutModule } from '@angular/flex-layout';
-
+import {BrowserModule} from '@angular/platform-browser';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
+import {FlexLayoutModule} from '@angular/flex-layout';
+import {HttpModule} from '@angular/http';
+import {Ng2Webstorage} from 'ngx-webstorage';
 
 import {AppMaterialModule} from './app-material.module';
 import {AppRoutingModule} from './app-routing.module';
+import {SessionModule} from './session/session.module';
 
-import {MatSidenavModule} from '@angular/material';
+import {AppAuthService} from './app-auth.service';
 
-import { AppToolbarComponent } from './app-toolbar/app-toolbar.component';
-import { AppHomeComponent } from "./app-home/app-home.component";
+import {AppComponent} from './app.component';
+import {AppToolbarComponent} from './app-toolbar/app-toolbar.component';
+import {AppHomeComponent} from "./app-home/app-home.component";
 
 @NgModule({
   declarations: [
@@ -25,11 +26,13 @@ import { AppHomeComponent } from "./app-home/app-home.component";
     BrowserModule,
     BrowserAnimationsModule,
     FlexLayoutModule,
+    HttpModule,
+    Ng2Webstorage,
     AppRoutingModule,
     AppMaterialModule,
-    MatSidenavModule
+    SessionModule,
   ],
-  providers: [],
+  providers: [AppAuthService],
   bootstrap: [AppComponent]
 })
 export class AppModule {
