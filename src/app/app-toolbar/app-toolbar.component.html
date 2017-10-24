@@ -1,3 +1,42 @@
-<p>
-  app-toolbar works!
-</p>
+<mat-toolbar color="primary"
+             fxLayout="column"
+             fxFlexFill>
+
+  <button mat-icon-button
+          type="button"
+          *ngIf="!sidenav.opened"
+          (click)="sidenav.open()">
+    <mat-icon>menu</mat-icon>
+  </button>
+
+  <span>Search Toolbar</span>
+
+  <span fxFlex></span>
+
+  <button mat-icon-button
+          type="button"
+          [matMenuTriggerFor]="appMenu">
+    <mat-icon>more_vert</mat-icon>
+  </button>
+  <mat-menu #appMenu="matMenu">
+    <button mat-menu-item>
+      <mat-icon>account_circle</mat-icon>
+      Account Settings
+    </button>
+    <button mat-menu-item>
+      <mat-icon>book</mat-icon>
+      API Documentation
+    </button>
+    <button mat-menu-item
+            *ngIf="isAuthenticated">
+      <mat-icon>lock</mat-icon>
+      Log Out
+    </button>
+    <button mat-menu-item
+            *ngIf="!isAuthenticated">
+      <mat-icon>lock</mat-icon>
+      Log In
+    </button>
+  </mat-menu>
+
+</mat-toolbar>

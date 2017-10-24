@@ -1,5 +1,8 @@
 <mat-sidenav-container fxFlexFill>
-  <mat-sidenav #sidenav class="mat-elevation-z3" mode="side" opened="true">
+  <mat-sidenav #sidenav
+               class="mat-elevation-z3"
+               mode="side"
+               opened="true">
 
     <mat-toolbar color="primary" fxLayout="column">
       <span>Metabolica</span>
@@ -21,18 +24,10 @@
   </mat-sidenav>
 
   <div fxFlexFill fxLayout="column">
-    <mat-toolbar color="primary">
-
-      <button type="button" mat-icon-button (click)="sidenav.open()">
-        <mat-icon>menu</mat-icon>
-      </button>
-
-      <span>Custom Toolbar</span>
-    </mat-toolbar>
+    <app-toolbar [sidenav]="sidenav"></app-toolbar>
 
     <div fxFlex style="overflow: auto">
       <router-outlet></router-outlet>
     </div>
   </div>
 </mat-sidenav-container>
-
