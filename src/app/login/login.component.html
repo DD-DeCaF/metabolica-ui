@@ -1,0 +1,55 @@
+<div class="login-bg"
+     fxFill
+     fxLayoutAlign="center center">
+
+  <mat-card>
+    <mat-card-content>
+
+      <h1> {{ appName }} </h1>
+      <p>Enter your username and password to log in.</p>
+
+      <form class="login-form"
+            fxLayout="column"
+            #loginForm="ngForm"
+            (ngSubmit)="authenticate(loginForm)">
+
+        <mat-form-field>
+          <mat-icon matSuffix>person</mat-icon>
+          <input matInput
+                 name="username"
+                 placeholder="Username"
+                 required
+                 type="text"
+                 [(ngModel)]="credentials.username">
+          <mat-error> You must specify a username. </mat-error>
+        </mat-form-field>
+
+        <mat-form-field>
+          <mat-icon matSuffix>lock</mat-icon>
+          <input matInput
+                 name="password"
+                 placeholder="Password"
+                 required
+                 type="password"
+                 [(ngModel)]="credentials.password">
+          <mat-error> You must specify a password.</mat-error>
+        </mat-form-field>
+
+        <mat-error *ngIf="loginForm.control.hasError('invalidCredentials') && loginForm.untouched">
+          Your username or password are incorrect
+        </mat-error>
+
+        <mat-card-actions align="end">
+          <button mat-raised-button
+                  color="primary"
+                  type="submit"
+                  [disabled]="!loginForm.form.valid || loginForm.submitted">
+            LOGIN
+          </button>
+        </mat-card-actions>
+      </form>
+
+    </mat-card-content>
+  </mat-card>
+
+</div>
