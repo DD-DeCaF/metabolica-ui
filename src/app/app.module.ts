@@ -10,6 +10,8 @@ import {AppMaterialModule} from './app-material.module';
 import {AppRoutingModule} from './app-routing.module';
 import {SessionModule} from './session/session.module';
 import {SearchModule} from "./search/search.module";
+import {RegistryModule} from "./registry/registry.module";
+
 
 import {AppAuthService} from './app-auth.service';
 
@@ -33,7 +35,8 @@ import {AppHomeComponent} from "./app-home/app-home.component";
     AppRoutingModule,
     AppMaterialModule,
     SessionModule,
-    SearchModule
+    SearchModule,
+    RegistryModule
   ],
   providers: [AppAuthService],
   bootstrap: [AppComponent]
