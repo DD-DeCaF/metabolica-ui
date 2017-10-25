@@ -10,7 +10,8 @@ import {
   MatFormFieldModule,
   MatInputModule,
   MatCardModule,
-  MatMenuModule
+  MatMenuModule,
+  MatAutocompleteModule
 } from '@angular/material';
 
 
@@ -19,9 +20,9 @@ import {
  */
 @NgModule({
   imports: [MatButtonModule, MatCheckboxModule, MatListModule, MatToolbarModule, MatIconModule, MatFormFieldModule,
-    MatInputModule, MatCardModule, MatSidenavModule, MatMenuModule],
+    MatInputModule, MatCardModule, MatSidenavModule, MatMenuModule, MatAutocompleteModule],
   exports: [MatButtonModule, MatCheckboxModule, MatListModule, MatToolbarModule, MatIconModule, MatFormFieldModule,
-    MatInputModule, MatCardModule, MatSidenavModule, MatMenuModule],
+    MatInputModule, MatCardModule, MatSidenavModule, MatMenuModule, MatAutocompleteModule],
 })
 export class AppMaterialModule {
 }

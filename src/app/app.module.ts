@@ -9,12 +9,14 @@ import {Ng2Webstorage} from 'ngx-webstorage';
 import {AppMaterialModule} from './app-material.module';
 import {AppRoutingModule} from './app-routing.module';
 import {SessionModule} from './session/session.module';
+import {SearchModule} from "./search/search.module";
 
 import {AppAuthService} from './app-auth.service';
 
 import {AppComponent} from './app.component';
 import {AppToolbarComponent} from './app-toolbar/app-toolbar.component';
 import {AppHomeComponent} from "./app-home/app-home.component";
+
 
 @NgModule({
   declarations: [
@@ -31,6 +33,7 @@ import {AppHomeComponent} from "./app-home/app-home.component";
     AppRoutingModule,
     AppMaterialModule,
     SessionModule,
+    SearchModule
   ],
   providers: [AppAuthService],
   bootstrap: [AppComponent]
