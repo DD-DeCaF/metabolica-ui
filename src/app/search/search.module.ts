@@ -1,10 +1,10 @@
-import { NgModule } from '@angular/core';
-import { CommonModule } from '@angular/common';
-import { SearchComponent } from './search.component';
-import { SearchSourcesProvider} from "./search-source.service";
+import {NgModule} from '@angular/core';
+import {CommonModule} from '@angular/common';
+import {SearchComponent} from './search.component';
 import {AppMaterialModule} from "../app-material.module";
 import {FlexLayoutModule} from "@angular/flex-layout";
 import {FormsModule} from "@angular/forms";
+import {RegistryService} from "../registry/registry.service";
 
 
 @NgModule({
@@ -16,6 +16,6 @@ import {FormsModule} from "@angular/forms";
   ],
   exports: [SearchComponent],
   declarations: [SearchComponent],
-  providers: [SearchSourcesProvider]
+  providers: [RegistryService]
 })
 export class SearchModule { }

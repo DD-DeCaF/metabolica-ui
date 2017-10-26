@@ -1,5 +1,15 @@
 import {Component} from '@angular/core';
-import {SearchSourcesProvider} from "./search-source.service";
+import {RegistryService} from "../registry/registry.service";
+
+
+interface Source {
+  resourceName: string;
+  pluralName: string;
+  state: string;
+  query(resource: any, searchText: string): Promise<any>;
+  stateParams(item: any): object;
+  formatAsText(item: any): string;
+}
 
 
 @Component({
@@ -11,11 +21,26 @@ export class SearchComponent {
   showSearch: boolean = false;
   searchText: string = '';
   placeholder: string = 'Search';
-  searchSources: Array<any>;
+  searchSources: Array<Source>;
 
-  constructor(sourceProvider: SearchSourcesProvider) {
-    this.searchSources = sourceProvider.getSources();
-    this.placeholder = `Search ${this.searchSources.map(source => source.source.pluralName).join(', ')}`;
+  constructor(registry: RegistryService) {
+    // register fake resource for testing purpose
+    registry.register('experiment', ['search'], {
+      resourceName: 'testElement',
+      pluralName: 'testElements',
+      state: 'home',
+      query: (resource, searchText) => {
+        return new Promise((resolve, reject) => {
+          resolve(['elementA', 'elementB', 'otherElement']
+            .filter(x => x.startsWith(searchText)))
+        });
+      },
+      stateParams: (item) => ({item}),
+      formatAsText: (item) => `${item}_formatted`
+    });
+
+    this.searchSources = Object.values(registry.get('search'));
+    this.placeholder = `Search ${this.searchSources.map(source => source.pluralName).join(', ')}`;
   }
 
   toggleSearch() {
@@ -26,8 +51,8 @@ export class SearchComponent {
   query() {
     if (this.searchText && this.searchText.length > 1) {
       let searches = [];
-      for (const {resource, source} of this.searchSources) {
-        searches.push(source.query(resource, this.searchText)
+      for (const source of this.searchSources) {
+        searches.push(source.query(source.resourceName, this.searchText)
           .then(results =>
             results.map(result => ({
               source,
