@@ -18,6 +18,7 @@ import {AppAuthService} from './app-auth.service';
 import {AppComponent} from './app.component';
 import {AppToolbarComponent} from './app-toolbar/app-toolbar.component';
 import {AppHomeComponent} from "./app-home/app-home.component";
+import {XrefsModule} from "./xrefs/xrefs.module";
 
 
 @NgModule({
@@ -36,7 +37,8 @@ import {AppHomeComponent} from "./app-home/app-home.component";
     AppMaterialModule,
     SessionModule,
     SearchModule,
-    RegistryModule
+    RegistryModule,
+    XrefsModule
   ],
   providers: [AppAuthService],
   bootstrap: [AppComponent]

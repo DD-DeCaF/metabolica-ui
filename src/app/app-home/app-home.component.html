@@ -27,6 +27,7 @@
     <app-toolbar [sidenav]="sidenav"></app-toolbar>
 
     <div fxFlex style="overflow: auto">
+      <app-xref type="Experiment" [value]="{id: 'exp_id', identifier: 'exp_identifier'}"></app-xref>
       <router-outlet></router-outlet>
     </div>
   </div>
