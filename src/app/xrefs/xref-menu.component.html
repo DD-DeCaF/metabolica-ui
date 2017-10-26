@@ -1,0 +1,17 @@
+<button mat-button
+        [matMenuTriggerFor]="menu">
+  Open Xref Menu
+</button>
+<mat-menu #menu="matMenu"
+          [overlapTrigger]="false">
+
+</mat-menu>
+
+
+<button mat-button
+        (click)="openDialog($event)">
+  Open Xref Dialog
+</button>
+
+
+

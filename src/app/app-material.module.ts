@@ -11,7 +11,8 @@ import {
   MatInputModule,
   MatCardModule,
   MatMenuModule,
-  MatAutocompleteModule
+  MatAutocompleteModule,
+  MatDialogModule
 } from '@angular/material';
 
 
@@ -20,9 +21,9 @@ import {
  */
 @NgModule({
   imports: [MatButtonModule, MatCheckboxModule, MatListModule, MatToolbarModule, MatIconModule, MatFormFieldModule,
-    MatInputModule, MatCardModule, MatSidenavModule, MatMenuModule, MatAutocompleteModule],
+    MatInputModule, MatCardModule, MatSidenavModule, MatMenuModule, MatAutocompleteModule, MatDialogModule],
   exports: [MatButtonModule, MatCheckboxModule, MatListModule, MatToolbarModule, MatIconModule, MatFormFieldModule,
-    MatInputModule, MatCardModule, MatSidenavModule, MatMenuModule, MatAutocompleteModule],
+    MatInputModule, MatCardModule, MatSidenavModule, MatMenuModule, MatAutocompleteModule, MatDialogModule],
 })
 export class AppMaterialModule {
 }
