@@ -1,6 +1,7 @@
 import {Injectable, Injector} from '@angular/core';
 import {HttpEvent, HttpHandler, HttpInterceptor, HttpRequest} from '@angular/common/http';
 import {Observable} from "rxjs/Observable";
+import "rxjs/add/operator/do";
 import {AppAuthService} from "../app-auth.service";
 import {LocalStorageService} from 'ngx-webstorage';
 import {SessionService} from "./session.service";
@@ -20,9 +21,7 @@ export class SessionInterceptorService implements HttpInterceptor {
       req = req.clone({headers: req.headers.set('Authorization', `Bearer ${sessionJWT}`)})
     }
 
-    const observable = next.handle(req);
-
-    observable.subscribe(
+    return next.handle(req).do(
       function onNext(response) {
         // do nothing
       },
@@ -37,8 +36,5 @@ export class SessionInterceptorService implements HttpInterceptor {
         // do nothing
       }
     );
-
-    return observable;
   }
-
 }
