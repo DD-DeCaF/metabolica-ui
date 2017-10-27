@@ -22,19 +22,17 @@ export class SessionInterceptorService implements HttpInterceptor {
     }
 
     return next.handle(req).do(
-      function onNext(response) {
-        // do nothing
+      () => {
       },
-      function onError(response) {
+      response => {
         if (response.status === 401) {
           if (appAuth.isRequired) {
             session.logout();
           }
         }
       },
-      function onComplete() {
-        // do nothing
-      }
+      () => {
+      },
     );
   }
 }

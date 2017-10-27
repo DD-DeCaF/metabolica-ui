@@ -1,5 +1,5 @@
 import {Injectable} from '@angular/core';
-import {HttpClient, HttpResponse} from "@angular/common/http";
+import {HttpClient} from "@angular/common/http";
 import {LocalStorageService} from 'ngx-webstorage';
 import 'rxjs/add/operator/toPromise';
 
@@ -27,7 +27,7 @@ export class SessionService {
     }
   }
 
-  get _attributes() {
+  private get attributes() {
     const sessionJWT = this.localStorage.retrieve('sessionJWT');
     if (sessionJWT) {
       try {
@@ -41,13 +41,11 @@ export class SessionService {
   }
 
   authenticate(credentials): Promise<any> {
-    const promise = this.http.post(`/api/auth`, credentials)
-      .toPromise();
-    promise.then((response: any) => {
-      this.localStorage.store('sessionJWT', response.token);
-      // $rootScope.$broadcast('session:login');
-    });
-    return promise;
+    return this.http.post(`/api/auth`, credentials)
+      .toPromise().then((response: any) => {
+        this.localStorage.store('sessionJWT', response.token);
+        // $rootScope.$broadcast('session:login');
+      });
   }
 
   logout(next = null): void {
