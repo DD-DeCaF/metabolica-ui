@@ -1,36 +1,78 @@
-import {Component, OnInit, Input} from '@angular/core';
-import {MatDialog, MatDialogRef} from "@angular/material";
+import {Component, OnChanges, Input, ViewChild} from '@angular/core';
+import {Overlay, OverlayOrigin} from '@angular/cdk/overlay';
+import {ComponentPortal} from "@angular/cdk/portal";
+import {RegistryService} from "../registry/registry.service";
+
 
 @Component({
   selector: 'app-xref-menu',
   templateUrl: './xref-menu.component.html',
   styleUrls: ['./xref-menu.component.css']
 })
-export class XrefMenuComponent implements OnInit {
+export class XrefMenuComponent implements OnChanges {
+  component: any = null;
+  text: string = '';
+  xrefs: any;
   @Input() type: string;
   @Input() value: any;
-  constructor(public dialog: MatDialog) { }
+  @ViewChild(OverlayOrigin) overlayOrigin: OverlayOrigin;
 
-  ngOnInit() {
-  }
-
-  openDialog($event) {
-    let dialogRef = this.dialog.open(DialogComponent, {
-      height: '350px',
-      data: {},
-      backdropClass: 'transparent',
-      position: {
-
-      }
+  constructor(public overlay: Overlay, registry: RegistryService) {
+    // register for test purposes
+    registry.register('Experiment', ['xref'], {
+      component: TestPanel,
+      state: 'app.project.experiment',
+      stateParams: (experiment) => ({experimentId: experiment.id}),
+      formatAsText: (experiment) => experiment.identifier
     });
+
+    this.xrefs = registry.get('xref');
   }
 
+  ngOnChanges() {
+    if (this.value) {
+      const config = this.xrefs[this.type || this.value.constructor.name];
+      if (config) {
+        this.text = config.formatAsText(this.value);
+        this.component = config.component;
+      }
+    }
+  }
+
+  openPanel() {
+    if (this.value && this.component) {
+      let overlayRef = this.overlay.create({
+        backdropClass: 'cdk-overlay-transparent-backdrop',
+        hasBackdrop: true,
+        panelClass: 'xref-menu-overlay-panel', // has to be defined in styles.css (main css file)
+        scrollStrategy: this.overlay.scrollStrategies.block(),
+        positionStrategy: this.overlay.position()
+          .connectedTo(
+            this.overlayOrigin.elementRef,
+            {originX: 'center', originY: 'bottom'}, {overlayX: 'start', overlayY: 'top'})
+          .withFallbackPosition(
+            {originX: 'center', originY: 'top'}, {overlayX: 'start', overlayY: 'bottom'}
+          )
+          .withFallbackPosition(
+            {originX: 'center', originY: 'bottom'}, {overlayX: 'end', overlayY: 'top'}
+          )
+          .withFallbackPosition(
+            {originX: 'center', originY: 'top'}, {overlayX: 'end', overlayY: 'bottom'}
+          )
+      });
+
+      overlayRef.attach(new ComponentPortal(this.component));
+      overlayRef.backdropClick().subscribe(() => {
+        overlayRef.detach(); // removes the component
+        overlayRef.dispose(); // removes the overlay panel
+      });
+    }
+  }
 }
+
 
 @Component({
-  selector: 'dialog-component',
-  template: `<mat-dialog-content>dialog content</mat-dialog-content>`
+  selector: 'test-panel',
+  template: `<div> xref menu content </div>`
 })
-export class DialogComponent {
-
-}
+export class TestPanel { }

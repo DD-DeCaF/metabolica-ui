@@ -1,8 +1,8 @@
+.xref-menu-open-button {
+  cursor: pointer;
+  outline: none;
+}
 
-/*.mat-dialog-container {*/
-  /*pointer-events: none;*/
-/*}*/
-
-/*mat-dialog {*/
-  /*pointer-events: all;*/
-/*}*/
+.xref-menu-open-button:hover {
+  color: #2196F9;
+}

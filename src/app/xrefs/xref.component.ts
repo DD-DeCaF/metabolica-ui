@@ -8,22 +8,12 @@ import {RegistryService} from "../registry/registry.service";
 export class XrefComponent implements OnChanges {
   xrefs: any;
   state: string = '';
-  stateParams: Object = {};
+  stateParams: {[key: string]: any};
   text: string = '';
   @Input() type: string;
   @Input() value: any;
 
   constructor(registry: RegistryService) {
-    // register for test purposes
-    registry.register('Experiment', ['xref'], {
-      controller: {},
-      template: `experiment xref menu for {{experiment.identifier}}`,
-      state: (experiment) => 'app.project.experiment',
-      stateParams: (experiment) => ({experimentId: experiment.id}),
-      locals: (experiment) => ({experiment}),
-      formatAsText: (experiment) => experiment.identifier
-    });
-
     this.xrefs = registry.get('xref');
   }
 
@@ -31,7 +21,7 @@ export class XrefComponent implements OnChanges {
     if (this.value) {
       const config = this.xrefs[this.type || this.value.constructor.name];
       if (config) {
-        this.state = config.state(this.value);
+        this.state = config.state;
         this.stateParams = config.stateParams(this.value);
         this.text = config.formatAsText(this.value);
       }

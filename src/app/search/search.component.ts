@@ -7,7 +7,7 @@ interface Source {
   pluralName: string;
   state: string;
   query(resource: any, searchText: string): Promise<any>;
-  stateParams(item: any): object;
+  stateParams(item: any): {[key: string]: any};
   formatAsText(item: any): string;
 }
 

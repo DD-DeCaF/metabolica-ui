@@ -11,3 +11,14 @@ app-root {
   display: block;
   height: 100%;
 }
+
+.xref-menu-overlay-panel {
+  padding: 10px;
+  box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.14);
+  background: #eeeeee;
+  border-radius: 4px;
+  overflow: hidden;
+  border: 1px solid rgba(0,0,0,0.12);
+  width: 500px;
+  min-height: 180px;
+}
