@@ -1,9 +1,10 @@
 import {NgModule} from '@angular/core';
 import {RouterModule, Route} from '@angular/router';
 import {LoginModule} from "./login/login.module";
-
+import {AuthGuardService} from "./session/auth-guard.service";
 import {AppHomeComponent} from "./app-home/app-home.component";
 import {LoginComponent} from "./login/login.component";
+import {LogoutComponent} from "./login/logout.component";
 
 const appRoutes: Route[] = [
   {
@@ -13,11 +14,16 @@ const appRoutes: Route[] = [
   },
   {
     path: 'home',
-    component: AppHomeComponent
+    component: AppHomeComponent,
+    canActivate: [AuthGuardService],
   },
   {
     path: 'login',
     component: LoginComponent
+  },
+  {
+    path: 'logout',
+    component: LogoutComponent
   },
   {
     path: '**',

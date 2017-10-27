@@ -27,7 +27,7 @@ export class SessionService {
     }
   }
 
-  get _attributes() {
+  private get attributes() {
     const sessionJWT = this.localStorage.retrieve('sessionJWT');
     if (sessionJWT) {
       try {
@@ -42,8 +42,8 @@ export class SessionService {
 
   authenticate(credentials): Promise<any> {
     return this.http.post(`/api/auth`, credentials)
-      .toPromise().then((response:any) => {
-        this.localStorage.store('sessionJWT', response.json().token);
+      .toPromise().then((response: any) => {
+        this.localStorage.store('sessionJWT', response.token);
         // $rootScope.$broadcast('session:login');
       });
   }

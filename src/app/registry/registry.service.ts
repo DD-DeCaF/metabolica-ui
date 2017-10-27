@@ -25,10 +25,6 @@ export class RegistryService {
       throw new Error(`There is no entry in the registry for '${targetName}'.`)
     }
 
-    return Object.assign({}, ...this.registeredTargets[targetName].map(name => {
-      const config = {};
-      config[name] = Object.assign({}, this.registry[name]);
-      return config;
-    }));
+    return Object.assign({}, ...this.registeredTargets[targetName].map(name => ({[name]: Object.assign({}, this.registry[name])})));
   }
 }
