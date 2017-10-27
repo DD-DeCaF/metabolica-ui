@@ -3,7 +3,7 @@ import {NgModule} from '@angular/core';
 import {BrowserModule} from '@angular/platform-browser';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {FlexLayoutModule} from '@angular/flex-layout';
-import {HttpModule} from '@angular/http';
+import {HttpClientModule} from "@angular/common/http";
 import {Ng2Webstorage} from 'ngx-webstorage';
 
 import {AppMaterialModule} from './app-material.module';
@@ -31,7 +31,7 @@ import {XrefsModule} from "./xrefs/xrefs.module";
     BrowserModule,
     BrowserAnimationsModule,
     FlexLayoutModule,
-    HttpModule,
+    HttpClientModule,
     Ng2Webstorage,
     AppRoutingModule,
     AppMaterialModule,

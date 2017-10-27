@@ -5,12 +5,22 @@ import {Location} from "@angular/common";
 export class AppAuthService {
   isRequired: boolean = true;
   trustedURLs = new Set();
+  location: any;
 
-  constructor(private location: Location) {
+  constructor(private _location: Location) {
+    this.location = _location;
+  }
+
+  getCurrentURL() {
+    if (this.location._baseHref.startsWith('https://') || this.location._baseHref.startsWith('https://')){
+      return this.location.prepareExternalUrl(this.location.path());
+    }
+    // TODO - It does not seem like there is a clean way to do this.
+    return this.location._platformStrategy._platformLocation._location.href;
   }
 
   isTrustedURL(url: string): boolean {
-    const currentURL = this.location.prepareExternalUrl(this.location.path());
+    const currentURL = this.getCurrentURL();
     const currentHostname = (new URL(currentURL)).hostname;
 
     const urlObj = new URL(url, currentURL);
