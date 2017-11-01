@@ -59,7 +59,7 @@ class AppController {
     }
 
     isSidenavOpen(menuId) {
-        return this._$mdSidenav(menuId).isOpen() ||
+        return this._$mdSidenav(menuId).dialogIsOpen() ||
             (menuId == 'left' && this.isLeftSidenavLockedOpen());
     }
 
@@ -68,7 +68,7 @@ class AppController {
             this.lockLeftSidenavOpen = true;
         }
 
-        if (!this._$mdSidenav(menuId).isOpen()) {
+        if (!this._$mdSidenav(menuId).dialogIsOpen()) {
             this._$mdSidenav(menuId).open();
         }
     }
@@ -78,7 +78,7 @@ class AppController {
             this.lockLeftSidenavOpen = false;
         }
 
-        if (this._$mdSidenav(menuId).isOpen()) {
+        if (this._$mdSidenav(menuId).dialogIsOpen()) {
             this._$mdSidenav(menuId).close();
         }
     }

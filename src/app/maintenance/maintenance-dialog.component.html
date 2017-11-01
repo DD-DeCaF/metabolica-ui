@@ -1,0 +1,16 @@
+<h2 mat-dialog-title> iLoop is down for maintenance </h2>
+<mat-dialog-content>
+  <p>The application is currently down for maintenance and should be back up in a few minutes.</p>
+
+  <p>If you were just submitting a form, don't refresh the page. Instead, please wait a few moments and then
+    press the <em>Retry action</em> button to try once more.
+  </p>
+</mat-dialog-content>
+<mat-dialog-actions>
+  <button mat-raised-button
+          color="primary"
+          (click)="retry()">
+    <mat-icon>refresh</mat-icon>
+     Retry actions
+  </button>
+</mat-dialog-actions>
