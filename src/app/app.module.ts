@@ -21,6 +21,7 @@ import {AppComponent} from './app.component';
 import {AppToolbarComponent} from './app-toolbar/app-toolbar.component';
 import {AppHomeComponent} from "./app-home/app-home.component";
 import {XrefsModule} from "./xrefs/xrefs.module";
+import {MaintenanceModule} from "./maintenance/maintenance.module";
 
 
 @NgModule({
@@ -43,7 +44,8 @@ import {XrefsModule} from "./xrefs/xrefs.module";
     RegistryModule,
     XrefsModule,
     SharingModule,
-    ClipboardModule
+    ClipboardModule,
+    MaintenanceModule
   ],
   providers: [AppAuthService],
   bootstrap: [AppComponent]
