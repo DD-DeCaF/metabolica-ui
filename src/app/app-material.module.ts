@@ -1,18 +1,19 @@
 import {NgModule} from '@angular/core';
 
 import {
-  MatButtonModule,
-  MatCheckboxModule,
-  MatIconModule,
-  MatListModule,
-  MatSidenavModule,
-  MatToolbarModule,
-  MatFormFieldModule,
-  MatInputModule,
-  MatCardModule,
-  MatMenuModule,
   MatAutocompleteModule,
-  MatDialogModule
+  MatButtonModule,
+  MatCardModule,
+  MatCheckboxModule,
+  MatDialogModule,
+  MatFormFieldModule,
+  MatIconModule,
+  MatIconRegistry,
+  MatInputModule,
+  MatListModule,
+  MatMenuModule,
+  MatSidenavModule,
+  MatToolbarModule
 } from '@angular/material';
 
 
@@ -24,6 +25,7 @@ import {
     MatInputModule, MatCardModule, MatSidenavModule, MatMenuModule, MatAutocompleteModule, MatDialogModule],
   exports: [MatButtonModule, MatCheckboxModule, MatListModule, MatToolbarModule, MatIconModule, MatFormFieldModule,
     MatInputModule, MatCardModule, MatSidenavModule, MatMenuModule, MatAutocompleteModule, MatDialogModule],
+  providers: [MatIconRegistry]
 })
 export class AppMaterialModule {
 }
