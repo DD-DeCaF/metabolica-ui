@@ -33,5 +33,6 @@ jobs:
             - node_modules
           key: v1-dependencies-{{ checksum "package.json" }}
 
+      - run: export CHROME_BIN=chromium-browser
       - run: npm run test -- -single-run --no-progress
       - run: npm run lint
