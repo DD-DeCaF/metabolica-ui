@@ -1,11 +1,11 @@
 import {Component, Input, OnChanges, OnDestroy, OnInit} from '@angular/core';
 import {DomSanitizer} from '@angular/platform-browser';
 import {MatIconRegistry} from '@angular/material';
-import {ClipboardService} from "./clipboard.service";
+import {ClipboardService} from './clipboard.service';
 
 
 @Component({
-  selector: 'add-to-clipboard',
+  selector: 'app-add-to-clipboard',
   template: `
     <button mat-icon-button button [disabled]="isAdded"
             (click)="addToClipboard(type, value)">
@@ -21,7 +21,7 @@ export class AddToClipboardComponent implements OnInit, OnChanges, OnDestroy {
   clipboardChangeHandler: any;
 
 
-  constructor(private iconRegistry: MatIconRegistry, private sanitizer: DomSanitizer, private clipboard: ClipboardService) {
+  constructor(iconRegistry: MatIconRegistry, sanitizer: DomSanitizer, private clipboard: ClipboardService) {
     iconRegistry
       .addSvgIcon('clipboard-plus', sanitizer.bypassSecurityTrustResourceUrl('/assets/icons/clipboard-plus.svg'))
       .addSvgIcon('clipboard-check', sanitizer.bypassSecurityTrustResourceUrl('/assets/icons/clipboard-check.svg'));

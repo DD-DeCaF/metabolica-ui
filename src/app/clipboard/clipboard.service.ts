@@ -1,5 +1,5 @@
 import {Injectable} from '@angular/core';
-import {RegistryService} from "../registry/registry.service";
+import {RegistryService} from '../registry/registry.service';
 
 
 @Injectable()
@@ -60,7 +60,7 @@ export class ClipboardService {
   }
 
   getItemsOfType(type): [string, any][] {
-    return this.items.filter(([itemType,]) => itemType === type);
+    return this.items.filter(([itemType, ]) => itemType === type);
   }
 
   getItemsGroupedByType(): object {

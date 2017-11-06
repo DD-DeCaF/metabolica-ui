@@ -1,7 +1,7 @@
 import {Component, OnInit} from '@angular/core';
-import {ClipboardService} from "./clipboard.service";
-import {SharingService} from "../sharing/sharing.service";
-import {OverlayRef} from "@angular/cdk/overlay";
+import {ClipboardService} from './clipboard.service';
+import {SharingService} from '../sharing/sharing.service';
+import {OverlayRef} from '@angular/cdk/overlay';
 import {DomSanitizer} from '@angular/platform-browser';
 import {MatIconRegistry} from '@angular/material';
 
@@ -14,7 +14,8 @@ export class ClipboardMenuPanelComponent implements OnInit {
   sharingTargets: Array<any>;
   private overlayRef: OverlayRef;
 
-  constructor(private iconRegistry: MatIconRegistry, private sanitizer: DomSanitizer, private clipboard: ClipboardService, private sharing: SharingService) {
+  constructor(iconRegistry: MatIconRegistry, sanitizer: DomSanitizer, private clipboard: ClipboardService,
+              private sharing: SharingService) {
     iconRegistry
       .addSvgIcon('share', sanitizer.bypassSecurityTrustResourceUrl('/assets/icons/share.svg'))
       .addSvgIcon('clear-all', sanitizer.bypassSecurityTrustResourceUrl('/assets/icons/clear-all.svg'))
@@ -31,9 +32,6 @@ export class ClipboardMenuPanelComponent implements OnInit {
         sharingTargets: this.sharing.findTargets(type)
       }))]);
     }
-
-    console.log(this.itemGroups);
-
     this.onSelectionChange();
   }
 
@@ -43,7 +41,6 @@ export class ClipboardMenuPanelComponent implements OnInit {
 
   getSharingTargets() {
     const selectedItemGroups = this.getSelectedItemGroups();
-    console.log(selectedItemGroups);
 
     return this.sharing.registry.filter(({_name, accept}) =>
       accept.some(({type, multiple}) => selectedItemGroups[type] !== undefined && (multiple || !(selectedItemGroups[type].length > 1))

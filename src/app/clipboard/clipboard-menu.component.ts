@@ -1,13 +1,13 @@
 import {Component, OnInit, ViewChild} from '@angular/core';
 import {Overlay, OverlayOrigin, OverlayRef} from '@angular/cdk/overlay';
-import {ComponentPortal} from "@angular/cdk/portal";
+import {ComponentPortal} from '@angular/cdk/portal';
 import {DomSanitizer} from '@angular/platform-browser';
 import {MatIconRegistry} from '@angular/material';
-import {ClipboardMenuPanelComponent} from "./clipboard-menu-panel.component";
-import {ClipboardService} from "./clipboard.service";
+import {ClipboardMenuPanelComponent} from './clipboard-menu-panel.component';
+import {ClipboardService} from './clipboard.service';
 
 @Component({
-  selector: 'clipboard-menu',
+  selector: 'app-clipboard-menu',
   template: `
     <span [hidden]="clipboard.isEmpty()">
     <button mat-icon-button id="clipboard-menu"
@@ -23,7 +23,7 @@ export class ClipboardMenuComponent implements OnInit {
   component: any = null;
   overlayRef: OverlayRef = null;
 
-  constructor(private iconRegistry: MatIconRegistry, private sanitizer: DomSanitizer, private overlay: Overlay, public clipboard: ClipboardService) {
+  constructor(iconRegistry: MatIconRegistry, sanitizer: DomSanitizer, private overlay: Overlay, public clipboard: ClipboardService) {
     iconRegistry
       .addSvgIcon('clipboard-outline', sanitizer.bypassSecurityTrustResourceUrl('/assets/icons/clipboard-outline.svg'));
 

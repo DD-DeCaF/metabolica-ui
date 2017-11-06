@@ -1,6 +1,6 @@
 import {Injectable} from '@angular/core';
-import {Router} from "@angular/router";
-import {RegistryService} from "../registry/registry.service";
+import {Router} from '@angular/router';
+import {RegistryService} from '../registry/registry.service';
 
 @Injectable()
 export class SharingService {
@@ -16,7 +16,7 @@ export class SharingService {
   }
 
   items(type: string, otherwise: Array<any> = []) {
-    let values = this.transfer[type];
+    const values = this.transfer[type];
     if (values instanceof Array) {
       delete this.transfer[type];
       return values;
@@ -29,7 +29,7 @@ export class SharingService {
   }
 
   item(type: string, otherwise: any = null) {
-    let value = this.transfer[type];
+    const value = this.transfer[type];
     if (!(value === undefined || value instanceof Array)) {
       delete this.transfer[type];
       return value;
@@ -53,8 +53,8 @@ export class SharingService {
   }
 
   _triggerOnShareChange() {
-    let targets = this.targets;
-    for (let hookFn of this.hooks) {
+    const targets = this.targets;
+    for (const hookFn of this.hooks) {
       hookFn(targets);
     }
   }
@@ -65,12 +65,13 @@ export class SharingService {
   }
 
   findTargets(provides, isMultiple = false) {
-    return this.registry.filter(({_name, accept, state}) => accept.some(({type, multiple}) => type === provides && (multiple || !isMultiple)));
+    return this.registry.filter(({_name, accept, state}) =>
+      accept.some(({type, multiple}) => type === provides && (multiple || !isMultiple)));
   }
 
   open(state) {
     this.transfer = this.provided;
-    this.router.navigate([state])
+    this.router.navigate([state]);
   }
 
   share(type, itemOrItems, targetState) {
