@@ -5,6 +5,7 @@ import {AuthGuardService} from './session/auth-guard.service';
 import {AppHomeComponent} from './app-home/app-home.component';
 import {LoginComponent} from './login/login.component';
 import {LogoutComponent} from './login/logout.component';
+import {ProjectComponent} from './project/project.component';
 
 const appRoutes: Route[] = [
   {
@@ -16,6 +17,12 @@ const appRoutes: Route[] = [
     path: 'home',
     component: AppHomeComponent,
     canActivate: [AuthGuardService],
+    children: [
+      {
+        path: 'project/:project',
+        component: ProjectComponent
+      },
+    ]
   },
   {
     path: 'login',

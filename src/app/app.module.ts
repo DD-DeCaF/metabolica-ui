@@ -22,7 +22,7 @@ import {AppToolbarComponent} from './app-toolbar/app-toolbar.component';
 import {AppHomeComponent} from './app-home/app-home.component';
 import {XrefsModule} from './xrefs/xrefs.module';
 import {MaintenanceModule} from './maintenance/maintenance.module';
-
+import {ProjectModule} from './project/project.module';
 
 @NgModule({
   declarations: [
@@ -45,7 +45,8 @@ import {MaintenanceModule} from './maintenance/maintenance.module';
     XrefsModule,
     SharingModule,
     ClipboardModule,
-    MaintenanceModule
+    MaintenanceModule,
+    ProjectModule
   ],
   providers: [AppAuthService],
   bootstrap: [AppComponent]
