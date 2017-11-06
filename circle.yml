@@ -33,7 +33,5 @@ jobs:
             - node_modules
           key: v1-dependencies-{{ checksum "package.json" }}
 
+      - run: npm run test -- -single-run --no-progress
       - run: npm run lint
-
-      - run: export CHROME_BIN=chromium-browser
-      - run: xvfb-run -a npm run test -- --single-run --no-progress --browser=ChromeNoSandbox
