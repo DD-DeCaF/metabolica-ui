@@ -1,10 +1,10 @@
 import {Injectable, Injector} from '@angular/core';
 import {HttpEvent, HttpHandler, HttpInterceptor, HttpRequest} from '@angular/common/http';
-import {Observable} from "rxjs/Observable";
-import "rxjs/add/operator/do";
-import {AppAuthService} from "../app-auth.service";
+import {Observable} from 'rxjs/Observable';
+import 'rxjs/add/operator/do';
+import {AppAuthService} from '../app-auth.service';
 import {LocalStorageService} from 'ngx-webstorage';
-import {SessionService} from "./session.service";
+import {SessionService} from './session.service';
 
 @Injectable()
 export class SessionInterceptorService implements HttpInterceptor {
@@ -18,7 +18,7 @@ export class SessionInterceptorService implements HttpInterceptor {
 
     const sessionJWT = localStorage.retrieve('sessionJWT');
     if (sessionJWT && appAuth.isTrustedURL(req.url)) {
-      req = req.clone({headers: req.headers.set('Authorization', `Bearer ${sessionJWT}`)})
+      req = req.clone({headers: req.headers.set('Authorization', `Bearer ${sessionJWT}`)});
     }
 
     return next.handle(req).do(

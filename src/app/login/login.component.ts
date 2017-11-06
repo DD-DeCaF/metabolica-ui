@@ -1,6 +1,6 @@
 import {Component, OnInit} from '@angular/core';
 import {ActivatedRoute, Params, Router} from '@angular/router';
-import {SessionService} from "../session/session.service";
+import {SessionService} from '../session/session.service';
 
 
 interface Credentials {
@@ -28,8 +28,8 @@ export class LoginComponent implements OnInit {
 
   ngOnInit() {
     this.activatedRoute.queryParams.subscribe((params: Params) => {
-      this.nextUrl = params.next
-    })
+      this.nextUrl = params.next;
+    });
   }
 
   authenticate(form: any): void {
@@ -41,7 +41,7 @@ export class LoginComponent implements OnInit {
       }
     }).catch(invalidCredentials => {
       form.resetForm();
-      form.control.setErrors({'invalidCredentials': true});
+      form.control.setErrors({invalidCredentials: true});
     });
   }
 }

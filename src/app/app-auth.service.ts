@@ -1,9 +1,9 @@
 import {Injectable} from '@angular/core';
-import {Location} from "@angular/common";
+import {Location} from '@angular/common';
 
 @Injectable()
 export class AppAuthService {
-  isRequired: boolean = true;
+  isRequired = true;
   trustedURLs = new Set();
   location: any;
 
@@ -12,7 +12,7 @@ export class AppAuthService {
   }
 
   getCurrentURL() {
-    if (this.location._baseHref.startsWith('https://') || this.location._baseHref.startsWith('https://')){
+    if (this.location._baseHref.startsWith('https://') || this.location._baseHref.startsWith('https://')) {
       return this.location.prepareExternalUrl(this.location.path());
     }
     // TODO - It does not seem like there is a clean way to do this.
@@ -24,6 +24,7 @@ export class AppAuthService {
     const currentHostname = (new URL(currentURL)).hostname;
 
     const urlObj = new URL(url, currentURL);
-    return urlObj.hostname === currentHostname || Array.from(this.trustedURLs).some(trustedURL => urlObj.href.startsWith(trustedURL));
+    return urlObj.hostname === currentHostname || Array.from(this.trustedURLs)
+      .some(trustedURL => urlObj.href.startsWith(trustedURL));
   }
 }

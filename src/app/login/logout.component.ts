@@ -1,6 +1,6 @@
 import {Component, OnInit} from '@angular/core';
-import {SessionService} from "../session/session.service";
-import {Router} from "@angular/router";
+import {SessionService} from '../session/session.service';
+import {Router} from '@angular/router';
 
 @Component({
   selector: 'app-logout',

@@ -1,5 +1,5 @@
 import {Component} from '@angular/core';
-import {RegistryService} from "../registry/registry.service";
+import {RegistryService} from '../registry/registry.service';
 
 
 interface Source {
@@ -18,9 +18,9 @@ interface Source {
   styleUrls: ['./search.component.css']
 })
 export class SearchComponent {
-  showSearch: boolean = false;
-  searchText: string = '';
-  placeholder: string = 'Search';
+  showSearch = false;
+  searchText = '';
+  placeholder = 'Search';
   searchSources: Array<Source>;
 
   constructor(registry: RegistryService) {
@@ -32,11 +32,11 @@ export class SearchComponent {
       query: (resource, searchText) => {
         return new Promise((resolve, reject) => {
           resolve(['elementA', 'elementB', 'otherElement']
-            .filter(x => x.startsWith(searchText)))
+            .filter(x => x.startsWith(searchText)));
         });
       },
-      stateParams: (item) => ({item}),
-      formatAsText: (item) => `${item}_formatted`
+      stateParams: item => ({item}),
+      formatAsText: item => `${item}_formatted`
     });
 
     this.searchSources = Object.values(registry.get('search'));
@@ -50,7 +50,7 @@ export class SearchComponent {
 
   query() {
     if (this.searchText && this.searchText.length > 1) {
-      let searches = [];
+      const searches = [];
       for (const source of this.searchSources) {
         searches.push(source.query(source.resourceName, this.searchText)
           .then(results =>
@@ -66,7 +66,7 @@ export class SearchComponent {
       }
 
       return Promise.all(searches)
-        .then(searches => searches
+        .then(results => results
           .reduce((a, b) => a.concat(b))
           .sort((a, b) => a.text.localeCompare(b.text))
         );
@@ -74,7 +74,6 @@ export class SearchComponent {
   }
 
   onItemSelection(item: any) {
-    console.log(item);
     if (item) {
       this.searchText = '';
       this.showSearch = false;

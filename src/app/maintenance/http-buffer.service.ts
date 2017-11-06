@@ -1,5 +1,5 @@
 import {Injectable} from '@angular/core';
-import {HttpClient} from "@angular/common/http";
+import {HttpClient} from '@angular/common/http';
 
 @Injectable()
 export class HttpBufferService {
@@ -12,12 +12,12 @@ export class HttpBufferService {
   }
 
   retryHttpRequest(request) {
-    this.client.request(request).subscribe(() => {}, () => {})
+    this.client.request(request).subscribe(() => {}, () => {});
   }
 
   retryAll() {
-    for (let request of this.buffer) {
-      this.retryHttpRequest(request)
+    for (const request of this.buffer) {
+      this.retryHttpRequest(request);
     }
     this.buffer = [];
   }

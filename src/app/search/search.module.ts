@@ -1,10 +1,10 @@
 import {NgModule} from '@angular/core';
 import {CommonModule} from '@angular/common';
 import {SearchComponent} from './search.component';
-import {AppMaterialModule} from "../app-material.module";
-import {FlexLayoutModule} from "@angular/flex-layout";
-import {FormsModule} from "@angular/forms";
-import {RegistryService} from "../registry/registry.service";
+import {AppMaterialModule} from '../app-material.module';
+import {FlexLayoutModule} from '@angular/flex-layout';
+import {FormsModule} from '@angular/forms';
+import {RegistryService} from '../registry/registry.service';
 
 
 @NgModule({

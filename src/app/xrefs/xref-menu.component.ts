@@ -1,7 +1,13 @@
 import {Component, OnChanges, Input, ViewChild} from '@angular/core';
 import {Overlay, OverlayOrigin} from '@angular/cdk/overlay';
-import {ComponentPortal} from "@angular/cdk/portal";
-import {RegistryService} from "../registry/registry.service";
+import {ComponentPortal} from '@angular/cdk/portal';
+import {RegistryService} from '../registry/registry.service';
+
+@Component({
+  selector: 'app-test-panel',
+  template: `<div> xref menu content </div>`
+})
+export class TestPanelComponent { }
 
 
 @Component({
@@ -11,7 +17,7 @@ import {RegistryService} from "../registry/registry.service";
 })
 export class XrefMenuComponent implements OnChanges {
   component: any = null;
-  text: string = '';
+  text = '';
   xrefs: any;
   @Input() type: string;
   @Input() value: any;
@@ -20,10 +26,10 @@ export class XrefMenuComponent implements OnChanges {
   constructor(public overlay: Overlay, registry: RegistryService) {
     // register for test purposes
     registry.register('Experiment', ['xref'], {
-      component: TestPanel,
+      component: TestPanelComponent ,
       state: 'app.project.experiment',
-      stateParams: (experiment) => ({experimentId: experiment.id}),
-      formatAsText: (experiment) => experiment.identifier
+      stateParams: experiment => ({experimentId: experiment.id}),
+      formatAsText: experiment => experiment.identifier
     });
 
     this.xrefs = registry.get('xref');
@@ -41,7 +47,7 @@ export class XrefMenuComponent implements OnChanges {
 
   openPanel() {
     if (this.value && this.component) {
-      let overlayRef = this.overlay.create({
+      const overlayRef = this.overlay.create({
         backdropClass: 'cdk-overlay-transparent-backdrop',
         hasBackdrop: true,
         panelClass: 'xref-menu-overlay-panel', // has to be defined in styles.css (main css file)
@@ -69,10 +75,3 @@ export class XrefMenuComponent implements OnChanges {
     }
   }
 }
-
-
-@Component({
-  selector: 'test-panel',
-  template: `<div> xref menu content </div>`
-})
-export class TestPanel { }

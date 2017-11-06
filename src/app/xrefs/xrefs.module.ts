@@ -1,12 +1,12 @@
 import {NgModule} from '@angular/core';
 import {CommonModule} from '@angular/common';
-import {OverlayModule} from "@angular/cdk/overlay";
+import {OverlayModule} from '@angular/cdk/overlay';
 
 import {XrefComponent} from './xref.component';
-import {RegistryService} from "../registry/registry.service";
-import {AppMaterialModule} from "../app-material.module";
-import {AppRoutingModule} from "../app-routing.module";
-import {XrefMenuComponent, TestPanel} from './xref-menu.component';
+import {RegistryService} from '../registry/registry.service';
+import {AppMaterialModule} from '../app-material.module';
+import {AppRoutingModule} from '../app-routing.module';
+import {XrefMenuComponent, TestPanelComponent} from './xref-menu.component';
 
 
 @NgModule({
@@ -17,9 +17,9 @@ import {XrefMenuComponent, TestPanel} from './xref-menu.component';
     OverlayModule,
   ],
   exports: [XrefComponent, XrefMenuComponent],
-  declarations: [XrefComponent, XrefMenuComponent, TestPanel],
+  declarations: [XrefComponent, XrefMenuComponent, TestPanelComponent],
   providers: [RegistryService],
-  entryComponents: [TestPanel]
+  entryComponents: [TestPanelComponent]
 })
 export class XrefsModule {
 }

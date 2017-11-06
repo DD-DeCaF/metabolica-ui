@@ -29,7 +29,9 @@ describe('AppAuthService', () => {
     // let's add a trusted URL
     service.trustedURLs.add('https://stackoverflow.com/questions');
 
-    expect(service.isTrustedURL('https://stackoverflow.com/questions/38008334/angular-rxjs-when-should-i-unsubscribe-from-subscription')).toEqual(true);
+    expect(
+      service.isTrustedURL('https://stackoverflow.com/questions/38008334/angular-rxjs-when-should-i-unsubscribe-from-subscription')
+    ).toEqual(true);
 
     // http is not allowed because only https:// url was added
     expect(service.isTrustedURL('http://stackoverflow.com/questions')).toEqual(false);

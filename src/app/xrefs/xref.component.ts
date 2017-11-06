@@ -1,5 +1,5 @@
 import { Component, OnChanges, Input } from '@angular/core';
-import {RegistryService} from "../registry/registry.service";
+import {RegistryService} from '../registry/registry.service';
 
 @Component({
   selector: 'app-xref',
@@ -7,9 +7,9 @@ import {RegistryService} from "../registry/registry.service";
 })
 export class XrefComponent implements OnChanges {
   xrefs: any;
-  state: string = '';
+  state = '';
   stateParams: {[key: string]: any};
-  text: string = '';
+  text = '';
   @Input() type: string;
   @Input() value: any;
 

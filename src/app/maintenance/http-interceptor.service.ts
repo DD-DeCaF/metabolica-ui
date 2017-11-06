@@ -1,15 +1,14 @@
 import {Injectable, Injector} from '@angular/core';
-import {HttpEvent, HttpHandler, HttpInterceptor, HttpRequest} from "@angular/common/http";
-import {Observable} from "rxjs/Observable";
-import {MatDialog} from "@angular/material";
-import {MaintenanceDialogComponent} from "./maintenance-dialog.component";
-import {HttpClient} from "@angular/common/http";
-import {HttpBufferService} from "./http-buffer.service";
+import {HttpEvent, HttpHandler, HttpInterceptor, HttpRequest} from '@angular/common/http';
+import {Observable} from 'rxjs/Observable';
+import {MatDialog} from '@angular/material';
+import {MaintenanceDialogComponent} from './maintenance-dialog.component';
+import {HttpBufferService} from './http-buffer.service';
 
 
 @Injectable()
 export class HttpInterceptorService implements HttpInterceptor {
-  dialogIsOpen: boolean = false;
+  dialogIsOpen = false;
 
   constructor(public dialog: MatDialog, private injector: Injector) {
   }

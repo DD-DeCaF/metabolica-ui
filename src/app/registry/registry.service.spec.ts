@@ -10,9 +10,9 @@ describe('RegistryService', () => {
   });
 
   it('Should be able to register configs', inject([RegistryService], (service: RegistryService) => {
-    service.register('experiment', ['sharing', 'clipboard', 'search'], {'name': 'Experiment'});
-    service.register('pool', ['clipboard'], {'name': 'Pool'});
-    service.register('media', ['search'], {'name': 'Media'});
+    service.register('experiment', ['sharing', 'clipboard', 'search'], {name: 'Experiment'});
+    service.register('pool', ['clipboard'], {name: 'Pool'});
+    service.register('media', ['search'], {name: 'Media'});
 
     expect(Object.keys(service.get('clipboard'))).toEqual(['experiment', 'pool']);
     expect(Object.keys(service.get('sharing'))).toEqual(['experiment']);
