@@ -1,0 +1,48 @@
+<div fxLayout="column" class="clipboard-menu-panel">
+
+  <mat-list *ngFor="let itemGroup of itemGroups">
+    <h3 mat-subheader>{{ getTypePluralName(itemGroup[0]) }}</h3>
+    <mat-list-item fxFill fxLayout="row" *ngFor="let item of itemGroup[1]">
+      <mat-checkbox align="start" [(ngModel)]="item.selected" (ngChange)="onSelectionChange()"
+                    aria-label="Select for sharing">
+        {{ item.value }}
+      </mat-checkbox>
+      <span fxFill></span>
+      <button mat-icon-button aria-label="More" class="mat-icon-button" [matMenuTriggerFor]="shareFromClipboard">
+        <mat-icon>more_vert</mat-icon>
+      </button>
+      <mat-menu class="md-secondary" #shareFromClipboard="matMenu">
+        <button mat-icon-button *ngFor="let target of item.sharingTargets"
+                (click)="shareWith(itemGroup[0], item.value, target.state)">
+          <mat-icon svgIcon="share"></mat-icon>
+          Visualization
+        </button>
+        <mat-divider *ngIf="item.sharingTargets.length"></mat-divider>
+        <button mat-icon-button (click)="remove(itemGroup[0], item.value)">
+          <mat-icon svgIcon="delete"></mat-icon>
+          Delete
+        </button>
+      </mat-menu>
+    </mat-list-item>
+    <mat-divider></mat-divider>
+  </mat-list>
+
+  <mat-toolbar class="md-accent md-hue-1">
+    <div fxFill fxLayout="row">
+      <button mat-icon-button class="mat-icon-button" (click)="clear()">
+        <mat-icon svgIcon="clear-all"></mat-icon>
+      </button>
+      <span fxFlex></span>
+      <button mat-icon-button [disabled]="!sharingTargets.length" class="mat-icon-button"
+              [matMenuTriggerFor]="shareFromClipboard">
+        <mat-icon svgIcon="share"></mat-icon>
+      </button>
+      <mat-menu md-position-mode="target-right target" #shareFromClipboard="matMenu">
+        <button mat-icon-button *ngFor="let target of sharingTargets" (click)="open(target.state)">
+          <mat-icon svgIcon="share"></mat-icon>
+          {{ target.name }}
+        </button>
+      </mat-menu>
+    </div>
+  </mat-toolbar>
+</div>

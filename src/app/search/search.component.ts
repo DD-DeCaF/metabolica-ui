@@ -6,8 +6,11 @@ interface Source {
   resourceName: string;
   pluralName: string;
   state: string;
+
   query(resource: any, searchText: string): Promise<any>;
-  stateParams(item: any): {[key: string]: any};
+
+  stateParams(item: any): { [key: string]: any };
+
   formatAsText(item: any): string;
 }
 
@@ -25,7 +28,10 @@ export class SearchComponent {
 
   constructor(registry: RegistryService) {
     // register fake resource for testing purpose
-    registry.register('experiment', ['search'], {
+    registry.register('experiment', ['search', 'clipboard', 'sharing'], {
+      type: 'experiment',
+      name: 'Experiment',
+      accept: [{type: 'experiment', multiple: true}],
       resourceName: 'testElement',
       pluralName: 'testElements',
       state: 'home',

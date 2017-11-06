@@ -3,6 +3,7 @@ import {NgModule} from '@angular/core';
 import {BrowserModule} from '@angular/platform-browser';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {FlexLayoutModule} from '@angular/flex-layout';
+import {HttpModule} from '@angular/http';
 import {HttpClientModule} from '@angular/common/http';
 import {Ng2Webstorage} from 'ngx-webstorage';
 
@@ -11,7 +12,8 @@ import {AppRoutingModule} from './app-routing.module';
 import {SessionModule} from './session/session.module';
 import {SearchModule} from './search/search.module';
 import {RegistryModule} from './registry/registry.module';
-
+import {SharingModule} from './sharing/sharing.module';
+import {ClipboardModule} from './clipboard/clipboard.module';
 
 import {AppAuthService} from './app-auth.service';
 
@@ -32,6 +34,7 @@ import {MaintenanceModule} from './maintenance/maintenance.module';
     BrowserModule,
     BrowserAnimationsModule,
     FlexLayoutModule,
+    HttpModule,
     HttpClientModule,
     Ng2Webstorage,
     AppRoutingModule,
@@ -40,6 +43,8 @@ import {MaintenanceModule} from './maintenance/maintenance.module';
     SearchModule,
     RegistryModule,
     XrefsModule,
+    SharingModule,
+    ClipboardModule,
     MaintenanceModule
   ],
   providers: [AppAuthService],

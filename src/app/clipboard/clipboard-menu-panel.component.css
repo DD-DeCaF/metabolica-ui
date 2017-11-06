@@ -1,0 +1,8 @@
+.clipboard-menu-panel {
+  width: 500px;
+  max-height: 350px;
+  border-radius: 4px;
+  overflow: hidden;
+  display: flex;
+  flex: 1;
+}
