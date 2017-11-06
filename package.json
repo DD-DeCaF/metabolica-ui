@@ -7,7 +7,7 @@
     "start": "ng serve",
     "build": "ng build",
     "test": "ng test",
-    "lint": "ng lint",
+    "lint": "ng lint --type-check",
     "e2e": "ng e2e",
     "docs": "./node_modules/.bin/compodoc -p src/tsconfig.app.json --includes guides/ --includesName Guides -d docs/"
   },

@@ -9,9 +9,9 @@ import {SessionService} from '../session/session.service';
 })
 export class AppToolbarComponent implements OnInit {
   isAuthenticated: boolean;
-  @Input() private sidenav: MatSidenav;
+  @Input() sidenav: MatSidenav;
 
-  constructor(private session: SessionService) {
+  constructor(session: SessionService) {
     this.isAuthenticated = session.isAuthenticated();
   }
 

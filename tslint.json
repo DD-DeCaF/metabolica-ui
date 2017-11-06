@@ -5,7 +5,7 @@
   "rules": {
     "no-unused-variable": {
       "severity": "warning",
-      "options": [{"ignore-pattern": "^_"}]
+      "options": ["log", {"ignore-pattern": "^_"}]
     },
     "one-variable-per-declaration": true,
     "no-console": {
