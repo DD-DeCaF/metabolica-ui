@@ -13,7 +13,8 @@ import {
   MatListModule,
   MatMenuModule,
   MatSidenavModule,
-  MatToolbarModule
+  MatToolbarModule,
+  MatTableModule
 } from '@angular/material';
 
 
@@ -21,10 +22,10 @@ import {
  * https://material.angular.io/guide/getting-started#step-3-import-the-component-modules
  */
 @NgModule({
-  imports: [MatButtonModule, MatCheckboxModule, MatListModule, MatToolbarModule, MatIconModule, MatFormFieldModule,
-    MatInputModule, MatCardModule, MatSidenavModule, MatMenuModule, MatAutocompleteModule, MatDialogModule],
-  exports: [MatButtonModule, MatCheckboxModule, MatListModule, MatToolbarModule, MatIconModule, MatFormFieldModule,
-    MatInputModule, MatCardModule, MatSidenavModule, MatMenuModule, MatAutocompleteModule, MatDialogModule],
+  imports: [MatButtonModule, MatCheckboxModule, MatListModule, MatToolbarModule, MatIconModule, MatFormFieldModule, MatInputModule,
+    MatCardModule, MatSidenavModule, MatMenuModule, MatAutocompleteModule, MatDialogModule, MatTableModule],
+  exports: [MatButtonModule, MatCheckboxModule, MatListModule, MatToolbarModule, MatIconModule, MatFormFieldModule, MatInputModule,
+    MatCardModule, MatSidenavModule, MatMenuModule, MatAutocompleteModule, MatDialogModule, MatTableModule],
   providers: [MatIconRegistry]
 })
 export class AppMaterialModule {

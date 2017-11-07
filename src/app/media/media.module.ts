@@ -3,10 +3,13 @@ import { CommonModule } from '@angular/common';
 import { MediumComponent } from './medium.component';
 import { MediumListComponent } from './medium-list.component';
 import {RegistryService} from '../registry/registry.service';
+import {AppMaterialModule} from '../app-material.module';
+
 
 @NgModule({
   imports: [
-    CommonModule
+    CommonModule,
+    AppMaterialModule
   ],
   declarations: [MediumComponent, MediumListComponent]
 })
