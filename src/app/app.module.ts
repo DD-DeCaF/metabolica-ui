@@ -6,6 +6,7 @@ import {FlexLayoutModule} from '@angular/flex-layout';
 import {HttpModule} from '@angular/http';
 import {HttpClientModule} from '@angular/common/http';
 import {Ng2Webstorage} from 'ngx-webstorage';
+import {POTION_CONFIG, POTION_RESOURCES, PotionModule} from 'potion-client';
 
 import {AppMaterialModule} from './app-material.module';
 import {AppRoutingModule} from './app-routing.module';
@@ -14,9 +15,7 @@ import {SearchModule} from './search/search.module';
 import {RegistryModule} from './registry/registry.module';
 import {SharingModule} from './sharing/sharing.module';
 import {ClipboardModule} from './clipboard/clipboard.module';
-
 import {AppAuthService} from './app-auth.service';
-
 import {AppComponent} from './app.component';
 import {AppToolbarComponent} from './app-toolbar/app-toolbar.component';
 import {AppHomeComponent} from './app-home/app-home.component';
@@ -24,6 +23,7 @@ import {XrefsModule} from './xrefs/xrefs.module';
 import {MaintenanceModule} from './maintenance/maintenance.module';
 import {ProjectModule} from './project/project.module';
 import {MediaModule} from './media/media.module';
+import {resources} from './app.resources';
 
 @NgModule({
   declarations: [
@@ -36,6 +36,7 @@ import {MediaModule} from './media/media.module';
     BrowserAnimationsModule,
     FlexLayoutModule,
     HttpModule,
+    PotionModule,
     HttpClientModule,
     Ng2Webstorage,
     AppRoutingModule,
@@ -50,7 +51,20 @@ import {MediaModule} from './media/media.module';
     ProjectModule,
     MediaModule
   ],
-  providers: [AppAuthService],
+  providers: [
+    AppAuthService,
+    {
+      provide: POTION_RESOURCES,
+      useValue: resources,
+      multi: true
+    },
+    {
+      provide: POTION_CONFIG,
+      useValue: {
+        prefix: '/api'
+      }
+    }
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule {

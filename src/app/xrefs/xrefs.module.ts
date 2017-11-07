@@ -22,5 +22,14 @@ import {XrefMenuComponent, TestPanelComponent} from './xref-menu.component';
   entryComponents: [TestPanelComponent]
 })
 export class XrefsModule {
+  constructor(private registry: RegistryService){
+    // register for test purposes
+    registry.register('Experiment', ['xref'], {
+      component: TestPanelComponent ,
+      state: 'app.project.experiment',
+      stateParams: experiment => ({experimentId: experiment.id}),
+      formatAsText: experiment => experiment.identifier
+    });
+  }
 }
 

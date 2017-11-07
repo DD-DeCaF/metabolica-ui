@@ -3,6 +3,8 @@ import {HttpClient} from '@angular/common/http';
 import {LocalStorageService} from 'ngx-webstorage';
 import 'rxjs/add/operator/toPromise';
 
+import {User} from "../app.resources";
+
 @Injectable()
 export class SessionService {
 
@@ -37,6 +39,19 @@ export class SessionService {
       }
     } else {
       return {};
+    }
+  }
+
+  getCurrentUser() {
+    if (!this.isAuthenticated()) {
+      return null;
+    }
+
+    let attrs = this.attributes;
+    if (attrs.userId) {
+      return User.fetch(attrs.userId, {cache: false});
+    } else {
+      return User.current();
     }
   }
 

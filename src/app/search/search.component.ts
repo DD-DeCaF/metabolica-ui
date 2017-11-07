@@ -27,23 +27,7 @@ export class SearchComponent {
   searchSources: Array<Source>;
 
   constructor(registry: RegistryService) {
-    // register fake resource for testing purpose
-    registry.register('experiment', ['search', 'clipboard', 'sharing'], {
-      type: 'experiment',
-      name: 'Experiment',
-      accept: [{type: 'experiment', multiple: true}],
-      resourceName: 'testElement',
-      pluralName: 'testElements',
-      state: 'home',
-      query: (resource, searchText) => {
-        return new Promise((resolve, reject) => {
-          resolve(['elementA', 'elementB', 'otherElement']
-            .filter(x => x.startsWith(searchText)));
-        });
-      },
-      stateParams: item => ({item}),
-      formatAsText: item => `${item}_formatted`
-    });
+
 
     this.searchSources = Object.values(registry.get('search'));
     this.placeholder = `Search ${this.searchSources.map(source => source.pluralName).join(', ')}`;

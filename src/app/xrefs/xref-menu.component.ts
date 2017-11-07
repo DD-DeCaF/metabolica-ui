@@ -24,13 +24,7 @@ export class XrefMenuComponent implements OnChanges {
   @ViewChild(OverlayOrigin) overlayOrigin: OverlayOrigin;
 
   constructor(public overlay: Overlay, registry: RegistryService) {
-    // register for test purposes
-    registry.register('Experiment', ['xref'], {
-      component: TestPanelComponent ,
-      state: 'app.project.experiment',
-      stateParams: experiment => ({experimentId: experiment.id}),
-      formatAsText: experiment => experiment.identifier
-    });
+
 
     this.xrefs = registry.get('xref');
   }
