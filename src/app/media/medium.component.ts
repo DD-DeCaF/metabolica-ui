@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import {ActivatedRoute} from '@angular/router';
 
 @Component({
   selector: 'app-medium',
@@ -6,10 +7,13 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./medium.component.css']
 })
 export class MediumComponent implements OnInit {
+  mediumId: string;
 
-  constructor() { }
+  constructor(private route: ActivatedRoute) { }
 
   ngOnInit() {
+    this.mediumId = this.route.snapshot.paramMap.get('mediumId');
+    console.log(this.mediumId)
   }
 
 }

@@ -7,6 +7,8 @@ import {LoginComponent} from './login/login.component';
 import {LogoutComponent} from './login/logout.component';
 import {ProjectComponent} from './project/project.component';
 import {ProjectResolverService} from './project/project-resolver.service';
+import {MediumListComponent} from './media/medium-list.component';
+import {MediumComponent} from './media/medium.component';
 
 const appRoutes: Route[] = [
   {
@@ -26,6 +28,14 @@ const appRoutes: Route[] = [
           project: ProjectResolverService
         }
       },
+      {
+        path: 'media',
+        component: MediumListComponent
+      },
+      {
+        path: 'medium/:mediumId',
+        component: MediumComponent
+      }
     ]
   },
   {

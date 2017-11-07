@@ -23,6 +23,7 @@ import {AppHomeComponent} from './app-home/app-home.component';
 import {XrefsModule} from './xrefs/xrefs.module';
 import {MaintenanceModule} from './maintenance/maintenance.module';
 import {ProjectModule} from './project/project.module';
+import {MediaModule} from './media/media.module';
 
 @NgModule({
   declarations: [
@@ -46,7 +47,8 @@ import {ProjectModule} from './project/project.module';
     SharingModule,
     ClipboardModule,
     MaintenanceModule,
-    ProjectModule
+    ProjectModule,
+    MediaModule
   ],
   providers: [AppAuthService],
   bootstrap: [AppComponent]
