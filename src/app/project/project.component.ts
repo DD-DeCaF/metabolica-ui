@@ -1,17 +1,18 @@
 import {Component, OnInit} from '@angular/core';
 import {ActivatedRoute} from '@angular/router';
 
+
 @Component({
   selector: 'app-project',
-  template: `<p> You are know browsing project {{projectId}}</p>`
+  template: `<p> You are know browsing project {{project.name}}</p>`
 })
 export class ProjectComponent implements OnInit {
-  projectId: string;
+  project: any;
 
   constructor(private route: ActivatedRoute) { }
 
   ngOnInit() {
-    this.projectId = this.route.snapshot.paramMap.get('project');
+    this.project = this.route.snapshot.data['project'];
   }
 
 }

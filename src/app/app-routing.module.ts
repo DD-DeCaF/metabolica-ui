@@ -6,6 +6,7 @@ import {AppHomeComponent} from './app-home/app-home.component';
 import {LoginComponent} from './login/login.component';
 import {LogoutComponent} from './login/logout.component';
 import {ProjectComponent} from './project/project.component';
+import {ProjectResolverService} from './project/project-resolver.service';
 
 const appRoutes: Route[] = [
   {
@@ -20,7 +21,10 @@ const appRoutes: Route[] = [
     children: [
       {
         path: 'project/:project',
-        component: ProjectComponent
+        component: ProjectComponent,
+        resolve: {
+          project: ProjectResolverService
+        }
       },
     ]
   },
