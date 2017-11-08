@@ -3,14 +3,15 @@ import {RegistryService} from '../registry/registry.service';
 
 @Component({
   selector: 'app-xref',
-  template: `<a [queryParams]="stateParams" [routerLink]="state">{{ text }}</a>`,
+  template: `<a [queryParams]="queryParams" [routerLink]="routerLink">{{ text }}</a>`,
   styles: ['a {text-decoration: none;}']
 })
 export class XrefComponent implements OnChanges {
-  xrefs: any;
-  state = '';
-  stateParams: {[key: string]: any};
+  routerLink: Array<string|number> | string | number;
+  queryParams: {[key: string]: any};
   text = '';
+  xrefs: {[key: string]: any};
+
   @Input() type: string;
   @Input() value: any;
 
@@ -22,8 +23,8 @@ export class XrefComponent implements OnChanges {
     if (this.value) {
       const config = this.xrefs[this.type || this.value.constructor.name];
       if (config) {
-        this.state = config.state;
-        this.stateParams = config.stateParams(this.value);
+        this.routerLink = config.getRouterLink(this.value);
+        this.queryParams = config.getQueryParams(this.value);
         this.text = config.formatAsText(this.value);
       }
     }

@@ -1,16 +1,14 @@
 import {Component} from '@angular/core';
 import {RegistryService} from '../registry/registry.service';
+import {Router} from '@angular/router';
 
 
 interface Source {
   resourceName: string;
   pluralName: string;
-  state: string;
-
-  query(resource: any, searchText: string): Promise<any>;
-
-  stateParams(item: any): { [key: string]: any };
-
+  query(searchText: string): Promise<any>;
+  getQueryParams(item: any): { [key: string]: any };
+  getRouterLink(item: any): Array<string|number> | string | number;
   formatAsText(item: any): string;
 }
 
@@ -26,9 +24,7 @@ export class SearchComponent {
   placeholder = 'Search';
   searchSources: Array<Source>;
 
-  constructor(registry: RegistryService) {
-
-
+  constructor(registry: RegistryService, private router: Router) {
     this.searchSources = Object.values(registry.get('search'));
     this.placeholder = `Search ${this.searchSources.map(source => source.pluralName).join(', ')}`;
   }
@@ -42,13 +38,13 @@ export class SearchComponent {
     if (this.searchText && this.searchText.length > 1) {
       const searches = [];
       for (const source of this.searchSources) {
-        searches.push(source.query(source.resourceName, this.searchText)
-          .then(results =>
-            results.map(result => ({
+        searches.push(source.query(this.searchText)
+          .then(items =>
+            items.map(item => ({
               source,
-              state: source.state,
-              stateParams: source.stateParams(result),
-              text: source.formatAsText(result)
+              routerLink: source.getRouterLink(item),
+              queryParams: source.getQueryParams(item),
+              text: source.formatAsText(item)
             }))
           )
           .catch(() => [])
@@ -67,7 +63,7 @@ export class SearchComponent {
     if (item) {
       this.searchText = '';
       this.showSearch = false;
-      // to do: redirect to url (using item.state, item.stateParam)
+      this.router.navigate(item.routerLink, {queryParams: item.queryParams});
     }
   }
 }

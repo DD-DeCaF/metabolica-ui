@@ -13,7 +13,6 @@ export class MediumComponent implements OnInit {
 
   ngOnInit() {
     this.mediumId = this.route.snapshot.paramMap.get('mediumId');
-    console.log(this.mediumId)
   }
 
 }

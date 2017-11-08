@@ -13,14 +13,6 @@ import 'rxjs/add/operator/switchMap';
 import {Medium} from '../app.resources';
 
 
-export interface Medium {
-  name: string;
-  key: string;
-  createdBy: string;
-  createdAt: string;
-}
-
-
 @Component({
   selector: 'app-medium-list',
   templateUrl: './medium-list.component.html',
