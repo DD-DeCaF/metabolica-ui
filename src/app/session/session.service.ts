@@ -3,7 +3,7 @@ import {HttpClient} from '@angular/common/http';
 import {LocalStorageService} from 'ngx-webstorage';
 import 'rxjs/add/operator/toPromise';
 
-import {User} from "../app.resources";
+import {User} from '../app.resources';
 
 @Injectable()
 export class SessionService {
@@ -47,7 +47,7 @@ export class SessionService {
       return null;
     }
 
-    let attrs = this.attributes;
+    const attrs = this.attributes;
     if (attrs.userId) {
       return User.fetch(attrs.userId, {cache: false});
     } else {

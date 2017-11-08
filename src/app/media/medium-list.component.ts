@@ -13,28 +13,6 @@ import 'rxjs/add/operator/switchMap';
 import {Medium} from '../app.resources';
 
 
-@Component({
-  selector: 'app-medium-list',
-  templateUrl: './medium-list.component.html',
-  styleUrls: ['./medium-list.component.css']
-})
-export class MediumListComponent implements OnInit {
-  pageSize = 10;
-  order = 'name';
-  dataSource: MediumDataSource;
-  displayedColumns = ['name', 'identifier', 'createdBy', 'createdAt'];
-
-  @ViewChild(MatPaginator) paginator: MatPaginator;
-  @ViewChild(MatSort) sort: MatSort;
-
-  constructor() { }
-
-  ngOnInit() {
-    this.dataSource = new MediumDataSource(this.paginator, this.sort);
-  }
-
-}
-
 class MediumDataSource extends DataSource<Medium> {
   resultsLength = 119; // {paginate: true} doesn't work, so we can't get the total length from the query
 
@@ -69,6 +47,27 @@ class MediumDataSource extends DataSource<Medium> {
   disconnect() {}
 }
 
+@Component({
+  selector: 'app-medium-list',
+  templateUrl: './medium-list.component.html',
+  styleUrls: ['./medium-list.component.css']
+})
+export class MediumListComponent implements OnInit {
+  pageSize = 10;
+  order = 'name';
+  dataSource: MediumDataSource;
+  displayedColumns = ['name', 'identifier', 'createdBy', 'createdAt'];
+
+  @ViewChild(MatPaginator) paginator: MatPaginator;
+  @ViewChild(MatSort) sort: MatSort;
+
+  constructor() { }
+
+  ngOnInit() {
+    this.dataSource = new MediumDataSource(this.paginator, this.sort);
+  }
+
+}
 
 function getSortValue(activeSort: string, direction: string): {[key: string]: boolean} {
   if (activeSort) {
