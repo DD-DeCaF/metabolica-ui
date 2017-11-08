@@ -54,7 +54,7 @@ class MediumDataSource extends DataSource<Medium> {
 })
 export class MediumListComponent implements OnInit {
   pageSize = 10;
-  order = 'name';
+  defaultSort = 'createdAt';
   dataSource: MediumDataSource;
   displayedColumns = ['name', 'identifier', 'createdBy', 'createdAt'];
 

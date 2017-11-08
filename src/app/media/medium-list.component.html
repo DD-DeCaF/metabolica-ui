@@ -4,6 +4,8 @@
 
 <mat-table #table
            matSort
+           matSortDirection="desc"
+           [matSortActive]="defaultSort"
            [dataSource]="dataSource">
 
   <ng-container matColumnDef="name">
