@@ -1,11 +1,40 @@
-<mat-table #table [dataSource]="dataSource">
+<mat-toolbar class="mat-accent">
+  <h2>Media</h2>
+</mat-toolbar>
+
+<mat-table #table
+           matSort
+           [dataSource]="dataSource">
 
   <ng-container matColumnDef="name">
-    <mat-header-cell *matHeaderCellDef> Name</mat-header-cell>
-    <mat-cell *matCellDef="let row"> {{row.name}} </mat-cell>
+    <mat-header-cell *matHeaderCellDef mat-sort-header> Name </mat-header-cell>
+    <mat-cell *matCellDef="let medium">
+      <app-xref [type]="'Medium'" [value]="medium">{{medium.name}}</app-xref>
+    </mat-cell>
+  </ng-container>
+
+  <ng-container matColumnDef="identifier">
+    <mat-header-cell *matHeaderCellDef mat-sort-header> Key </mat-header-cell>
+    <mat-cell *matCellDef="let medium"> {{medium.identifier}} </mat-cell>
+  </ng-container>
+
+  <ng-container matColumnDef="createdBy">
+    <mat-header-cell *matHeaderCellDef mat-sort-header> Created By </mat-header-cell>
+    <mat-cell *matCellDef="let medium"> to do: user </mat-cell>
+  </ng-container>
+
+  <ng-container matColumnDef="createdAt">
+    <mat-header-cell *matHeaderCellDef mat-sort-header> Date created </mat-header-cell>
+    <mat-cell *matCellDef="let medium"> to do: date </mat-cell>
   </ng-container>
 
   <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
-  <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
+  <mat-row *matRowDef="let medium; columns: displayedColumns;"></mat-row>
 
 </mat-table>
+
+<mat-paginator #paginator
+               [length]="dataSource.resultsLength"
+               [pageIndex]="0"
+               [pageSize]="pageSize">
+</mat-paginator>

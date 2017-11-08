@@ -3,7 +3,8 @@ import {RegistryService} from '../registry/registry.service';
 
 @Component({
   selector: 'app-xref',
-  template: `<a matLine [queryParams]="stateParams" [routerLink]="state">{{ text }}</a>`
+  template: `<a [queryParams]="stateParams" [routerLink]="state">{{ text }}</a>`,
+  styles: ['a {text-decoration: none;}']
 })
 export class XrefComponent implements OnChanges {
   xrefs: any;

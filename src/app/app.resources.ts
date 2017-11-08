@@ -35,6 +35,11 @@ export class Project extends Item {
 export class ProjectMembership extends Item {
 }
 
+export class Medium extends Item {
+  static readContents = Route.GET('/contents');
+  static updateContents = Route.POST('/contents');
+}
+
 
 export const resources: PotionResources = {
   '/organization': Organization,
@@ -44,6 +49,7 @@ export const resources: PotionResources = {
   '/group-membership': GroupMembership,
   '/project': Project,
   '/project-membership': ProjectMembership,
+  '/medium': Medium
 };
 
 

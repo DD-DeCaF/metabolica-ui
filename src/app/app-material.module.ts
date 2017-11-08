@@ -14,7 +14,10 @@ import {
   MatMenuModule,
   MatSidenavModule,
   MatToolbarModule,
-  MatTableModule
+  MatTableModule,
+  MatSortModule,
+  MatPaginatorModule,
+  MatProgressSpinnerModule
 } from '@angular/material';
 
 
@@ -23,9 +26,11 @@ import {
  */
 @NgModule({
   imports: [MatButtonModule, MatCheckboxModule, MatListModule, MatToolbarModule, MatIconModule, MatFormFieldModule, MatInputModule,
-    MatCardModule, MatSidenavModule, MatMenuModule, MatAutocompleteModule, MatDialogModule, MatTableModule],
+    MatCardModule, MatSidenavModule, MatMenuModule, MatAutocompleteModule, MatDialogModule, MatTableModule, MatSortModule,
+    MatPaginatorModule, MatProgressSpinnerModule],
   exports: [MatButtonModule, MatCheckboxModule, MatListModule, MatToolbarModule, MatIconModule, MatFormFieldModule, MatInputModule,
-    MatCardModule, MatSidenavModule, MatMenuModule, MatAutocompleteModule, MatDialogModule, MatTableModule],
+    MatCardModule, MatSidenavModule, MatMenuModule, MatAutocompleteModule, MatDialogModule, MatTableModule, MatSortModule,
+    MatPaginatorModule, MatProgressSpinnerModule],
   providers: [MatIconRegistry]
 })
 export class AppMaterialModule {

@@ -4,12 +4,16 @@ import { MediumComponent } from './medium.component';
 import { MediumListComponent } from './medium-list.component';
 import {RegistryService} from '../registry/registry.service';
 import {AppMaterialModule} from '../app-material.module';
+import {FlexLayoutModule} from '@angular/flex-layout';
+import {XrefsModule} from '../xrefs/xrefs.module';
 
 
 @NgModule({
   imports: [
     CommonModule,
-    AppMaterialModule
+    AppMaterialModule,
+    FlexLayoutModule,
+    XrefsModule
   ],
   declarations: [MediumComponent, MediumListComponent]
 })
@@ -18,7 +22,7 @@ export class MediaModule {
   constructor(registry: RegistryService) {
 
     registry.register('Medium',
-      ['search'],
+      ['xref'],
       {
         name: 'medium',
         pluralName: 'media',
