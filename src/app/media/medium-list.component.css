@@ -9,6 +9,7 @@
 }
 
 .mat-header-cell, .mat-cell {
+  min-width: 100px;
   display: table-cell;
   height: 45px;
   vertical-align: middle;

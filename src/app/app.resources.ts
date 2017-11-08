@@ -14,6 +14,9 @@ export class User extends Item {
   static roles = Route.GET('/roles');
   static changePassword = Route.POST('/change-password');
 
+  displayName: string;
+  title: string;
+
   shortFullName() {
     return `${(this.firstName || '').split(' ')[0]} ${this.lastName}`;
   }

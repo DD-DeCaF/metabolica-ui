@@ -24,6 +24,7 @@ import {MaintenanceModule} from './maintenance/maintenance.module';
 import {ProjectModule} from './project/project.module';
 import {MediaModule} from './media/media.module';
 import {resources} from './app.resources';
+import {AppCommonModule} from './app-common/app-common.module';
 
 @NgModule({
   declarations: [
@@ -49,7 +50,8 @@ import {resources} from './app.resources';
     ClipboardModule,
     MaintenanceModule,
     ProjectModule,
-    MediaModule
+    MediaModule,
+    AppCommonModule
   ],
   providers: [
     AppAuthService,

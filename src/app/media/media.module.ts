@@ -7,13 +7,15 @@ import {AppMaterialModule} from '../app-material.module';
 import {FlexLayoutModule} from '@angular/flex-layout';
 import {XrefsModule} from '../xrefs/xrefs.module';
 import {Medium} from '../app.resources';
+import {AppCommonModule} from '../app-common/app-common.module';
 
 @NgModule({
   imports: [
     CommonModule,
     AppMaterialModule,
     FlexLayoutModule,
-    XrefsModule
+    XrefsModule,
+    AppCommonModule
   ],
   declarations: [MediumComponent, MediumListComponent]
 })
