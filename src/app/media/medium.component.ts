@@ -9,10 +9,10 @@ import {ActivatedRoute} from '@angular/router';
 export class MediumComponent implements OnInit {
   mediumId: string;
 
-  constructor(private route: ActivatedRoute) { }
-
-  ngOnInit() {
-    this.mediumId = this.route.snapshot.paramMap.get('mediumId');
+  constructor(route: ActivatedRoute) {
+    route.params.subscribe(params => this.mediumId = params['mediumId']);
   }
+
+  ngOnInit() { }
 
 }
