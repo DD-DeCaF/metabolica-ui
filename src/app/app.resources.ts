@@ -29,18 +29,18 @@ export class GroupMembership extends Item {
 }
 
 export class Project extends Item {
-  static readPermissions = Route.GET('/permissions');
-  static readSummary = Route.GET('/summary');
-  static defaultTests = Route.GET('/default-tests');
-  static updateDefaultTests = Route.POST('/update-default-tests');
+  readPermissions = Route.GET('/permissions');
+  readSummary = Route.GET('/summary');
+  defaultTests = Route.GET('/default-tests');
+  updateDefaultTests = Route.POST('/update-default-tests');
 }
 
 export class ProjectMembership extends Item {
 }
 
 export class Medium extends Item {
-  static readContents = Route.GET('/contents');
-  static updateContents = Route.POST('/contents');
+  readContents = Route.GET('/contents');
+  updateContents = Route.POST('/contents');
 }
 
 
