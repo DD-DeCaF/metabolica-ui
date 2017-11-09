@@ -5,7 +5,26 @@
                opened="true">
 
     <mat-toolbar color="primary" fxLayout="column">
-      <span>Metabolica</span>
+      <button mat-icon-button [matMenuTriggerFor]="organizationsMenu">
+        <span *ngIf="project !== null" routerLink="/home/project/{{ project.id }}">{{ project.name }}</span>
+        <span *ngIf="project === null">Metabolica</span>
+        <mat-icon>arrow_drop_down</mat-icon>
+      </button>
+
+      <mat-menu #organizationsMenu="matMenu">
+        <mat-nav-list>
+          <mat-list-item>
+            <a matLine routerLink="/home">Home</a>
+            <mat-icon>home</mat-icon>
+          </mat-list-item>
+          <mat-divider></mat-divider>
+          <mat-list-item *ngFor="let project of projects">
+            <a matLine routerLink="/home/project/{{ project.id }}">{{ project.name }}</a>
+            <mat-icon [ngStyle]="{color: project.color}">folder</mat-icon>
+          </mat-list-item>
+        </mat-nav-list>
+      </mat-menu>
+
 
       <span fxFlex></span>
 
@@ -13,12 +32,23 @@
         <mat-icon>chevron_left</mat-icon>
       </button>
     </mat-toolbar>
+    <section [hidden]="!fetchingData">
+      <mat-progress-bar mode="indeterminate"></mat-progress-bar>
+    </section>
 
+    <div *ngIf="project === null && (projects && projects.length > 0)">
+      <mat-nav-list>
+        <h3 mat-subheader>Projects</h3>
+        <mat-list-item *ngFor="let project of projects">
+          <a matLine routerLink="/home/project/{{project.id}}">{{ project.name }}</a>
+        </mat-list-item>
+        <mat-divider></mat-divider>
+      </mat-nav-list>
+    </div>
     <mat-nav-list>
       <mat-list-item>
         <a matLine routerLink="/home">Home</a>
       </mat-list-item>
-
     </mat-nav-list>
 
   </mat-sidenav>
