@@ -1,0 +1,29 @@
+.description {
+  padding: 20px;
+  vertical-align: middle;
+}
+
+.accentColor {
+  color: rgba(0, 0, 0, 0.54);
+}
+
+.mat-table {
+  display: table;
+  width: 100%;
+}
+
+.mat-header-row, .mat-row {
+  display: table-row;
+  border: none;
+}
+
+.mat-header-cell, .mat-cell {
+  min-width: 100px;
+  display: table-cell;
+  height: 45px;
+  vertical-align: middle;
+  padding-left: 10px;
+  padding-right: 10px;
+
+  border-bottom: 1px solid rgba(0, 0, 0, 0.12);
+}

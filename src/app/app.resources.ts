@@ -43,6 +43,12 @@ export class Medium extends Item {
   updateContents = Route.POST('/contents');
 }
 
+export class ChemicalEntity extends Item {
+  getChEBIURL () {
+    return `http://www.ebi.ac.uk/chebi/searchId.do?chebiId=CHEBI:${this.chebiId}`;
+  }
+}
+
 
 export const resources: PotionResources = {
   '/organization': Organization,
@@ -52,7 +58,8 @@ export const resources: PotionResources = {
   '/group-membership': GroupMembership,
   '/project': Project,
   '/project-membership': ProjectMembership,
-  '/medium': Medium
+  '/medium': Medium,
+  '/chemical-entity': ChemicalEntity
 };
 
 

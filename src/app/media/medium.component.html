@@ -1,3 +1,77 @@
-<p>
-  medium {{mediumId}}
-</p>
+<div *ngIf='medium'>
+  <mat-toolbar fxLayout="row">
+    <button mat-icon-button>
+      <mat-icon>arrow_back</mat-icon>
+    </button>
+
+    <h2>{{medium.name}}</h2>
+
+  </mat-toolbar>
+
+  <mat-list>
+
+    <mat-list-item>
+      <mat-icon matListIcon>vpn_key</mat-icon>
+      <h3 matLine>Key</h3>
+      <p matLine class="accentColor">{{medium.identifier}}</p>
+    </mat-list-item>
+
+    <mat-divider></mat-divider>
+
+    <h3 matSubheader>Meta Information</h3>
+
+    <mat-list-item>
+      <mat-icon matListIcon>person</mat-icon>
+      <h3 matLine>Created By</h3>
+      <p matLine class="accentColor"><app-user [value]="medium.createdBy"></app-user></p>
+    </mat-list-item>
+
+    <mat-list-item>
+      <mat-icon matListIcon>today</mat-icon>
+      <h3 matLine>Date Created</h3>
+      <p matLine class="accentColor"><app-date [value]="medium.createdAt"></app-date></p>
+    </mat-list-item>
+
+  </mat-list>
+
+  <mat-divider></mat-divider>
+
+  <div *ngIf="medium.description">
+    <div class="description">
+      <h3>Description</h3>
+      <p>{{medium.description}}</p>
+    </div>
+    <mat-divider></mat-divider>
+  </div>
+</div>
+
+  <mat-toolbar color="accent">Recipe</mat-toolbar>
+
+  <mat-table #table
+             matSort
+             [dataSource]="dataSource">
+
+    <ng-container matColumnDef="compound">
+      <mat-header-cell *matHeaderCellDef mat-sort-header>Chemical compound</mat-header-cell>
+      <mat-cell *matCellDef="let row"> {{row.compound.name}} </mat-cell>
+    </ng-container>
+
+    <ng-container matColumnDef="concentration">
+      <mat-header-cell *matHeaderCellDef mat-sort-header>Concentration g/L</mat-header-cell>
+      <mat-cell *matCellDef="let row"> {{row.concentration}} </mat-cell>
+    </ng-container>
+
+    <ng-container matColumnDef="chebi">
+      <mat-header-cell *matHeaderCellDef mat-sort-header>ChEBI Number</mat-header-cell>
+      <mat-cell *matCellDef="let row">
+        <a href="{{row.compound.getChEBIURL()}}" target="_blank">
+          CHEBI:{{row.compound.chebiId}}
+        </a>
+      </mat-cell>
+    </ng-container>
+
+    <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+    <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
+
+  </mat-table>
+
