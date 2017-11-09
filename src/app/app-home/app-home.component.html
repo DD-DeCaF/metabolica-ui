@@ -6,8 +6,8 @@
 
     <mat-toolbar color="primary" fxLayout="column">
       <button mat-icon-button [matMenuTriggerFor]="organizationsMenu">
-        <span *ngIf="project !== null" routerLink="/home/project/{{ project.id }}">{{ project.name }}</span>
-        <span *ngIf="project === null">Metabolica</span>
+        <span *ngIf="project" routerLink="/home/project/{{ project.id }}">{{ project.name }}</span>
+        <span *ngIf="project === null || project === undefined">Metabolica</span>
         <mat-icon>arrow_drop_down</mat-icon>
       </button>
 

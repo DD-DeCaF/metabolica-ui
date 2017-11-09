@@ -1,8 +1,8 @@
 import {Component, OnInit} from '@angular/core';
 
-import {Project} from "../app.resources";
+import {Project} from '../app.resources';
 
-import {ActivatedRoute, Router, NavigationEnd} from "@angular/router";
+import {ActivatedRoute, Router, NavigationEnd} from '@angular/router';
 
 @Component({
   selector: 'app-app-home',
@@ -12,17 +12,17 @@ import {ActivatedRoute, Router, NavigationEnd} from "@angular/router";
 export class AppHomeComponent implements OnInit {
   title = 'app';
 
-  fetchingData: boolean = false;
+  fetchingData = false;
 
   projects: any[] = [];
-  project: any=null;
+  project: any = null;
 
-  constructor(private route: ActivatedRoute, private router: Router) {
-    router.events.subscribe(event=>{
-      if (event instanceof  NavigationEnd){
+  constructor(private route: ActivatedRoute, router: Router) {
+    router.events.subscribe(event => {
+      if (event instanceof  NavigationEnd) {
         this.project = this.route.firstChild && this.route.firstChild.snapshot.data['project'];
       }
-    })
+    });
   }
 
   ngOnInit() {
