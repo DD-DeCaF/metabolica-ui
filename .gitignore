@@ -289,3 +289,6 @@ testem.log
 # System Files
 .DS_Store
 Thumbs.db
+
+# Auto generated docs
+docs/

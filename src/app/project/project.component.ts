@@ -1,18 +1,16 @@
-import {Component, OnInit} from '@angular/core';
+import {Component} from '@angular/core';
 import {ActivatedRoute} from '@angular/router';
-
 
 @Component({
   selector: 'app-project',
-  template: `<p> You are know browsing project {{project.name}}</p>`
+  template: `<p> You are now browsing project {{project.name}}</p>`
 })
-export class ProjectComponent implements OnInit {
+export class ProjectComponent {
   project: any;
 
-  constructor(private route: ActivatedRoute) { }
-
-  ngOnInit() {
-    this.project = this.route.snapshot.data['project'];
+  constructor(private route: ActivatedRoute) {
+    this.route.params.subscribe(() =>
+      this.project = this.route.snapshot.data['project']
+    );
   }
-
 }
