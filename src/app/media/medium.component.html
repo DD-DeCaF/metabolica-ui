@@ -43,9 +43,9 @@
     </div>
     <mat-divider></mat-divider>
   </div>
-</div>
 
   <mat-toolbar color="accent">Recipe</mat-toolbar>
+  <mat-progress-bar *ngIf="isLoadingIngredients"></mat-progress-bar>
 
   <mat-table #table
              matSort
@@ -64,7 +64,9 @@
     <ng-container matColumnDef="chebi">
       <mat-header-cell *matHeaderCellDef mat-sort-header>ChEBI Number</mat-header-cell>
       <mat-cell *matCellDef="let row">
-        <a href="{{row.compound.getChEBIURL()}}" target="_blank">
+        <a href="{{row.compound.getChEBIURL()}}"
+           target="_blank"
+           *ngIf="row.compound.chebiId">
           CHEBI:{{row.compound.chebiId}}
         </a>
       </mat-cell>
@@ -75,3 +77,4 @@
 
   </mat-table>
 
+</div>
