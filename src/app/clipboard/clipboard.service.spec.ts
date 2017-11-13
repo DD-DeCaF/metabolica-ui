@@ -1,11 +1,12 @@
 import {inject, TestBed} from '@angular/core/testing';
 
 import {ClipboardService} from './clipboard.service';
+import {RegistryService} from '../registry/registry.service';
 
 describe('ClipboardService', () => {
   beforeEach(() => {
     TestBed.configureTestingModule({
-      providers: [ClipboardService]
+      providers: [ClipboardService, RegistryService]
     });
   });
 

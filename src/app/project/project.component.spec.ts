@@ -1,6 +1,8 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { ProjectComponent } from './project.component';
+import {ActivatedRoute} from '@angular/router';
+import {Observable} from 'rxjs/Observable';
 
 describe('ProjectComponent', () => {
   let component: ProjectComponent;
@@ -8,7 +10,14 @@ describe('ProjectComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ ProjectComponent ]
+      declarations: [ ProjectComponent ],
+      providers: [{
+        provide: ActivatedRoute,
+        useValue: {
+          params: Observable.of({id: 2}),
+          snapshot: {data: {project: {}}}
+        }
+      }]
     })
     .compileComponents();
   }));

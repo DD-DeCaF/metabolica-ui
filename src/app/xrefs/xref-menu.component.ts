@@ -24,8 +24,7 @@ export class XrefMenuComponent implements OnChanges {
   @ViewChild(OverlayOrigin) overlayOrigin: OverlayOrigin;
 
   constructor(public overlay: Overlay, registry: RegistryService) {
-
-
+    console.log(registry);
     this.xrefs = registry.get('xref');
   }
 

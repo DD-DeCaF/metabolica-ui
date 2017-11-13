@@ -24,7 +24,7 @@ export class MediaModule {
   constructor(registry: RegistryService) {
 
     registry.register('Medium',
-      ['xref', 'search'],
+      ['xref', 'search', 'sharing'],
       {
         name: 'medium',
         pluralName: 'media',

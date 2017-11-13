@@ -1,6 +1,10 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { LogoutComponent } from './logout.component';
+import {Router} from '@angular/router';
+import {SessionService} from '../session/session.service';
+import {HttpClient, HttpHandler} from '@angular/common/http';
+import {LocalStorageService} from 'ngx-webstorage';
 
 describe('LogoutComponent', () => {
   let component: LogoutComponent;
@@ -8,7 +12,16 @@ describe('LogoutComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ LogoutComponent ]
+      declarations: [ LogoutComponent ],
+      providers: [{
+        provide: Router,
+        useClass: class {navigate = jasmine.createSpy('navigate'); }
+      },
+        SessionService,
+        HttpClient,
+        HttpHandler,
+        LocalStorageService
+    ]
     })
     .compileComponents();
   }));

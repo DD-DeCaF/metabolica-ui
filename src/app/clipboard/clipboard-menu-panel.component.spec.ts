@@ -1,6 +1,8 @@
 import {async, ComponentFixture, TestBed} from '@angular/core/testing';
 
 import {ClipboardMenuPanelComponent} from './clipboard-menu-panel.component';
+import {APP_BASE_HREF} from '@angular/common';
+import {AppModule} from '../app.module';
 
 describe('ClipboardMenuPanelComponent', () => {
   let component: ClipboardMenuPanelComponent;
@@ -8,7 +10,11 @@ describe('ClipboardMenuPanelComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ClipboardMenuPanelComponent]
+      providers: [
+        // SessionService,
+        {provide: APP_BASE_HREF, useValue: 'https://iloop.biosustain.dtu.dk/'}
+      ],
+      imports: [AppModule]
     })
       .compileComponents();
   }));
