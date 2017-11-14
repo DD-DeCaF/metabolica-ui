@@ -1,36 +1,41 @@
 <mat-sidenav-container fxFlexFill>
   <mat-sidenav #sidenav
+               class="mat-elevation-z3"
                mode="side"
                opened="true">
 
-    <mat-toolbar color="primary" fxLayout="column">
-      <button mat-icon-button [matMenuTriggerFor]="organizationsMenu">
-        <span *ngIf="project" routerLink="/home/project/{{ project.id }}">{{ project.name }}</span>
-        <span *ngIf="project === null || project === undefined">Metabolica</span>
-        <mat-icon>arrow_drop_down</mat-icon>
-      </button>
+    <mat-toolbar color="primary">
+      <mat-toolbar-row>
 
-      <mat-menu #organizationsMenu="matMenu">
-        <mat-nav-list>
-          <mat-list-item>
-            <a matLine routerLink="/home">Home</a>
-            <mat-icon>home</mat-icon>
-          </mat-list-item>
-          <mat-divider></mat-divider>
-          <mat-list-item *ngFor="let project of projects">
-            <a matLine routerLink="/home/project/{{ project.id }}">{{ project.name }}</a>
-            <mat-icon [ngStyle]="{color: project.color}">folder</mat-icon>
-          </mat-list-item>
-        </mat-nav-list>
-      </mat-menu>
+        <button mat-icon-button [matMenuTriggerFor]="organizationsMenu">
+          <span *ngIf="project" routerLink="/home/project/{{ project.id }}">{{ project.name }}</span>
+          <span *ngIf="project === null || project === undefined">Metabolica</span>
+          <mat-icon>arrow_drop_down</mat-icon>
+        </button>
 
+        <mat-menu #organizationsMenu="matMenu">
+          <mat-nav-list>
+            <mat-list-item>
+              <a matLine routerLink="/home">Home</a>
+              <mat-icon>home</mat-icon>
+            </mat-list-item>
+            <mat-divider></mat-divider>
+            <mat-list-item *ngFor="let project of projects">
+              <a matLine routerLink="/home/project/{{ project.id }}">{{ project.name }}</a>
+              <mat-icon [ngStyle]="{color: project.color}">folder</mat-icon>
+            </mat-list-item>
+          </mat-nav-list>
+        </mat-menu>
 
-      <span fxFlex></span>
+        <span fxFlex></span>
 
-      <button type="button" mat-icon-button (click)="sidenav.close()">
-        <mat-icon>chevron_left</mat-icon>
-      </button>
+        <button type="button" mat-icon-button (click)="sidenav.close()">
+          <mat-icon>chevron_left</mat-icon>
+        </button>
+
+      </mat-toolbar-row>
     </mat-toolbar>
+
     <section [hidden]="!fetchingData">
       <mat-progress-bar mode="indeterminate"></mat-progress-bar>
     </section>
