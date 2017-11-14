@@ -9,8 +9,9 @@ export class ProjectComponent {
   project: any;
 
   constructor(private route: ActivatedRoute) {
-    this.route.params.subscribe(() =>
-      this.project = this.route.snapshot.data['project']
+    this.route.params.subscribe(() => {
+        this.project = this.route.snapshot.data['project'];
+      }
     );
   }
 }

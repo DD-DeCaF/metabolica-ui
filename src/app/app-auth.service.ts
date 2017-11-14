@@ -16,7 +16,7 @@ export class AppAuthService {
       return this.location.prepareExternalUrl(this.location.path());
     }
     // TODO - It does not seem like there is a clean way to do this.
-    return this.location._platformStrategy._platformLocation._location.href;
+    return this.location._platformStrategy._platformLocation.location.href;
   }
 
   isTrustedURL(url: string): boolean {

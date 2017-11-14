@@ -13,14 +13,14 @@ import 'rxjs/add/operator/switchMap';
 import {Medium} from '../app.resources';
 
 
-class MediumDataSource extends DataSource<Medium> {
+class MediumDataSource extends DataSource<any> {
   resultsLength = 119; // {paginate: true} doesn't work, so we can't get the total length from the query
 
   constructor(private paginator: MatPaginator, private sort: MatSort) {
     super();
   }
 
-  connect(): Observable<Medium[]> {
+  connect(): Observable<any[]> {
     const displayDataChanges = [
       this.sort.sortChange,
       this.paginator.page
