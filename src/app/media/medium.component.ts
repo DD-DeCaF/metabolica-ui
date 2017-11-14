@@ -5,7 +5,7 @@ import {MatSort} from '@angular/material';
 
 import {Observable} from 'rxjs/Observable';
 import 'rxjs/add/observable/of';
-import {catchError, map, startWith} from 'rxjs/operators';
+import {map, startWith} from 'rxjs/operators';
 
 import {Medium} from '../app.resources';
 import {ChemicalEntity} from '../app.resources';
