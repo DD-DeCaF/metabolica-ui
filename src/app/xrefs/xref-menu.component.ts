@@ -1,5 +1,5 @@
 import {Component, OnChanges, Input, ViewChild} from '@angular/core';
-import {Overlay, OverlayOrigin} from '@angular/cdk/overlay';
+import {Overlay, CdkOverlayOrigin} from '@angular/cdk/overlay';
 import {ComponentPortal} from '@angular/cdk/portal';
 import {RegistryService} from '../registry/registry.service';
 
@@ -21,7 +21,7 @@ export class XrefMenuComponent implements OnChanges {
   xrefs: any;
   @Input() type: string;
   @Input() value: any;
-  @ViewChild(OverlayOrigin) overlayOrigin: OverlayOrigin;
+  @ViewChild(CdkOverlayOrigin) overlayOrigin: CdkOverlayOrigin;
 
   constructor(public overlay: Overlay, registry: RegistryService) {
     this.xrefs = registry.get('xref');

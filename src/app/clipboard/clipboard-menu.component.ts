@@ -1,5 +1,5 @@
 import {Component, OnInit, ViewChild} from '@angular/core';
-import {Overlay, OverlayOrigin, OverlayRef} from '@angular/cdk/overlay';
+import {Overlay, CdkOverlayOrigin, OverlayRef} from '@angular/cdk/overlay';
 import {ComponentPortal} from '@angular/cdk/portal';
 import {DomSanitizer} from '@angular/platform-browser';
 import {MatIconRegistry} from '@angular/material';
@@ -19,7 +19,7 @@ import {ClipboardService} from './clipboard.service';
   </span>`
 })
 export class ClipboardMenuComponent implements OnInit {
-  @ViewChild(OverlayOrigin) overlayOrigin: OverlayOrigin;
+  @ViewChild(CdkOverlayOrigin) overlayOrigin: CdkOverlayOrigin;
   component: any = null;
   overlayRef: OverlayRef = null;
 
