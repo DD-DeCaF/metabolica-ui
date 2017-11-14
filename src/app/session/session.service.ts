@@ -1,7 +1,6 @@
 import {Injectable} from '@angular/core';
 import {HttpClient} from '@angular/common/http';
 import {LocalStorageService} from 'ngx-webstorage';
-import 'rxjs/add/operator/toPromise';
 
 import {User} from '../app.resources';
 

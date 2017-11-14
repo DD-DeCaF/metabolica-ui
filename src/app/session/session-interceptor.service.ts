@@ -1,7 +1,7 @@
 import {Injectable, Injector} from '@angular/core';
 import {HttpEvent, HttpHandler, HttpInterceptor, HttpRequest} from '@angular/common/http';
 import {Observable} from 'rxjs/Observable';
-import 'rxjs/add/operator/do';
+import {tap} from 'rxjs/operators';
 import {AppAuthService} from '../app-auth.service';
 import {LocalStorageService} from 'ngx-webstorage';
 import {SessionService} from './session.service';
@@ -21,18 +21,16 @@ export class SessionInterceptorService implements HttpInterceptor {
       req = req.clone({headers: req.headers.set('Authorization', `Bearer ${sessionJWT}`)});
     }
 
-    return next.handle(req).do(
-      () => {
-      },
-      response => {
-        if (response.status === 401) {
-          if (appAuth.isRequired) {
-            session.logout();
+    return next.handle(req).pipe(
+      tap(
+        () => {},
+        response => {
+          if (response.status === 401) {
+            if (appAuth.isRequired) {
+              session.logout();
+            }
           }
         }
-      },
-      () => {
-      },
-    );
+      ));
   }
 }

@@ -5,9 +5,7 @@ import {MatSort} from '@angular/material';
 
 import {Observable} from 'rxjs/Observable';
 import 'rxjs/add/observable/of';
-import 'rxjs/add/operator/catch';
-import 'rxjs/add/operator/switchMap';
-import 'rxjs/add/operator/startWith';
+import {catchError, map, startWith} from 'rxjs/operators';
 
 import {Medium} from '../app.resources';
 import {ChemicalEntity} from '../app.resources';
@@ -26,9 +24,10 @@ class IngredientsDataSource extends DataSource<Ingredient> {
   }
 
   connect(): Observable<Ingredient[]> {
-    return this.sort.sortChange
-      .startWith(null)
-      .map(() => this.getSortedData());
+    return this.sort.sortChange.pipe(
+      startWith(null),
+      map(() => this.getSortedData())
+    );
   }
 
   getSortedData(): Ingredient[] {

@@ -5,10 +5,7 @@ import {MatPaginator, MatSort} from '@angular/material';
 import {Observable} from 'rxjs/Observable';
 import 'rxjs/add/observable/of';
 import 'rxjs/add/observable/merge';
-import 'rxjs/add/operator/catch';
-import 'rxjs/add/operator/map';
-import 'rxjs/add/operator/startWith';
-import 'rxjs/add/operator/switchMap';
+import {startWith, catchError, switchMap} from 'rxjs/operators';
 
 import {Medium} from '../app.resources';
 
@@ -30,18 +27,20 @@ class MediumDataSource extends DataSource<any> {
     this.sort.sortChange.subscribe(() => this.paginator.pageIndex = 0);
 
     return Observable.merge(...displayDataChanges)
-      .startWith(null)
-      .switchMap(() => Medium.query(
-        {
-          page: this.paginator.pageIndex + 1,
-          perPage: this.paginator.pageSize,
-          sort: getSortValue(this.sort.active, this.sort.direction)
-        },
-        {
-          cache: true,
-          paginate: false
-        }))
-      .catch(() => Observable.of([]));
+      .pipe(
+        startWith(null),
+        switchMap(() => Medium.query(
+          {
+            page: this.paginator.pageIndex + 1,
+            perPage: this.paginator.pageSize,
+            sort: getSortValue(this.sort.active, this.sort.direction)
+          },
+          {
+            cache: true,
+            paginate: false
+          })),
+         catchError(() => Observable.of([]))
+      );
   }
 
   disconnect() {}
