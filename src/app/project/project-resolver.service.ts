@@ -13,7 +13,7 @@ export class ProjectResolverService implements Resolve<any> {
 
     return Project.fetch(projectId)
       .catch(() => {
-        this.router.navigate(['/home']);
+        this.router.navigate(['/app/home']);
       });
   }
 

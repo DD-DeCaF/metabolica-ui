@@ -25,12 +25,14 @@ import {ProjectModule} from './project/project.module';
 import {MediaModule} from './media/media.module';
 import {resources} from './app.resources';
 import {AppCommonModule} from './app-common/app-common.module';
+import { AppWelcomeComponent } from './app-welcome/app-welcome.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     AppToolbarComponent,
-    AppHomeComponent
+    AppHomeComponent,
+    AppWelcomeComponent
   ],
   imports: [
     BrowserModule,

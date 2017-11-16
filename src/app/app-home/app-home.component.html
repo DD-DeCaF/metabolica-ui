@@ -8,7 +8,7 @@
       <mat-toolbar-row>
 
         <button mat-icon-button [matMenuTriggerFor]="organizationsMenu">
-          <span *ngIf="project" routerLink="/home/project/{{ project.id }}">{{ project.name }}</span>
+          <span *ngIf="project" routerLink="/app/project/{{ project.id }}">{{ project.name }}</span>
           <span *ngIf="project === null || project === undefined">Metabolica</span>
           <mat-icon>arrow_drop_down</mat-icon>
         </button>
@@ -16,12 +16,12 @@
         <mat-menu #organizationsMenu="matMenu">
           <mat-nav-list>
             <mat-list-item>
-              <a matLine routerLink="/home">Home</a>
+              <a matLine routerLink="/app/home">Home</a>
               <mat-icon>home</mat-icon>
             </mat-list-item>
             <mat-divider></mat-divider>
             <mat-list-item *ngFor="let project of projects">
-              <a matLine routerLink="/home/project/{{ project.id }}">{{ project.name }}</a>
+              <a matLine routerLink="/app/project/{{ project.id }}">{{ project.name }}</a>
               <mat-icon [ngStyle]="{color: project.color}">folder</mat-icon>
             </mat-list-item>
           </mat-nav-list>
@@ -40,18 +40,19 @@
       <mat-progress-bar mode="indeterminate"></mat-progress-bar>
     </section>
 
-    <div *ngIf="project === null && (projects && projects.length > 0)">
+    <div *ngIf="project === null || project === undefined && (projects && projects.length > 0)">
       <mat-nav-list>
         <h3 mat-subheader>Projects</h3>
         <mat-list-item *ngFor="let project of projects">
-          <a matLine routerLink="/home/project/{{project.id}}">{{ project.name }}</a>
+          <mat-icon mat-list-icon [ngStyle]="{color: project.color}">folder</mat-icon>
+          <a matLine routerLink="/app/project/{{project.id}}">{{ project.name }}</a>
         </mat-list-item>
         <mat-divider></mat-divider>
       </mat-nav-list>
     </div>
     <mat-nav-list>
       <mat-list-item>
-        <a matLine routerLink="/home">Home</a>
+        <a matLine routerLink="/app/home">Home</a>
       </mat-list-item>
     </mat-nav-list>
 
@@ -62,11 +63,6 @@
 
     <div fxFlex style="overflow: auto">
       <router-outlet>
-        <div class="content">
-          <h1 class="mat-display-1"> Welcome to iLoop Web Platform </h1>
-          <p class="mat-subheading-2"> Get started by selecting a project or one of the tools.</p>
-        </div>
-
       </router-outlet>
     </div>
   </div>

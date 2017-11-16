@@ -28,7 +28,7 @@ export class MediaModule {
       {
         name: 'medium',
         pluralName: 'media',
-        getRouterLink: medium => ['/home/medium', medium.id],
+        getRouterLink: medium => ['/app/medium', medium.id],
         query: searchText => Medium.query({where: {identifier: {$icontains: searchText}}}),
         getQueryParams: medium => ({}),
         formatAsText: medium => medium.name

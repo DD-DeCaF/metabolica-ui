@@ -9,18 +9,27 @@ import {ProjectComponent} from './project/project.component';
 import {ProjectResolverService} from './project/project-resolver.service';
 import {MediumListComponent} from './media/medium-list.component';
 import {MediumComponent} from './media/medium.component';
+import {AppWelcomeComponent} from './app-welcome/app-welcome.component';
 
 const appRoutes: Route[] = [
   {
     path: '',
-    redirectTo: 'home',
+    redirectTo: '/app/home',
     pathMatch: 'full'
   },
   {
-    path: 'home',
+    path: 'app',
     component: AppHomeComponent,
     canActivate: [AuthGuardService],
     children: [
+      {
+        path: '',
+        component: AppWelcomeComponent
+      },
+      {
+        path: 'home',
+        component: AppWelcomeComponent
+      },
       {
         path: 'project/:project',
         component: ProjectComponent,
@@ -48,7 +57,7 @@ const appRoutes: Route[] = [
   },
   {
     path: '**',
-    redirectTo: '/home'
+    redirectTo: '/app/home'
   },
 ];
 
