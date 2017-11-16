@@ -10,6 +10,7 @@ import {ProjectResolverService} from './project/project-resolver.service';
 import {MediumListComponent} from './media/medium-list.component';
 import {MediumComponent} from './media/medium.component';
 import {AppWelcomeComponent} from './app-welcome/app-welcome.component';
+import {CompareComponent} from './compare/compare.component';
 
 const appRoutes: Route[] = [
   {
@@ -32,10 +33,19 @@ const appRoutes: Route[] = [
       },
       {
         path: 'project/:project',
-        component: ProjectComponent,
         resolve: {
           project: ProjectResolverService
-        }
+        },
+        children: [
+          {
+            path: '',
+            component: ProjectComponent
+          },
+          {
+            path: 'compare',
+            component: CompareComponent
+          }
+        ]
       },
       {
         path: 'media',

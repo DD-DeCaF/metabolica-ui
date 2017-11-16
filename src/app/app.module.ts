@@ -26,6 +26,7 @@ import {MediaModule} from './media/media.module';
 import {resources} from './app.resources';
 import {AppCommonModule} from './app-common/app-common.module';
 import { AppWelcomeComponent } from './app-welcome/app-welcome.component';
+import {CompareModule} from './compare/compare.module';
 
 @NgModule({
   declarations: [
@@ -53,7 +54,8 @@ import { AppWelcomeComponent } from './app-welcome/app-welcome.component';
     MaintenanceModule,
     ProjectModule,
     MediaModule,
-    AppCommonModule
+    AppCommonModule,
+    CompareModule
   ],
   providers: [
     AppAuthService,
