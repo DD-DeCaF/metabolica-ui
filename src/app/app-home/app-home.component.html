@@ -61,7 +61,13 @@
     <app-toolbar [sidenav]="sidenav"></app-toolbar>
 
     <div fxFlex style="overflow: auto">
-      <router-outlet></router-outlet>
+      <router-outlet>
+        <div class="content">
+          <h1 class="mat-display-1"> Welcome to iLoop Web Platform </h1>
+          <p class="mat-subheading-2"> Get started by selecting a project or one of the tools.</p>
+        </div>
+
+      </router-outlet>
     </div>
   </div>
 </mat-sidenav-container>

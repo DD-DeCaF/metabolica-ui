@@ -18,4 +18,8 @@ export class AppToolbarComponent implements OnInit {
   ngOnInit() {
   }
 
+  getTitle() {
+    return 'Home'; // todo
+  }
+
 }
