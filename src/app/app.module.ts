@@ -3,7 +3,6 @@ import {NgModule} from '@angular/core';
 import {BrowserModule} from '@angular/platform-browser';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {FlexLayoutModule} from '@angular/flex-layout';
-import {HttpModule} from '@angular/http';
 import {HttpClientModule} from '@angular/common/http';
 import {Ng2Webstorage} from 'ngx-webstorage';
 import {POTION_CONFIG, POTION_RESOURCES, PotionModule} from 'potion-client';
@@ -39,7 +38,6 @@ import {CompareModule} from './compare/compare.module';
     BrowserModule,
     BrowserAnimationsModule,
     FlexLayoutModule,
-    HttpModule,
     PotionModule,
     HttpClientModule,
     Ng2Webstorage,
