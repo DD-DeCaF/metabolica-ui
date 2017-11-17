@@ -18,7 +18,8 @@ import {
   MatSortModule,
   MatPaginatorModule,
   MatTooltipModule,
-  MatProgressBarModule
+  MatProgressBarModule,
+  MatChipsModule
 } from '@angular/material';
 
 
@@ -28,10 +29,10 @@ import {
 @NgModule({
   imports: [MatButtonModule, MatCheckboxModule, MatListModule, MatToolbarModule, MatIconModule, MatFormFieldModule, MatInputModule,
     MatCardModule, MatSidenavModule, MatMenuModule, MatAutocompleteModule, MatDialogModule, MatTableModule, MatSortModule,
-    MatPaginatorModule, MatTooltipModule, MatProgressBarModule],
+    MatPaginatorModule, MatTooltipModule, MatProgressBarModule, MatChipsModule],
   exports: [MatButtonModule, MatCheckboxModule, MatListModule, MatToolbarModule, MatIconModule, MatFormFieldModule, MatInputModule,
     MatCardModule, MatSidenavModule, MatMenuModule, MatAutocompleteModule, MatDialogModule, MatTableModule, MatSortModule,
-    MatPaginatorModule, MatTooltipModule, MatProgressBarModule],
+    MatPaginatorModule, MatTooltipModule, MatProgressBarModule, MatChipsModule],
   providers: [MatIconRegistry]
 })
 export class AppMaterialModule {

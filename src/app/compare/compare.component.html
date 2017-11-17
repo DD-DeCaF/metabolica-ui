@@ -1,3 +1,22 @@
-<p>
-  compare works!
-</p>
+<mat-form-field fxFlex>
+  <mat-chip-list #chipList>
+    <mat-chip *ngFor="let pool of selectedPools"
+              (remove)="remove(pool)">
+      {{pool.identifier}} <mat-icon matChipRemove>cancel</mat-icon>
+    </mat-chip>
+    <input matInput
+           placeholder="Add pools..."
+           #poolInput
+           [formControl]="poolCtrl"
+           [matAutocomplete]="auto"
+           [matChipInputFor]="chipList"/>
+  </mat-chip-list>
+  <mat-autocomplete #auto="matAutocomplete"
+                    (optionSelected)="selected($event)">
+    <mat-option *ngFor="let pool of queryResults | async"
+                [value]="pool">
+      {{ pool.identifier }}
+    </mat-option>
+  </mat-autocomplete>
+</mat-form-field>
+

@@ -1,10 +1,57 @@
 import {Item, PotionResources, Route} from 'potion-client';
 
+// resources in alphabetical order
+
+export class ChemicalEntity extends Item {
+  getChEBIURL () {
+    return `http://www.ebi.ac.uk/chebi/searchId.do?chebiId=CHEBI:${this.chebiId}`;
+  }
+}
+
+export class Group extends Item {
+}
+
+export class GroupMembership extends Item {
+}
+
+export class Medium extends Item {
+  readContents = Route.GET('/contents');
+  updateContents = Route.POST('/contents');
+}
 
 export class Organization extends Item {
 }
 
-export class Group extends Item {
+export class PersonalToken extends Item {
+}
+
+export class Pool extends Item {
+  static lineage = Route.GET('/lineage');
+  static searchByGenotype = Route.GET('/search-by-genotype');
+  static compareGenotypes = Route.POST('/compare-genotypes');
+  static findByExperiments = Route.GET('/find-by-experiments');
+
+  readSamples = Route.GET('/samples');
+
+  POOL_TYPES = {
+    ale_population: 'ALE population',
+    ale_strain: 'ALE strain',
+    library: 'library',
+    design: 'design'
+  };
+
+  get typeAsText() {
+    return this.POOL_TYPES[this.type] || this.type;
+  }
+
+  get fullGenotype() {
+    // todo: caching
+    if (this.parentPool) {
+      return [this.parentPool.fullGenotype || '', this.genotype || ''].join(' ');
+    } else {
+      return this.genotype || '';
+    }
+  }
 }
 
 export class User extends Item {
@@ -22,12 +69,6 @@ export class User extends Item {
   }
 }
 
-export class PersonalToken extends Item {
-}
-
-export class GroupMembership extends Item {
-}
-
 export class Project extends Item {
   readPermissions = Route.GET('/permissions');
   readSummary = Route.GET('/summary');
@@ -38,18 +79,6 @@ export class Project extends Item {
 export class ProjectMembership extends Item {
 }
 
-export class Medium extends Item {
-  readContents = Route.GET('/contents');
-  updateContents = Route.POST('/contents');
-}
-
-export class ChemicalEntity extends Item {
-  getChEBIURL () {
-    return `http://www.ebi.ac.uk/chebi/searchId.do?chebiId=CHEBI:${this.chebiId}`;
-  }
-}
-
-
 export const resources: PotionResources = {
   '/organization': Organization,
   '/group': Group,
@@ -59,7 +88,8 @@ export const resources: PotionResources = {
   '/project': Project,
   '/project-membership': ProjectMembership,
   '/medium': Medium,
-  '/chemical-entity': ChemicalEntity
+  '/chemical-entity': ChemicalEntity,
+  '/pool': Pool
 };
 
 

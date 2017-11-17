@@ -3,12 +3,15 @@ import {CommonModule} from '@angular/common';
 import {AppMaterialModule} from '../app-material.module';
 import {FlexLayoutModule} from '@angular/flex-layout';
 import { CompareComponent } from './compare.component';
+import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 
 @NgModule({
   imports: [
     CommonModule,
     AppMaterialModule,
-    FlexLayoutModule
+    FlexLayoutModule,
+    FormsModule,
+    ReactiveFormsModule
   ],
   declarations: [CompareComponent]
 })
