@@ -2,3 +2,7 @@
 mat-sidenav {
   width: 320px;
 }
+
+.content {
+  overflow: auto;
+}

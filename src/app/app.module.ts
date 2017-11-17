@@ -3,7 +3,6 @@ import {NgModule} from '@angular/core';
 import {BrowserModule} from '@angular/platform-browser';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {FlexLayoutModule} from '@angular/flex-layout';
-import {HttpModule} from '@angular/http';
 import {HttpClientModule} from '@angular/common/http';
 import {Ng2Webstorage} from 'ngx-webstorage';
 import {POTION_CONFIG, POTION_RESOURCES, PotionModule} from 'potion-client';
@@ -26,6 +25,7 @@ import {MediaModule} from './media/media.module';
 import {resources} from './app.resources';
 import {AppCommonModule} from './app-common/app-common.module';
 import { AppWelcomeComponent } from './app-welcome/app-welcome.component';
+import {CompareModule} from './compare/compare.module';
 
 @NgModule({
   declarations: [
@@ -38,7 +38,6 @@ import { AppWelcomeComponent } from './app-welcome/app-welcome.component';
     BrowserModule,
     BrowserAnimationsModule,
     FlexLayoutModule,
-    HttpModule,
     PotionModule,
     HttpClientModule,
     Ng2Webstorage,
@@ -53,7 +52,8 @@ import { AppWelcomeComponent } from './app-welcome/app-welcome.component';
     MaintenanceModule,
     ProjectModule,
     MediaModule,
-    AppCommonModule
+    AppCommonModule,
+    CompareModule
   ],
   providers: [
     AppAuthService,
