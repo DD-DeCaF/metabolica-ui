@@ -6,7 +6,7 @@
         {{pool.identifier}} <mat-icon matChipRemove>cancel</mat-icon>
       </mat-chip>
       <input matInput
-             placeholder="Add pools..."
+             placeholder="Search for pools..."
              #poolInput
              [formControl]="poolCtrl"
              [matAutocomplete]="auto"
@@ -18,8 +18,13 @@
                   [value]="pool">
         {{ pool.identifier }}
       </mat-option>
+      <mat-option *ngIf="noMatchesFound">
+        No matches found.
+      </mat-option>
     </mat-autocomplete>
   </mat-form-field>
 </div>
+
+<mat-divider></mat-divider>
 
 
