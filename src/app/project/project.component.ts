@@ -1,5 +1,6 @@
 import {Component} from '@angular/core';
 import {ActivatedRoute} from '@angular/router';
+import {ProjectContextService} from './project-context.service';
 
 @Component({
   selector: 'app-project',
@@ -8,9 +9,10 @@ import {ActivatedRoute} from '@angular/router';
 export class ProjectComponent {
   project: any;
 
-  constructor(private route: ActivatedRoute) {
+  constructor(private route: ActivatedRoute, private projectContext: ProjectContextService) {
     this.route.params.subscribe(() => {
         this.project = this.route.snapshot.data['project'];
+        this.projectContext.announceProjectChange(this.project);
       }
     );
   }

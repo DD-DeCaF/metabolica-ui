@@ -1,5 +1,5 @@
 import {NgModule} from '@angular/core';
-import {RouterModule, Route} from '@angular/router';
+import {Route, RouterModule} from '@angular/router';
 import {LoginModule} from './login/login.module';
 import {AuthGuardService} from './session/auth-guard.service';
 import {AppHomeComponent} from './app-home/app-home.component';
@@ -10,6 +10,7 @@ import {ProjectResolverService} from './project/project-resolver.service';
 import {MediumListComponent} from './media/medium-list.component';
 import {MediumComponent} from './media/medium.component';
 import {AppWelcomeComponent} from './app-welcome/app-welcome.component';
+import {ProjectDeactivationGuardService} from './project/project-deactivation-guard.service';
 
 const appRoutes: Route[] = [
   {
@@ -35,7 +36,8 @@ const appRoutes: Route[] = [
         component: ProjectComponent,
         resolve: {
           project: ProjectResolverService
-        }
+        },
+        canDeactivate: [ProjectDeactivationGuardService]
       },
       {
         path: 'media',
