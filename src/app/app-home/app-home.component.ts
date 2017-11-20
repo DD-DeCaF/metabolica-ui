@@ -6,7 +6,7 @@ import {ProjectContextService} from '../project/project-context.service';
 @Component({
   selector: 'app-app-home',
   templateUrl: './app-home.component.html',
-  styleUrls: ['./app-home.component.css']
+  styleUrls: ['./app-home.component.scss']
 })
 export class AppHomeComponent implements OnInit {
   title = 'app';

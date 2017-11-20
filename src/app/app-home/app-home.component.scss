@@ -1,0 +1,20 @@
+a {
+  //color: rgba(0, 0, 0, 0.54);
+  color: white;
+  //color: #2196F9;
+  text-decoration: none;
+
+  &:active,
+  &:hover,
+  &:focus {
+    color: black;
+  }
+}
+
+mat-sidenav {
+  width: 320px;
+}
+
+.content {
+  overflow: auto;
+}
