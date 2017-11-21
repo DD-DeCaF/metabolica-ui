@@ -26,6 +26,7 @@ import {resources} from './app.resources';
 import {AppCommonModule} from './app-common/app-common.module';
 import { AppWelcomeComponent } from './app-welcome/app-welcome.component';
 import {CompareModule} from './compare/compare.module';
+import {UpgradeModule} from '@angular/upgrade/static';
 
 @NgModule({
   declarations: [
@@ -35,6 +36,7 @@ import {CompareModule} from './compare/compare.module';
     AppWelcomeComponent
   ],
   imports: [
+    UpgradeModule,
     BrowserModule,
     BrowserAnimationsModule,
     FlexLayoutModule,
@@ -69,7 +71,10 @@ import {CompareModule} from './compare/compare.module';
       }
     }
   ],
-  bootstrap: [AppComponent]
+  entryComponents: [AppComponent]
 })
 export class AppModule {
+  constructor(public upgrade: UpgradeModule) {}
+
+  ngDoBootstrap() {}
 }
