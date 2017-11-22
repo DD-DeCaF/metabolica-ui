@@ -8,6 +8,17 @@ export class ChemicalEntity extends Item {
   }
 }
 
+export class Experiment extends Item {
+  static readCompartmentTypes = Route.GET('/compartment-types');
+  static containing = Route.GET('/containing');
+
+  readSamples = Route.GET('/samples');
+  listDataShapes = Route.GET('/list-data-shapes');
+  readScalarMeasurementTests = Route.GET('/scalar-measurement-tests');
+  readSeriesMeasurementTests = Route.GET('/series-measurement-tests');
+  readSamplesWithSeries = Route.GET('/samples-with-series');
+}
+
 export class Group extends Item {
 }
 
@@ -89,7 +100,8 @@ export const resources: PotionResources = {
   '/project-membership': ProjectMembership,
   '/medium': Medium,
   '/chemical-entity': ChemicalEntity,
-  '/pool': Pool
+  '/pool': Pool,
+  '/experiment': Experiment
 };
 
 

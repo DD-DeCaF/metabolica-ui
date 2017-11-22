@@ -1,0 +1,39 @@
+<mat-card>
+  <mat-card-header fxLayout="row" fxLayoutAlign="space-between center">
+
+    <h2 class="mat-title" fxFlex>Genotypes</h2>
+
+    <mat-checkbox color="primary"
+                  (change)="updateComparison()"
+                  [(ngModel)]="includeCommonChanges">
+      Include common changes
+    </mat-checkbox>
+
+  </mat-card-header>
+
+  <mat-table #table
+             [dataSource]="dataSource"
+             *ngIf="dataSource">
+
+    <ng-container matColumnDef="change">
+      <mat-header-cell *matHeaderCellDef>Change</mat-header-cell>
+      <mat-cell *matCellDef="let change">
+        <span [innerHTML]="change.format.html"></span>
+      </mat-cell>
+    </ng-container>
+
+    <ng-container matColumnDef="{{poolIdentifier}}"
+                  *ngFor="let poolIdentifier of dataSource.poolIdentifiers">
+      <mat-header-cell *matHeaderCellDef>{{poolIdentifier}}</mat-header-cell>
+      <mat-cell *matCellDef="let change"> {{change[poolIdentifier]}} </mat-cell>
+    </ng-container>
+
+    <mat-header-row *matHeaderRowDef="dataSource.columnNames"></mat-header-row>
+    <mat-row *matRowDef="let change; columns: dataSource.columnNames;"></mat-row>
+
+  </mat-table>
+
+</mat-card>
+
+
+

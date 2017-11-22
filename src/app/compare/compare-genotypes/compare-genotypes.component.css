@@ -1,0 +1,25 @@
+.mat-card {
+  margin: 16px;
+  overflow: auto;
+}
+
+.mat-table {
+  display: table;
+  width: 100%;
+}
+
+.mat-header-row, .mat-row {
+  display: table-row;
+  border: none;
+}
+
+.mat-header-cell, .mat-cell {
+  min-width: 60px;
+  display: table-cell;
+  height: 45px;
+  vertical-align: middle;
+  padding-left: 16px;
+  padding-right: 4px;
+
+  border-bottom: 1px solid rgba(0, 0, 0, 0.12);
+}

@@ -1,13 +1,13 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { CompareComponent } from './compare.component';
-import {AppModule} from '../app.module';
+import { CompareGenotypesComponent } from './compare-genotypes.component';
+import {AppModule} from '../../app.module';
 import {APP_BASE_HREF} from '@angular/common';
-import {FormsModule} from '@angular/forms';
+import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 
-describe('CompareComponent', () => {
-  let component: CompareComponent;
-  let fixture: ComponentFixture<CompareComponent>;
+describe('CompareGenotypesComponent', () => {
+  let component: CompareGenotypesComponent;
+  let fixture: ComponentFixture<CompareGenotypesComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
@@ -15,13 +15,13 @@ describe('CompareComponent', () => {
         // SessionService,
         {provide: APP_BASE_HREF, useValue: 'https://iloop.biosustain.dtu.dk/'}
       ],
-      imports: [AppModule, FormsModule]
+      imports: [AppModule, FormsModule, ReactiveFormsModule]
     })
     .compileComponents();
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(CompareComponent);
+    fixture = TestBed.createComponent(CompareGenotypesComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

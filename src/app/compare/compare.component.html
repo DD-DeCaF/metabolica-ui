@@ -1,5 +1,7 @@
-<div class="content">
-  <mat-form-field fxFlex>
+<div fxLayout="column">
+
+  <mat-form-field class="mat-elevation-z1"
+                  fxFlex>
     <mat-chip-list #chipList>
       <mat-chip *ngFor="let pool of selectedPools"
                 (remove)="remove(pool)">
@@ -13,18 +15,26 @@
              [matChipInputFor]="chipList"/>
     </mat-chip-list>
     <mat-autocomplete #auto="matAutocomplete"
-                      (optionSelected)="selected($event)">
+                      (optionSelected)="onSelection($event)">
       <mat-option *ngFor="let pool of queryResults | async"
                   [value]="pool">
-        {{ pool.identifier }}
+        {{ pool.identifier}}
       </mat-option>
       <mat-option *ngIf="noMatchesFound">
         No matches found.
       </mat-option>
     </mat-autocomplete>
   </mat-form-field>
+
+  <app-compare-genotypes *ngIf="selectedPools.length"
+                         [pools]="selectedPools">
+  </app-compare-genotypes>
+
+  <app-experiment-history *ngIf="selectedPools.length"
+                          [pools]="selectedPools">
+  </app-experiment-history>
+
 </div>
 
-<mat-divider></mat-divider>
 
 
