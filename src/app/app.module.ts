@@ -27,13 +27,15 @@ import {AppCommonModule} from './app-common/app-common.module';
 import { AppWelcomeComponent } from './app-welcome/app-welcome.component';
 import {CompareModule} from './compare/compare.module';
 import {UpgradeModule} from '@angular/upgrade/static';
+import {LineagePlotDirective} from './app-ng1/ancestry/lineage-plot';
 
 @NgModule({
   declarations: [
     AppComponent,
     AppToolbarComponent,
     AppHomeComponent,
-    AppWelcomeComponent
+    AppWelcomeComponent,
+    LineagePlotDirective
   ],
   imports: [
     UpgradeModule,
