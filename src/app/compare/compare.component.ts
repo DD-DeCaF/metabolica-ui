@@ -63,7 +63,7 @@ export class CompareComponent implements OnInit {
   }
 
   onSelection(event: MatAutocompleteSelectedEvent): void {
-    this.selectedPools.push(event.option.value);
+    this.selectedPools = [...this.selectedPools, event.option.value];
     this.poolInput.nativeElement.value = '';
   }
 }

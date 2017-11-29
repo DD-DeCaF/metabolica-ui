@@ -1,4 +1,4 @@
-import {Component, DoCheck, Input, IterableDiffers} from '@angular/core';
+import {Component, OnChanges, Input} from '@angular/core';
 import {Experiment} from '../../app.resources';
 import {DataSource} from '@angular/cdk/collections';
 import {Observable} from 'rxjs/Observable';
@@ -64,25 +64,18 @@ class ExperimentHistoryDataSource extends DataSource<any> {
   templateUrl: './experiment-history.component.html',
   styleUrls: ['./experiment-history.component.css']
 })
-export class ExperimentHistoryComponent implements DoCheck {
+export class ExperimentHistoryComponent implements OnChanges {
   columnNames = [];
   dataSource?: ExperimentHistoryDataSource = null;
-  iterableDiffer: any;
   poolIdentifiers = [];
 
   @Input() pools = [];
 
-  constructor(iterableDiffers: IterableDiffers) {
-    this.iterableDiffer = iterableDiffers.find([]).create(null);
+  constructor() {}
+
+  ngOnChanges() {
+    this.poolIdentifiers = this.pools.map(pool => pool.identifier);
+    this.dataSource = new ExperimentHistoryDataSource(this.pools);
+    this.columnNames = ['date', 'key', 'description'].concat(this.poolIdentifiers);
   }
-
-  ngDoCheck() {
-    if (this.iterableDiffer.diff(this.pools)) {
-      this.poolIdentifiers = this.pools.map(pool => pool.identifier);
-      this.dataSource = new ExperimentHistoryDataSource(this.pools);
-      this.columnNames = ['date', 'key', 'description'].concat(this.poolIdentifiers);
-    }
-  }
-
-
 }

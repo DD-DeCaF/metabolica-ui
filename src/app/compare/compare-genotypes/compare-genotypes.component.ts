@@ -1,4 +1,4 @@
-import {Component, DoCheck, Input, IterableDiffers} from '@angular/core';
+import {Component, Input, OnChanges} from '@angular/core';
 import {Pool} from '../../app.resources';
 import {DataSource} from '@angular/cdk/collections';
 import {Observable} from 'rxjs/Observable';
@@ -38,21 +38,16 @@ class GenotypeChangesDataSource extends DataSource<any> {
   templateUrl: './compare-genotypes.component.html',
   styleUrls: ['./compare-genotypes.component.css']
 })
-export class CompareGenotypesComponent implements DoCheck {
+export class CompareGenotypesComponent implements OnChanges {
   dataSource?: GenotypeChangesDataSource = null;
   includeCommonChanges = true;
-  iterableDiffer: any;
 
   @Input() pools = [];
 
-  constructor(iterableDiffers: IterableDiffers) {
-    this.iterableDiffer = iterableDiffers.find([]).create(null);
-  }
+  constructor() {}
 
-  ngDoCheck() {
-    if (this.iterableDiffer.diff(this.pools)) {
-      this.updateComparison();
-    }
+  ngOnChanges() {
+    this.updateComparison();
   }
 
   updateComparison() {
