@@ -7,7 +7,6 @@ import 'angular-messages';
 import angular from 'angular';
 import {AppComponent} from './app.component';
 import {AppToolbarComponent} from './app-toolbar.component';
-import {HomeModule} from './home/home.module';
 import {SessionModule} from './shared/session/session.module';
 import {SharingModule} from './shared/sharing/sharing-legacy.module';
 import {DocsModule} from './docs/docs.module';
@@ -92,7 +91,6 @@ export const AppModule = angular.module('App', [
         DirectivesModule.name,
         TestUtilsModule.name,
         ClipboardModule.name,
-        HomeModule.name,
     ])
     .provider('appNavigation', AppNavigationProvider)
     .provider('appName', AppNameProvider)
