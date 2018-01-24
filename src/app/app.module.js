@@ -6,8 +6,8 @@ import 'angular-ui-router';
 import 'angular-messages';
 import angular from 'angular';
 import {AppComponent} from './app.component';
-import {AppHomeComponent} from './app-home.component';
 import {AppToolbarComponent} from './app-toolbar.component';
+import {HomeModule} from './home/home.module';
 import {SessionModule} from './shared/session/session.module';
 import {SharingModule} from './shared/sharing/sharing-legacy.module';
 import {DocsModule} from './docs/docs.module';
@@ -91,13 +91,13 @@ export const AppModule = angular.module('App', [
         SearchModule.name,
         DirectivesModule.name,
         TestUtilsModule.name,
-        ClipboardModule.name
+        ClipboardModule.name,
+        HomeModule.name,
     ])
     .provider('appNavigation', AppNavigationProvider)
     .provider('appName', AppNameProvider)
     .provider('appAuth', AppAuthProvider)
     .component('app', AppComponent)
-    .component('appHome', AppHomeComponent)
     .component('appToolbar', AppToolbarComponent)
     .config(function ($mdThemingProvider) {
         /**
@@ -129,20 +129,11 @@ export const AppModule = angular.module('App', [
          * Set up states and specify default state
          */
 
-        $stateProvider
-            .state({
-                name: 'app',
-                url: '/app',
-                component: 'app'
-            })
-            .state({
-                name: 'app.home',
-                url: '/home',
-                component: 'appHome',
-                data: {
-                    title: 'Home'
-                }
-            });
+        $stateProvider.state({
+            name: 'app',
+            url: '/app',
+            component: 'app'
+        });
 
         $urlRouterProvider.otherwise('/app/home');
         $locationProvider.html5Mode(true);

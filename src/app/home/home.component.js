@@ -1,5 +1,5 @@
 
-class AppHomeController {
+class HomeController {
     constructor(appName, $mdSidenav) {
         this.appName = appName;
         this._$mdSidenav = $mdSidenav;
@@ -7,8 +7,8 @@ class AppHomeController {
 }
 
 
-export const AppHomeComponent = {
-    controller: AppHomeController,
+export const HomeComponent = {
+    controller: HomeController,
     template: `
     <div class="md-padding">
         <md-content>
