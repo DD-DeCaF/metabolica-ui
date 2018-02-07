@@ -1,0 +1,19 @@
+version: 2
+jobs:
+  build:
+    docker:
+      - image: circleci/node:9.5-browsers
+    steps:
+      - checkout
+      - run:
+          name: "Installing dependencies"
+          command: "yarn"
+      - run:
+          name: "Checking Versions"
+          command: |
+            node --version
+            npm --version
+      - run:
+          name: "Test"
+          command: "npm test"
+
