@@ -75,7 +75,10 @@
       <md-list>
         <md-list-item ng-repeat="component in $ctrl.navigation" ui-sref="{{ component.state }}">
           <md-icon md-svg-icon="{{ component.icon }}"></md-icon>
-          <p ng-if="!$ctrl.inProjectComponent">{{ component.title }}</p>
+          <p class="list-item-tooltip" ng-if="!$ctrl.inProjectComponent">
+            <md-tooltip md-direction="right">{{ component.tooltip }}</md-tooltip>
+            {{ component.title }}
+          </p>
         </md-list-item>
       </md-list>
     </md-content>
