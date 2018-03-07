@@ -1,30 +1,24 @@
 import template from './login.component.html';
 import './login.component.scss';
 
-interface Credentials {
-    username: string;
-    password: string;
-}
-
 /** This class is LoginComponent's controller */
 class LoginController {
-    appName: string;
-    credentials: Credentials;
-    authenticate: (form: any, credentials: Credentials) => void;
+    appName;
+    credentials;
 
     /**
      * LoginController class constructor
      * @param Session  comment about Session parameter
      * @param appName  The application name to show during login
      */
-    constructor($scope, $timeout, $state, $stateParams, $location, Session, appName: string) {
+    constructor($scope, $timeout, $state, $stateParams, $location, Session, appName) {
         this.appName = appName;
         this.credentials = {
             username: '',
             password: ''
         };
 
-        this.authenticate = async (form: any, credentials: Credentials) => {
+        this.authenticate = async (form, credentials) => {
             try {
                 await Session.authenticate(credentials);
 
@@ -43,16 +37,6 @@ class LoginController {
                 $scope.$apply();
             }
         };
-    }
-
-    /** @method exampleMethod
-     * @param foo  A very detailed comment about the foo parameter
-     * @param bar  Something less detailed for bar
-     * @returns    The concatenation of the two parameters in input
-     */
-    exampleMethod(foo: string, bar: string): string {
-        console.log('An example of how to document a method.');
-        return foo + bar;
     }
 }
 
