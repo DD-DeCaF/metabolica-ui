@@ -30,13 +30,13 @@ class AppNavigationProvider {
     // XXX is component needed?
     register(state, {title, position = null, authRequired = true, icon = 'puzzle', order = Number.MAX_VALUE,
         stateParams = {}} = {}) {
-		if (!position) {
-			if (state.startsWith('app.project.')) {
-				position = 'project';
-			} else {
-				position = 'global';
-			}
-		}
+        if (!position) {
+            if (state.startsWith('app.project.')) {
+                position = 'project';
+            } else {
+                position = 'global';
+            }
+        }
 
         let module = {state: `${state}(${JSON.stringify(stateParams)})`, title, position, icon, order, authRequired};
         this.navigation.push(module);
@@ -45,8 +45,6 @@ class AppNavigationProvider {
     $get() {
         return this.navigation;
     }
-
-
 }
 
 

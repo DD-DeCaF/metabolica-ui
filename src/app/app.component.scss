@@ -8,6 +8,11 @@ app {
   display: flex;
   flex: 1;
   flex-direction: column;
+
+  .metabolica-sidenav,
+  .metabolica-content {
+    height: 100vh;
+  }
 }
 
 .md-sidenav-left {
