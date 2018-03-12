@@ -1,9 +1,13 @@
 // Karma configuration
-const webpackConfig = require('./webpack.config')();
+// const webpackConfig = require('./webpack.config.common');
+const merge = require('webpack-merge');
 
-// https://github.com/webpack-contrib/karma-webpack/issues/24#issuecomment-257613167
-const commonsChunkPluginIndex = webpackConfig.plugins.findIndex(plugin => plugin.chunkNames);
-webpackConfig.plugins.splice(commonsChunkPluginIndex, 1);
+const ExtractTextPlugin = require('extract-text-webpack-plugin');
+const webpackConfig = merge(require('./webpack.config.common'), {
+    plugins: [
+        new ExtractTextPlugin('styles.css'),
+    ]
+});
 
 module.exports = function (config) {
     config.set({
